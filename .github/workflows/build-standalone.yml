@@ -1,0 +1,28 @@
+name: Build standalone HTML
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+      - name: Build and verify
+        shell: pwsh
+        run: ./scripts/check-repository.ps1
+      - name: Upload standalone artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: markdown-preview-lab-${{ github.sha }}
+          path: |
+            dist/index.html
+            dist/index.self-extract.html
+            dist/dependency-manifest.json
+            dist/self-extract-manifest.json
+          if-no-files-found: error
+          retention-days: 14

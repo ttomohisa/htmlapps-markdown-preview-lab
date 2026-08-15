@@ -1,0 +1,22 @@
+{
+  "$schema": "./schemas/app-config.schema.json",
+  "name": "Markdown Preview Lab",
+  "nameJa": "Markdown Preview Lab",
+  "slug": "htmlapps-markdown-preview-lab",
+  "version": "1.0",
+  "description": "A fully local Markdown editor for comparing GitHub, Qiita, and Zenn-inspired previews and portability.",
+  "descriptionJa": "GitHub・Qiita・Zenn風プレビューと互換性をブラウザ内だけで比較できるMarkdownエディタです。",
+  "defaultLanguage": "auto",
+  "repository": {
+    "owner": "ttomohisa",
+    "name": "htmlapps-markdown-preview-lab"
+  },
+  "build": {
+    "output": "dist/index.html",
+    "blockRuntimeNetwork": true,
+    "selfExtract": {
+      "enabled": true,
+      "output": "dist/index.self-extract.html"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+dist/*
+!dist/.gitkeep
+!dist/index.html
+!dist/index.self-extract.html
+!dist/dependency-manifest.json
+!dist/self-extract-manifest.json
+!dist/.nojekyll
+.DS_Store
+Thumbs.db

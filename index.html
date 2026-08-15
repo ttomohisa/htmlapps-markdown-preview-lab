@@ -1,0 +1,752 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#f5f5f2">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; script-src 'self' 'unsafe-inline' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data: blob:; media-src 'self' data: blob:; worker-src 'self' blob:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Markdown Preview Lab</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2316624f'/%3E%3Cpath d='M14 19h36v26H14z' fill='none' stroke='white' stroke-width='4' stroke-linejoin='round'/%3E%3Cpath d='M20 37V27l6 7 6-7v10M38 27v10m-5-5 5 5 5-5' fill='none' stroke='white' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f5f2;
+      --surface: #ffffff;
+      --surface-muted: #f0f0ed;
+      --surface-hover: #e9e9e5;
+      --text: #20211f;
+      --muted: #666963;
+      --line: #dadbd6;
+      --line-strong: #bfc1ba;
+      --accent: #16624f;
+      --accent-hover: #0e503f;
+      --accent-soft: #e1f0ea;
+      --danger: #b3261e;
+      --warning: #9a6500;
+      --focus: #4d8bc7;
+      --shadow-sm: 0 1px 2px rgba(25,28,24,.08), 0 1px 6px rgba(25,28,24,.04);
+      --shadow-md: 0 12px 34px rgba(25,28,24,.10);
+      --radius: 12px;
+      --header-height: 66px;
+    }
+    * { box-sizing: border-box; }
+    html { min-height: 100%; background: var(--bg); scroll-behavior: smooth; }
+    body { margin:0; min-height:100vh; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP","Yu Gothic UI","Hiragino Kaku Gothic ProN",Meiryo,sans-serif; font-size:15px; line-height:1.5; -webkit-font-smoothing:antialiased; }
+    button, textarea, select, input { font: inherit; }
+    button { color: inherit; }
+    button:focus-visible, textarea:focus-visible, select:focus-visible, summary:focus-visible, .seg-button:focus-visible { outline:3px solid color-mix(in srgb,var(--focus) 55%,transparent); outline-offset:2px; }
+    .app-header { position:sticky; z-index:30; top:0; min-height:var(--header-height); border-bottom:1px solid color-mix(in srgb,var(--line) 82%,transparent); background:color-mix(in srgb,var(--bg) 92%,transparent); backdrop-filter:blur(16px) saturate(1.2); }
+    .header-inner { width:min(1500px,100%); min-height:var(--header-height); margin:0 auto; padding:10px clamp(14px,2.8vw,30px); display:flex; align-items:center; gap:14px; }
+    .brand { display:flex; align-items:center; gap:10px; min-width:0; }
+    .brand-mark { display:grid; place-items:center; width:38px; height:38px; flex:0 0 auto; border-radius:11px; background:var(--accent); color:#fff; box-shadow:var(--shadow-sm); }
+    .brand-mark svg { width:21px; height:21px; display:block; }
+    .brand-copy { min-width:0; }
+    .brand-name { margin:0; font-size:17px; line-height:1.2; letter-spacing:.01em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .version-badge { display:inline-flex; align-items:center; margin-left:7px; padding:1px 6px; border:1px solid var(--line); border-radius:999px; color:var(--muted); background:var(--surface-muted); font-size:10px; font-weight:650; vertical-align:2px; }
+    .brand-meta { margin:2px 0 0; color:var(--muted); font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .header-actions { margin-left:auto; display:flex; align-items:center; gap:12px; }
+    .language-button { padding:5px 1px; border:0; background:transparent; color:var(--muted); font-size:12px; font-weight:750; letter-spacing:.02em; cursor:pointer; transition:color .16s ease,opacity .16s ease; }
+    .language-button:hover { color:var(--text); }
+    .header-icon-button { width:auto; height:auto; padding:5px 1px; border:0; background:transparent; color:var(--muted); cursor:pointer; transition:color .16s ease,opacity .16s ease; }
+    .header-icon-button:hover { color:var(--text); }
+    .header-icon-button svg { width:20px; height:20px; display:block; }
+    .main { width:min(1500px,100%); margin:0 auto; padding:18px clamp(12px,2.3vw,28px) 46px; }
+    .page-intro { display:flex; align-items:flex-start; justify-content:space-between; gap:20px; padding:0 2px 14px; }
+    .page-intro h2 { margin:0; font-size:clamp(20px,3vw,25px); line-height:1.3; letter-spacing:-.025em; }
+    .page-intro p { margin:5px 0 0; max-width:900px; color:var(--muted); font-size:13px; }
+    .local-badge { display:inline-flex; align-items:center; gap:7px; flex:0 0 auto; margin-top:3px; padding:7px 10px; border:1px solid color-mix(in srgb,var(--accent) 24%,var(--line)); border-radius:999px; color:var(--accent); background:var(--accent-soft); font-size:12px; font-weight:700; white-space:nowrap; }
+    .local-badge svg { width:15px; height:15px; }
+    .local-badge .short { display:none; }
+    .workspace { border:1px solid var(--line); border-radius:16px; background:var(--surface); box-shadow:var(--shadow-sm); overflow:hidden; }
+    .workspace-toolbar { display:flex; align-items:center; gap:10px; min-height:56px; padding:8px 10px; border-bottom:1px solid var(--line); background:#fbfbf9; }
+    .button-row { display:flex; align-items:center; flex-wrap:wrap; gap:6px; }
+    .button { min-height:36px; padding:7px 11px; border:1px solid var(--line); border-radius:9px; background:var(--surface); font-weight:690; cursor:pointer; transition:border-color .16s ease,background .16s ease,transform .16s ease; }
+    .button:hover { border-color:var(--line-strong); background:var(--surface-hover); }
+    .button:active { transform:translateY(1px); }
+    .button.primary { border-color:var(--accent); color:#fff; background:var(--accent); }
+    .button.primary:hover { background:var(--accent-hover); border-color:var(--accent-hover); }
+    .icon-text { display:inline-flex; align-items:center; gap:7px; }
+    .icon-text svg { width:16px; height:16px; flex:0 0 auto; }
+    .toolbar-divider { width:1px; align-self:stretch; margin:2px 2px; background:var(--line); }
+    .toolbar-spacer { flex:1; }
+    .save-status { display:flex; align-items:center; gap:7px; color:var(--muted); font-size:11px; white-space:nowrap; }
+    .save-dot { width:7px; height:7px; border-radius:50%; background:#4d8d5d; }
+    .workspace-controls { display:flex; align-items:center; gap:10px; padding:9px 10px; border-bottom:1px solid var(--line); overflow:auto; scrollbar-width:thin; }
+    .control-group { display:flex; align-items:center; gap:7px; min-width:max-content; }
+    .control-label { color:var(--muted); font-size:11px; font-weight:700; }
+    .segmented { display:inline-flex; align-items:center; padding:3px; border:1px solid var(--line); border-radius:10px; background:var(--surface-muted); }
+    .seg-button { min-height:30px; padding:5px 10px; border:0; border-radius:7px; background:transparent; color:var(--muted); font-size:12px; font-weight:740; cursor:pointer; }
+    .seg-button.active { color:var(--text); background:#fff; box-shadow:0 1px 2px rgba(20,22,18,.08); }
+    .style-chip { min-height:32px; padding:5px 10px; border:1px solid transparent; border-radius:999px; background:transparent; color:var(--muted); font-size:12px; font-weight:700; cursor:pointer; white-space:nowrap; }
+    .style-chip:hover { background:var(--surface-muted); color:var(--text); }
+    .style-chip.active { border-color:color-mix(in srgb,var(--accent) 28%,var(--line)); color:var(--accent); background:var(--accent-soft); }
+    select { min-height:34px; padding:5px 28px 5px 10px; border:1px solid var(--line); border-radius:9px; color:var(--text); background:#fff; cursor:pointer; }
+    .sync-toggle { display:inline-flex; align-items:center; gap:6px; color:var(--muted); font-size:11px; cursor:pointer; user-select:none; }
+    .sync-toggle input { accent-color:var(--accent); }
+    .editor-shell { display:grid; grid-template-columns:minmax(360px, .9fr) minmax(0, 1.1fr); height:clamp(520px, calc(100dvh - 250px), 820px); min-height:520px; }
+    .editor-pane, .preview-pane { min-width:0; min-height:0; position:relative; background:#fff; }
+    .editor-pane { border-right:1px solid var(--line); }
+    .pane-head { height:42px; display:flex; align-items:center; gap:8px; padding:0 11px; border-bottom:1px solid var(--line); background:#fafaf8; }
+    .pane-title { font-size:12px; font-weight:800; letter-spacing:.015em; }
+    .pane-meta { margin-left:auto; color:var(--muted); font-size:10px; white-space:nowrap; }
+    .sample-state { display:none; align-items:center; gap:7px; margin-left:auto; min-width:0; }
+    .sample-state.visible { display:flex; }
+    .sample-label { color:var(--muted); font-size:10px; white-space:nowrap; }
+    .sample-new-button { padding:4px 7px; border:0; border-radius:7px; background:transparent; color:var(--accent); font-size:10px; font-weight:800; cursor:pointer; white-space:nowrap; }
+    .sample-new-button:hover { background:var(--accent-soft); }
+    .sample-state.visible + .pane-meta { margin-left:0; }
+    .format-bar { display:flex; align-items:center; gap:2px; padding-right:5px; border-right:1px solid var(--line); margin-right:3px; }
+    .format-button { width:29px; height:29px; display:grid; place-items:center; border:0; border-radius:7px; background:transparent; color:var(--muted); font-size:12px; font-weight:800; cursor:pointer; }
+    .format-button:hover { background:var(--surface-muted); color:var(--text); }
+    #editor { width:100%; height:calc(100% - 42px); resize:none; border:0; outline:0; padding:18px 20px 36px; background:#fff; color:#252724; font:14px/1.72 ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace; tab-size:2; caret-color:var(--accent); }
+    #editor::selection { background:#cfe7df; }
+    .drop-overlay { position:absolute; inset:42px 0 0; z-index:5; display:none; place-items:center; background:rgba(225,240,234,.92); color:var(--accent); font-weight:800; border:2px dashed var(--accent); }
+    .editor-pane.dragging .drop-overlay { display:grid; }
+    .preview-scroll { height:calc(100% - 42px); overflow:auto; overscroll-behavior:contain; background:#fff; }
+    .preview-wrap { min-height:100%; padding:28px clamp(22px,4vw,52px) 60px; }
+    .compare-pane { display:none; grid-template-columns:1fr 1fr; min-width:0; min-height:0; }
+    .workspace.compare .editor-shell { grid-template-columns:minmax(330px,.72fr) minmax(0,1.28fr); }
+    .workspace.compare .single-preview { display:none; }
+    .workspace.compare .compare-pane { display:grid; }
+    .compare-cell { min-width:0; min-height:0; border-right:1px solid var(--line); }
+    .compare-cell:last-child { border-right:0; }
+    .compare-cell .preview-scroll { height:calc(100% - 42px); }
+    .compare-cell .preview-wrap { padding:24px clamp(18px,2.2vw,34px) 52px; }
+    .mobile-view-switch { display:none; }
+
+    /* Rendered Markdown: shared */
+    .md { max-width:860px; margin:0 auto; color:#24292f; font-size:16px; line-height:1.7; overflow-wrap:anywhere; }
+    .md > :first-child { margin-top:0 !important; }
+    .md > :last-child { margin-bottom:0 !important; }
+    .md h1,.md h2,.md h3,.md h4,.md h5,.md h6 { margin:1.6em 0 .65em; line-height:1.25; color:inherit; }
+    .md h1 { font-size:2em; } .md h2 { font-size:1.5em; } .md h3 { font-size:1.25em; }
+    .md p { margin:0 0 1em; }
+    .md a { color:#0969da; text-decoration:none; } .md a:hover { text-decoration:underline; }
+    .md strong { font-weight:700; }
+    .md del { color:#687078; }
+    .md code { padding:.18em .38em; border-radius:5px; background:#eff1f3; font:85%/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+    .md pre { margin:0 0 1.25em; padding:15px 17px; overflow:auto; border-radius:8px; background:#f6f8fa; line-height:1.5; }
+    .md pre code { padding:0; background:transparent; font-size:13px; }
+    .code-lang { display:block; margin:-4px 0 8px; color:#77808a; font-size:10px; font-family:inherit; text-transform:uppercase; letter-spacing:.06em; }
+    .md blockquote { margin:0 0 1.1em; padding:.1em 1em; border-left:4px solid #d0d7de; color:#656d76; }
+    .md ul,.md ol { margin:.4em 0 1em; padding-left:1.8em; }
+    .md li { margin:.25em 0; }
+    .md li.task { list-style:none; margin-left:-1.25em; }
+    .md li.task input { margin-right:.55em; accent-color:var(--accent); }
+    .md table { width:100%; margin:0 0 1.25em; border-collapse:collapse; display:block; overflow:auto; }
+    .md th,.md td { padding:7px 11px; border:1px solid #d0d7de; text-align:left; white-space:nowrap; }
+    .md th { font-weight:700; background:#f6f8fa; }
+    .md hr { height:1px; margin:1.8em 0; border:0; background:#d8dee4; }
+    .md .image-placeholder { display:flex; align-items:center; gap:9px; margin:1em 0; padding:12px 14px; border:1px dashed #c9ced4; border-radius:8px; background:#fafbfc; color:#66707a; font-size:12px; }
+    .md .math-block { margin:1em 0; padding:13px 16px; border-radius:8px; background:#f6f8fa; text-align:center; font-family:Georgia,"Times New Roman",serif; font-style:italic; }
+    .md .message-box { margin:1em 0; padding:13px 15px; border-radius:8px; border:1px solid #b9dcf2; background:#eef8ff; color:#24506b; }
+    .md .message-box.alert { border-color:#f3c9c9; background:#fff1f1; color:#7c3232; }
+    .md .raw-html { color:#8b4d4d; font-family:ui-monospace,monospace; font-size:.9em; }
+
+    /* GitHub-inspired */
+    .theme-github { max-width:980px; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; color:#1f2328; line-height:1.5; }
+    .theme-github h1,.theme-github h2 { padding-bottom:.3em; border-bottom:1px solid #d8dee4; }
+    .theme-github h1 { font-size:2em; } .theme-github h2 { font-size:1.5em; }
+    .theme-github code { background:rgba(175,184,193,.2); }
+    .theme-github pre { background:#f6f8fa; }
+
+    /* Qiita-inspired */
+    .theme-qiita { max-width:760px; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif; color:#333; line-height:1.9; }
+    .theme-qiita h1 { margin-top:1.4em; padding-bottom:.35em; border-bottom:2px solid #55c500; font-size:2em; }
+    .theme-qiita h2 { margin-top:2em; padding-bottom:.28em; border-bottom:1px solid #d9ddd6; font-size:1.55em; }
+    .theme-qiita h3 { padding-left:.65em; border-left:4px solid #55c500; }
+    .theme-qiita a { color:#3c8f00; }
+    .theme-qiita code { color:#c7254e; background:#f7f7f5; }
+    .theme-qiita pre { background:#272822; color:#f8f8f2; border-radius:6px; }
+    .theme-qiita pre code { color:inherit; }
+    .theme-qiita blockquote { border-left-color:#55c500; background:#f7fbf5; padding:.55em 1em; color:#5b6258; }
+    .theme-qiita th { background:#f3f7f1; }
+
+    /* Zenn-inspired */
+    .theme-zenn { max-width:760px; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif; color:#2f363d; line-height:1.9; letter-spacing:.01em; }
+    .theme-zenn h1 { margin-top:1.35em; font-size:2em; letter-spacing:-.02em; }
+    .theme-zenn h2 { margin-top:2.15em; padding-bottom:.32em; border-bottom:1px solid #e2e8ed; font-size:1.55em; }
+    .theme-zenn h3 { margin-top:1.8em; font-size:1.25em; }
+    .theme-zenn a { color:#0f83c9; }
+    .theme-zenn code { color:#e05a73; background:#f1f5f7; }
+    .theme-zenn pre { background:#1d2433; color:#d8dee9; border-radius:7px; }
+    .theme-zenn pre code { color:inherit; }
+    .theme-zenn blockquote { border-left:3px solid #8fc8ec; color:#647481; background:#f8fbfd; padding:.5em 1em; }
+    .theme-zenn .message-box { border:0; border-left:4px solid #3ea8ff; background:#eaf6fd; color:#304b5c; }
+    .theme-zenn .message-box.alert { border-left-color:#f06460; background:#fff0ef; color:#664443; }
+    .theme-zenn th { background:#f1f6f9; }
+
+    .theme-standard { max-width:820px; font-family:system-ui,sans-serif; color:#2a2d2a; line-height:1.75; }
+    .theme-standard h1 { font-size:2em; } .theme-standard h2 { border-bottom:1px solid #ddd; padding-bottom:.25em; }
+    .theme-minimal { max-width:700px; font-family:Georgia,"Times New Roman","Noto Serif JP",serif; color:#282826; line-height:1.9; }
+    .theme-minimal h1,.theme-minimal h2,.theme-minimal h3 { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif; letter-spacing:-.02em; }
+    .theme-minimal h1 { font-size:2.15em; } .theme-minimal h2 { margin-top:2.3em; }
+    .theme-minimal pre { border:1px solid #e2e2de; background:#fbfbf9; }
+    .theme-print { max-width:760px; color:#111; font-family:"Times New Roman","Noto Serif JP",serif; line-height:1.75; }
+    .theme-print h1,.theme-print h2,.theme-print h3 { color:#000; }
+    .theme-print a { color:#111; text-decoration:underline; }
+    .theme-print pre,.theme-print code { background:#f2f2f2; color:#111; }
+
+    .compat-section { margin-top:18px; padding:18px; border:1px solid var(--line); border-radius:16px; background:var(--surface); box-shadow:var(--shadow-sm); }
+    .section-head { display:flex; align-items:flex-start; gap:16px; margin-bottom:14px; }
+    .section-head h2 { margin:0; font-size:17px; letter-spacing:-.015em; }
+    .section-head p { margin:3px 0 0; color:var(--muted); font-size:12px; }
+    .score-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:9px; margin-left:auto; min-width:min(520px,55%); }
+    .score-card { padding:10px 12px; border:1px solid var(--line); border-radius:11px; background:#fbfbf9; }
+    .score-top { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+    .score-name { font-size:11px; font-weight:800; }
+    .score-number { font-size:16px; font-weight:820; }
+    .score-track { height:5px; margin-top:7px; border-radius:99px; background:#e6e7e2; overflow:hidden; }
+    .score-fill { height:100%; border-radius:inherit; background:var(--accent); transition:width .22s ease; }
+    .issues { border-top:1px solid var(--line); }
+    .issue-empty { padding:18px 4px 4px; color:var(--muted); font-size:12px; }
+    .issue-row { width:100%; display:grid; grid-template-columns:24px 84px minmax(0,1fr) auto; align-items:start; gap:8px; padding:11px 4px; border:0; border-bottom:1px solid #ecece8; background:transparent; text-align:left; cursor:pointer; }
+    .issue-row:hover { background:#fafaf8; }
+    .issue-icon { width:20px; height:20px; display:grid; place-items:center; margin-top:1px; border-radius:50%; font-size:11px; font-weight:900; }
+    .issue-icon.warn { color:#8a5b00; background:#fff2c7; }
+    .issue-icon.info { color:#2d607a; background:#e5f4fb; }
+    .issue-platform { color:var(--muted); font-size:11px; font-weight:750; }
+    .issue-message { font-size:12px; line-height:1.55; }
+    .issue-line { color:var(--muted); font-size:10px; white-space:nowrap; }
+    .heuristic-note { margin:10px 0 0; color:var(--muted); font-size:10px; }
+    footer { width:min(1500px,100%); margin:0 auto; padding:16px clamp(14px,2.8vw,30px) 32px; color:var(--muted); font-size:11px; }
+
+    .toast { position:fixed; right:18px; bottom:18px; z-index:60; max-width:min(360px,calc(100vw - 36px)); padding:11px 14px; border:1px solid var(--line); border-radius:11px; background:var(--surface); box-shadow:var(--shadow-md); opacity:0; transform:translateY(12px); pointer-events:none; transition:opacity .18s ease,transform .18s ease; }
+    .toast.show { opacity:1; transform:translateY(0); }
+    dialog { width:min(720px,calc(100% - 28px)); max-height:min(800px,calc(100dvh - 28px)); padding:0; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:var(--surface); color:var(--text); box-shadow:var(--shadow-md); }
+    dialog::backdrop { background:rgba(15,17,14,.52); backdrop-filter:blur(4px); }
+    .dialog-header { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 18px; border-bottom:1px solid var(--line); }
+    .dialog-header h2 { margin:0; font-size:17px; }
+    .dialog-close { width:34px; height:34px; display:grid; place-items:center; border:0; border-radius:8px; background:transparent; cursor:pointer; font-size:20px; color:var(--muted); }
+    .dialog-close:hover { background:var(--surface-muted); color:var(--text); }
+    .dialog-body { padding:20px 20px 26px; overflow:auto; max-height:calc(100dvh - 94px); }
+    .dialog-body h3 { margin:24px 0 8px; padding-top:18px; border-top:1px solid var(--line); font-size:14px; }
+    .dialog-body h3:first-child { margin-top:0; padding-top:0; border-top:0; }
+    .dialog-body p,.dialog-body li { color:var(--muted); font-size:13px; line-height:1.7; }
+    .dialog-body ul { padding-left:20px; }
+    .custom-css-editor { width:100%; min-height:280px; resize:vertical; padding:14px; border:1px solid var(--line); border-radius:10px; background:#fbfbf9; color:var(--text); font:13px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+    .dialog-actions { display:flex; justify-content:flex-end; flex-wrap:wrap; gap:8px; margin-top:12px; }
+
+    @media (max-width: 940px) {
+      .brand-meta { display:none; }
+      .main { padding-top:12px; }
+      .page-intro { padding-bottom:10px; }
+      .page-intro p { max-width:620px; }
+      .workspace-toolbar { overflow-x:auto; scrollbar-width:none; }
+      .workspace-toolbar::-webkit-scrollbar,.workspace-controls::-webkit-scrollbar { display:none; }
+      .button .label-optional { display:none; }
+      .editor-shell,.workspace.compare .editor-shell { grid-template-columns:42% 58%; }
+      .compare-pane { grid-template-columns:1fr; }
+      .compare-cell:first-child { border-right:0; border-bottom:1px solid var(--line); }
+      .compare-cell .preview-scroll { height:calc((100% - 84px)/2); }
+      .score-grid { min-width:54%; }
+    }
+    @media (max-width: 720px) {
+      :root { --header-height:58px; }
+      .header-inner { padding:8px 14px; }
+      .brand-mark { width:35px; height:35px; border-radius:10px; }
+      .brand-name { font-size:15px; }
+      .version-badge { font-size:9px; }
+      .header-actions { gap:10px; }
+      .page-intro { align-items:center; }
+      .page-intro h2 { font-size:19px; }
+      .page-intro p { font-size:11px; line-height:1.55; }
+      .local-badge { padding:6px 8px; font-size:10px; }
+      .workspace { border-radius:14px; }
+      .workspace-toolbar { min-height:50px; padding:6px 7px; }
+      .toolbar-divider { display:none; }
+      .save-status { display:none; }
+      .button { min-height:34px; padding:6px 9px; font-size:12px; }
+      .workspace-controls { padding:7px; gap:8px; }
+      .control-group.mode-group { display:none; }
+      .mobile-view-switch { display:flex; align-items:center; padding:7px; border-bottom:1px solid var(--line); background:#fafaf8; }
+      .mobile-view-switch .segmented { width:100%; }
+      .mobile-view-switch .seg-button { flex:1; }
+      .editor-shell,.workspace.compare .editor-shell { display:block; height:calc(100dvh - 258px); min-height:470px; }
+      .editor-pane,.single-preview,.compare-pane { display:none !important; height:100%; border:0; }
+      .workspace.mobile-editor .editor-pane { display:block !important; }
+      .workspace.mobile-preview .single-preview { display:block !important; }
+      .workspace.mobile-compare .compare-pane { display:grid !important; grid-template-columns:1fr; height:100%; }
+      .workspace.mobile-compare .editor-pane { display:none !important; }
+      .workspace.mobile-compare .compare-cell { min-height:0; }
+      .workspace.mobile-compare .compare-cell .preview-scroll { height:calc((100% - 84px)/2); }
+      #editor { padding:16px 14px 32px; font-size:13px; }
+      .sample-label { display:none; }
+      .sample-new-button { padding:4px 5px; }
+      .preview-wrap,.compare-cell .preview-wrap { padding:22px 17px 46px; }
+      .md { font-size:15px; }
+      .section-head { display:block; margin-bottom:12px; }
+      .score-grid { min-width:0; width:100%; margin:12px 0 0; gap:6px; }
+      .score-card { padding:8px; }
+      .score-name { font-size:10px; }
+      .score-number { font-size:14px; }
+      .compat-section { padding:14px; }
+      .issue-row { grid-template-columns:22px 68px minmax(0,1fr); }
+      .issue-line { display:none; }
+    }
+    @media (max-width: 430px) {
+      .brand-mark { width:33px; height:33px; }
+      .page-intro { gap:8px; }
+      .page-intro p { display:none; }
+      .local-badge span.long { display:none; }
+      .local-badge .short { display:inline; }
+      .main { padding-left:8px; padding-right:8px; }
+      .button .label-mobile-hide { display:none; }
+      .format-bar { max-width:150px; overflow:auto; scrollbar-width:none; }
+      .format-bar::-webkit-scrollbar { display:none; }
+      .control-label { display:none; }
+      .style-chip { padding:5px 8px; }
+      footer { padding-left:12px; padding-right:12px; }
+    }
+    @media print {
+      .app-header,.page-intro,.workspace-toolbar,.workspace-controls,.mobile-view-switch,.editor-pane,.compat-section,footer,.pane-head { display:none !important; }
+      body,.main,.workspace,.editor-shell,.preview-pane,.preview-scroll { display:block !important; width:100% !important; height:auto !important; min-height:0 !important; margin:0 !important; padding:0 !important; border:0 !important; box-shadow:none !important; background:#fff !important; overflow:visible !important; }
+      .single-preview { display:block !important; }
+      .compare-pane { display:none !important; }
+      .preview-wrap { padding:0 !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18v14H3z"/><path d="M6 15V9l3 3.5L12 9v6M15 9v6m-2.5-2.5L15 15l2.5-2.5"/></svg>
+        </div>
+        <div class="brand-copy">
+          <h1 class="brand-name">Markdown Preview Lab <span class="version-badge">v1.0</span></h1>
+          <p class="brand-meta" data-i18n="brandMeta">GitHub / Qiita / Zenn の見え方を比較</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="language-button" id="languageButton" type="button" aria-label="Switch language">EN</button>
+        <button class="header-icon-button" id="helpButton" type="button" aria-label="使い方と注意事項" title="使い方と注意事項">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.4 2.4 0 1 1 3.8 2c-.9.6-1.6 1.1-1.6 2.3"/><path d="M12 17h.01"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="page-intro">
+      <div>
+        <h2 data-i18n="pageTitle">Markdown エディタ</h2>
+        <p data-i18n="pageDesc">同じMarkdownを GitHub / Qiita / Zenn 風に切り替え、投稿先ごとの互換性も確認できます。</p>
+      </div>
+      <div class="local-badge" title="No network access">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l7 3v5c0 4.8-2.9 8.2-7 10-4.1-1.8-7-5.2-7-10V6z"/><path d="m9 12 2 2 4-4"/></svg>
+        <span class="long" data-i18n="localOnly">ブラウザ内で処理</span><span class="short">Local</span>
+      </div>
+    </div>
+
+    <section class="workspace mobile-editor" id="workspace" aria-label="Markdown editor workspace">
+      <div class="workspace-toolbar">
+        <div class="button-row">
+          <button class="button" id="openButton" type="button"><span class="icon-text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h6l2 2h10v10H3z"/><path d="M3 7v12"/></svg><span class="label-mobile-hide" data-i18n="open">開く</span></span></button>
+          <button class="button" id="downloadButton" type="button"><span class="icon-text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg><span class="label-mobile-hide" data-i18n="download">保存</span></span></button>
+          <button class="button" id="copyButton" type="button"><span class="icon-text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span class="label-optional" data-i18n="copy">コピー</span></span></button>
+        </div>
+        <div class="toolbar-divider"></div>
+        <div class="button-row">
+          <button class="button" id="undoButton" type="button" aria-label="Undo" title="Undo">↶</button>
+          <button class="button" id="redoButton" type="button" aria-label="Redo" title="Redo">↷</button>
+        </div>
+        <div class="toolbar-spacer"></div>
+        <div class="save-status"><span class="save-dot"></span><span id="saveStatus" data-i18n="saved">自動保存済み</span></div>
+      </div>
+
+      <div class="workspace-controls">
+        <div class="control-group mode-group">
+          <span class="control-label" data-i18n="view">表示</span>
+          <div class="segmented">
+            <button class="seg-button active" type="button" data-mode="single" data-i18n="single">通常</button>
+            <button class="seg-button" type="button" data-mode="compare" data-i18n="compare">比較</button>
+          </div>
+        </div>
+        <div class="toolbar-divider"></div>
+        <div class="control-group" id="styleChips">
+          <span class="control-label" data-i18n="style">スタイル</span>
+          <button class="style-chip active" type="button" data-style="github">GitHub</button>
+          <button class="style-chip" type="button" data-style="qiita">Qiita</button>
+          <button class="style-chip" type="button" data-style="zenn">Zenn</button>
+          <button class="style-chip" type="button" data-style="standard">Standard</button>
+          <button class="style-chip" type="button" data-style="minimal">Minimal</button>
+          <button class="style-chip" type="button" data-style="print">Print</button>
+          <button class="style-chip" type="button" data-style="custom" id="customStyleButton">Custom CSS</button>
+        </div>
+        <div class="toolbar-divider"></div>
+        <label class="sync-toggle"><input type="checkbox" id="syncScroll" checked><span data-i18n="sync">スクロール同期</span></label>
+      </div>
+
+      <div class="mobile-view-switch">
+        <div class="segmented">
+          <button class="seg-button active" type="button" data-mobile-view="editor" data-i18n="edit">編集</button>
+          <button class="seg-button" type="button" data-mobile-view="preview" data-i18n="preview">プレビュー</button>
+          <button class="seg-button" type="button" data-mobile-view="compare" data-i18n="compare">比較</button>
+        </div>
+      </div>
+
+      <div class="editor-shell">
+        <div class="editor-pane" id="editorPane">
+          <div class="pane-head">
+            <div class="format-bar" aria-label="Formatting toolbar">
+              <button class="format-button" type="button" data-format="bold" title="Bold">B</button>
+              <button class="format-button" type="button" data-format="italic" title="Italic"><i>I</i></button>
+              <button class="format-button" type="button" data-format="heading" title="Heading">H</button>
+              <button class="format-button" type="button" data-format="link" title="Link">↗</button>
+              <button class="format-button" type="button" data-format="code" title="Code">&lt;/&gt;</button>
+              <button class="format-button" type="button" data-format="list" title="List">•</button>
+            </div>
+            <span class="pane-title">Markdown</span>
+            <div class="sample-state" id="sampleState"><span class="sample-label" data-i18n="sampleViewing">サンプル表示中</span><button class="sample-new-button" id="newDocumentButton" type="button" data-i18n="newDocument">新規作成</button></div>
+            <span class="pane-meta" id="editorStats">0 chars · 0 lines</span>
+          </div>
+          <textarea id="editor" spellcheck="false" aria-label="Markdown input"></textarea>
+          <div class="drop-overlay" data-i18n="drop">Markdownファイルをドロップ</div>
+        </div>
+
+        <div class="preview-pane single-preview">
+          <div class="pane-head"><span class="pane-title" id="singlePreviewTitle">GitHub Preview</span><span class="pane-meta" data-i18n="approx">近似プレビュー</span></div>
+          <div class="preview-scroll" id="singlePreviewScroll"><div class="preview-wrap"><article class="md theme-github" id="singlePreview"></article></div></div>
+        </div>
+
+        <div class="preview-pane compare-pane">
+          <div class="compare-cell">
+            <div class="pane-head"><select id="compareStyleA" aria-label="Comparison style A"><option value="github">GitHub</option><option value="qiita">Qiita</option><option value="zenn">Zenn</option><option value="standard">Standard</option><option value="minimal">Minimal</option><option value="print">Print</option><option value="custom">Custom CSS</option></select><span class="pane-meta">A</span></div>
+            <div class="preview-scroll" id="compareScrollA"><div class="preview-wrap"><article class="md theme-github" id="comparePreviewA"></article></div></div>
+          </div>
+          <div class="compare-cell">
+            <div class="pane-head"><select id="compareStyleB" aria-label="Comparison style B"><option value="qiita">Qiita</option><option value="github">GitHub</option><option value="zenn">Zenn</option><option value="standard">Standard</option><option value="minimal">Minimal</option><option value="print">Print</option><option value="custom">Custom CSS</option></select><span class="pane-meta">B</span></div>
+            <div class="preview-scroll" id="compareScrollB"><div class="preview-wrap"><article class="md theme-qiita" id="comparePreviewB"></article></div></div>
+          </div>
+        </div>
+      </div>
+      <input id="fileInput" type="file" accept=".md,.markdown,.mdown,.mkd,text/markdown,text/plain" hidden>
+    </section>
+
+    <section class="compat-section" aria-labelledby="compatTitle">
+      <div class="section-head">
+        <div><h2 id="compatTitle" data-i18n="compatTitle">投稿先の互換性チェック</h2><p data-i18n="compatDesc">記法を簡易解析して、移植時に確認したい箇所を表示します。</p></div>
+        <div class="score-grid">
+          <div class="score-card"><div class="score-top"><span class="score-name">GitHub</span><span class="score-number" id="scoreGithub">100%</span></div><div class="score-track"><div class="score-fill" id="fillGithub" style="width:100%"></div></div></div>
+          <div class="score-card"><div class="score-top"><span class="score-name">Qiita</span><span class="score-number" id="scoreQiita">100%</span></div><div class="score-track"><div class="score-fill" id="fillQiita" style="width:100%"></div></div></div>
+          <div class="score-card"><div class="score-top"><span class="score-name">Zenn</span><span class="score-number" id="scoreZenn">100%</span></div><div class="score-track"><div class="score-fill" id="fillZenn" style="width:100%"></div></div></div>
+        </div>
+      </div>
+      <div class="issues" id="issues"></div>
+      <p class="heuristic-note" data-i18n="heuristic">※ スコアは独自ルールによる目安です。各サービスの公式レンダラーと完全一致するものではありません。</p>
+    </section>
+  </main>
+
+  <footer><span data-i18n="footer">Markdownの内容は外部送信せず、ブラウザ内のLocalStorageに自動保存します。</span></footer>
+
+  <dialog id="helpDialog">
+    <div class="dialog-header"><h2 data-i18n="helpTitle">使い方と注意事項</h2><button class="dialog-close" type="button" data-close-dialog="helpDialog" aria-label="Close">×</button></div>
+    <div class="dialog-body">
+      <h3 data-i18n="helpBasicTitle">基本操作</h3>
+      <p data-i18n="helpBasic">左側にMarkdownを書くと右側へ即時反映します。スタイルを切り替えると、GitHub / Qiita / Zenn 風の見え方を比較できます。内容はLocalStorageへ自動保存されます。</p>
+      <h3 data-i18n="helpCompareTitle">比較モード</h3>
+      <p data-i18n="helpCompare">「比較」を選ぶと、右側に2種類のプレビューを同時表示します。スマホでは下の「比較」タブから2プレビューを上下に確認できます。</p>
+      <h3 data-i18n="helpCompatTitle">互換性チェック</h3>
+      <p data-i18n="helpCompat">GFM固有記法、Zennメッセージ、数式、HTMLなどを検出して注意点を表示します。判定は補助機能であり、各サービスの公式仕様を完全再現するものではありません。</p>
+      <h3 data-i18n="helpPrivacyTitle">プライバシー / オフライン</h3>
+      <p data-i18n="helpPrivacy">外部ライブラリやCDNを使わず、このHTMLだけで動作します。CSPで外部通信を禁止しているため、Markdown内の外部画像は実画像を読み込まずプレースホルダーとして表示します。</p>
+      <h3 data-i18n="helpSyntaxTitle">v1.0で対応する主な記法</h3>
+      <ul><li>見出し、太字、斜体、取り消し線、リンク、引用</li><li>順序付き/なしリスト、タスクリスト、テーブル</li><li>インラインコード、コードフェンス</li><li>簡易数式ブロック、Zenn風 message ブロック</li></ul>
+    </div>
+  </dialog>
+
+  <dialog id="customCssDialog">
+    <div class="dialog-header"><h2>Custom CSS</h2><button class="dialog-close" type="button" data-close-dialog="customCssDialog" aria-label="Close">×</button></div>
+    <div class="dialog-body">
+      <p data-i18n="customCssHelp">プレビュー用の <code>.md</code> を対象にCSSを書いてください。例: <code>.md h2 { color: #16624f; }</code></p>
+      <textarea class="custom-css-editor" id="customCssEditor" spellcheck="false" aria-label="Custom CSS"></textarea>
+      <div class="dialog-actions"><button class="button" id="resetCssButton" type="button" data-i18n="reset">リセット</button><button class="button primary" id="applyCssButton" type="button" data-i18n="apply">適用</button></div>
+    </div>
+  </dialog>
+
+  <style id="customCssStyle"></style>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+  (() => {
+    'use strict';
+    const STORAGE_KEY = 'markdown-preview-lab:v1';
+    const defaultMarkdown = `# Markdown Preview Lab
+
+同じMarkdownを **GitHub / Qiita / Zenn** 風に切り替えて確認できます。
+
+## できること
+
+- リアルタイムプレビュー
+- [x] LocalStorageへ自動保存
+- [x] 2スタイル比較
+- [x] 投稿先の互換性チェック
+
+> このHTMLだけで動作し、Markdown本文を外部へ送信しません。
+
+### コード
+
+\`\`\`javascript
+const message = "Hello, Markdown!";
+console.log(message);
+\`\`\`
+
+### テーブル
+
+| 投稿先 | プレビュー | 互換性チェック |
+| --- | --- | --- |
+| GitHub | ✓ | ✓ |
+| Qiita | ✓ | ✓ |
+| Zenn | ✓ | ✓ |
+
+:::message
+Zenn風のmessage記法は、他の投稿先では互換性に注意してください。
+:::
+
+$$
+E = mc^2
+$$
+`;
+
+    const I18N = {
+      ja: {
+        brandMeta:'GitHub / Qiita / Zenn の見え方を比較', pageTitle:'Markdown エディタ', pageDesc:'同じMarkdownを GitHub / Qiita / Zenn 風に切り替え、投稿先ごとの互換性も確認できます。', localOnly:'ブラウザ内で処理', open:'開く', download:'保存', copy:'コピー', saved:'自動保存済み', saving:'保存中…', view:'表示', single:'通常', compare:'比較', style:'スタイル', sync:'スクロール同期', edit:'編集', preview:'プレビュー', approx:'近似プレビュー', drop:'Markdownファイルをドロップ', compatTitle:'投稿先の互換性チェック', compatDesc:'記法を簡易解析して、移植時に確認したい箇所を表示します。', heuristic:'※ スコアは独自ルールによる目安です。各サービスの公式レンダラーと完全一致するものではありません。', footer:'Markdownの内容は外部送信せず、ブラウザ内のLocalStorageに自動保存します。', helpTitle:'使い方と注意事項', helpBasicTitle:'基本操作', helpBasic:'左側にMarkdownを書くと右側へ即時反映します。スタイルを切り替えると、GitHub / Qiita / Zenn 風の見え方を比較できます。内容はLocalStorageへ自動保存されます。', helpCompareTitle:'比較モード', helpCompare:'「比較」を選ぶと、右側に2種類のプレビューを同時表示します。スマホでは下の「比較」タブから2プレビューを上下に確認できます。', helpCompatTitle:'互換性チェック', helpCompat:'GFM固有記法、Zennメッセージ、数式、HTMLなどを検出して注意点を表示します。判定は補助機能であり、各サービスの公式仕様を完全再現するものではありません。', helpPrivacyTitle:'プライバシー / オフライン', helpPrivacy:'外部ライブラリやCDNを使わず、このHTMLだけで動作します。CSPで外部通信を禁止しているため、Markdown内の外部画像は実画像を読み込まずプレースホルダーとして表示します。', helpSyntaxTitle:'v1.0で対応する主な記法', customCssHelp:'プレビュー用の .md を対象にCSSを書いてください。例: .md h2 { color: #16624f; }', reset:'リセット', apply:'適用', noIssues:'目立った互換性上の注意点はありません。', copied:'Markdownをコピーしました', copyFailed:'コピーできませんでした', downloaded:'Markdownファイルを保存しました', opened:'ファイルを読み込みました', invalidFile:'Markdown / テキストファイルを選んでください', cssApplied:'Custom CSSを適用しました', cssReset:'Custom CSSをリセットしました', line:'行', chars:'文字', lines:'行', warning:'注意', info:'情報', sampleViewing:'サンプル表示中', newDocument:'新規作成', newDocumentReady:'空のドキュメントを作成しました'
+      },
+      en: {
+        brandMeta:'Compare GitHub / Qiita / Zenn appearances', pageTitle:'Markdown Editor', pageDesc:'Switch the same Markdown between GitHub, Qiita and Zenn-inspired previews and check portability.', localOnly:'Runs in your browser', open:'Open', download:'Save', copy:'Copy', saved:'Autosaved', saving:'Saving…', view:'View', single:'Single', compare:'Compare', style:'Style', sync:'Sync scroll', edit:'Edit', preview:'Preview', approx:'Approx. preview', drop:'Drop a Markdown file', compatTitle:'Platform compatibility check', compatDesc:'A lightweight syntax scan highlights areas worth checking before publishing elsewhere.', heuristic:'Scores are heuristic estimates and do not guarantee identical output to each platform’s official renderer.', footer:'Your Markdown is not uploaded and is autosaved only in this browser’s LocalStorage.', helpTitle:'Help & notes', helpBasicTitle:'Basics', helpBasic:'Write Markdown on the left and the preview updates immediately. Switch styles to compare GitHub, Qiita and Zenn-inspired appearances. Your draft is autosaved to LocalStorage.', helpCompareTitle:'Compare mode', helpCompare:'Compare mode shows two preview styles at once. On phones, use the Compare tab to view both previews vertically.', helpCompatTitle:'Compatibility check', helpCompat:'The checker detects GFM-specific syntax, Zenn message blocks, math, HTML and more. It is an assistive heuristic, not an exact implementation of each official parser.', helpPrivacyTitle:'Privacy / offline', helpPrivacy:'No CDN or external library is required. CSP blocks external network requests, so remote images in Markdown are shown as placeholders rather than fetched.', helpSyntaxTitle:'Main syntax in v1.0', customCssHelp:'Target the .md preview in your CSS. Example: .md h2 { color: #16624f; }', reset:'Reset', apply:'Apply', noIssues:'No notable portability issues detected.', copied:'Markdown copied', copyFailed:'Could not copy', downloaded:'Markdown file saved', opened:'File loaded', invalidFile:'Choose a Markdown or text file', cssApplied:'Custom CSS applied', cssReset:'Custom CSS reset', line:'Line', chars:'chars', lines:'lines', warning:'Warning', info:'Info', sampleViewing:'Sample', newDocument:'New document', newDocumentReady:'Started a blank document'
+      }
+    };
+
+    const els = {
+      workspace: document.getElementById('workspace'), editor: document.getElementById('editor'), fileInput: document.getElementById('fileInput'), editorPane: document.getElementById('editorPane'),
+      singlePreview: document.getElementById('singlePreview'), singlePreviewScroll: document.getElementById('singlePreviewScroll'), singlePreviewTitle: document.getElementById('singlePreviewTitle'),
+      compareA: document.getElementById('comparePreviewA'), compareB: document.getElementById('comparePreviewB'), compareScrollA: document.getElementById('compareScrollA'), compareScrollB: document.getElementById('compareScrollB'),
+      compareStyleA: document.getElementById('compareStyleA'), compareStyleB: document.getElementById('compareStyleB'), syncScroll: document.getElementById('syncScroll'),
+      issues: document.getElementById('issues'), editorStats: document.getElementById('editorStats'), saveStatus: document.getElementById('saveStatus'), toast: document.getElementById('toast'),
+      sampleState: document.getElementById('sampleState'), newDocumentButton: document.getElementById('newDocumentButton'),
+      helpDialog: document.getElementById('helpDialog'), customCssDialog: document.getElementById('customCssDialog'), customCssEditor: document.getElementById('customCssEditor'), customCssStyle: document.getElementById('customCssStyle')
+    };
+
+    let state = { lang:'ja', style:'github', mode:'single', mobileView:'editor', compareA:'github', compareB:'qiita', customCss:'', syncScroll:true, samplePristine:true };
+    let history = [], historyIndex = -1, historyTimer = null, saveTimer = null, toastTimer = null, syncing = false;
+
+    function t(key) { return (I18N[state.lang] && I18N[state.lang][key]) || I18N.ja[key] || key; }
+    function showToast(message) { clearTimeout(toastTimer); els.toast.textContent = message; els.toast.classList.add('show'); toastTimer = setTimeout(() => els.toast.classList.remove('show'), 1800); }
+    function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+    function safeUrl(url) { try { const s=String(url).trim(); if (/^(https?:|mailto:|#|\/)/i.test(s)) return s; return '#'; } catch { return '#'; } }
+    function slugify(s) { return s.toLowerCase().replace(/<[^>]*>/g,'').replace(/[^\p{L}\p{N}\s-]/gu,'').trim().replace(/\s+/g,'-').slice(0,80); }
+
+    function inlineMarkdown(text) {
+      let s = escapeHtml(text);
+      const code = [];
+      s = s.replace(/`([^`]+)`/g, (_, c) => { code.push(`<code>${c}</code>`); return `\u0000CODE${code.length-1}\u0000`; });
+      s = s.replace(/!\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g, (_, alt, url) => `<span class="image-placeholder" title="${escapeHtml(url)}">▧ <span>${alt || 'image'} · ${escapeHtml(url)}</span></span>`);
+      s = s.replace(/\[([^\]]+)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g, (_, label, url) => `<a href="${escapeHtml(safeUrl(url))}" target="_blank" rel="noopener noreferrer">${label}</a>`);
+      s = s.replace(/&lt;(https?:\/\/[^&\s]+)&gt;/g, (_, url) => `<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${url}</a>`);
+      s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/__([^_]+)__/g, '<strong>$1</strong>');
+      s = s.replace(/~~([^~]+)~~/g, '<del>$1</del>');
+      s = s.replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>').replace(/(^|[^_])_([^_\n]+)_/g, '$1<em>$2</em>');
+      s = s.replace(/\u0000CODE(\d+)\u0000/g, (_, i) => code[Number(i)] || '');
+      return s;
+    }
+
+    function splitTableRow(line) {
+      let s=line.trim(); if (s.startsWith('|')) s=s.slice(1); if (s.endsWith('|')) s=s.slice(0,-1);
+      return s.split(/(?<!\\)\|/).map(x => x.trim().replace(/\\\|/g,'|'));
+    }
+
+    function markdownToHtml(md, platform='standard') {
+      const lines = md.replace(/\r\n?/g,'\n').split('\n');
+      let out = [], i=0;
+      const isBlank = l => /^\s*$/.test(l);
+      while (i < lines.length) {
+        let line = lines[i];
+        if (isBlank(line)) { i++; continue; }
+        if (i===0 && /^---\s*$/.test(line)) {
+          let j=i+1; while (j<lines.length && !/^---\s*$/.test(lines[j])) j++;
+          if (j<lines.length) { i=j+1; continue; }
+        }
+        let fm = line.match(/^\s*(```+|~~~+)\s*([^\s]*)\s*$/);
+        if (fm) {
+          const fence=fm[1], lang=fm[2]||'', code=[]; i++;
+          while (i<lines.length && !new RegExp('^\\s*'+fence[0]+'{'+fence.length+',}\\s*$').test(lines[i])) { code.push(lines[i]); i++; }
+          if (i<lines.length) i++;
+          out.push(`<pre>${lang?`<span class="code-lang">${escapeHtml(lang)}</span>`:''}<code>${escapeHtml(code.join('\n'))}</code></pre>`); continue;
+        }
+        if (/^\s*\$\$\s*$/.test(line)) {
+          const math=[]; i++; while (i<lines.length && !/^\s*\$\$\s*$/.test(lines[i])) { math.push(lines[i]); i++; } if(i<lines.length)i++;
+          out.push(`<div class="math-block">${escapeHtml(math.join(' '))}</div>`); continue;
+        }
+        let msg=line.match(/^\s*:::message(?:\s+(alert))?\s*$/);
+        if (msg) {
+          const body=[]; i++; while(i<lines.length && !/^\s*:::\s*$/.test(lines[i])) { body.push(lines[i]); i++; } if(i<lines.length)i++;
+          out.push(`<div class="message-box${msg[1]?' alert':''}">${body.map(inlineMarkdown).join('<br>')}</div>`); continue;
+        }
+        let h=line.match(/^(#{1,6})\s+(.+)$/);
+        if (h) { const n=h[1].length, content=inlineMarkdown(h[2].replace(/\s+#+\s*$/,'')); out.push(`<h${n} id="${slugify(h[2])}">${content}</h${n}>`); i++; continue; }
+        if (/^\s{0,3}([-*_])(?:\s*\1){2,}\s*$/.test(line)) { out.push('<hr>'); i++; continue; }
+        if (/^\s*>/.test(line)) {
+          const q=[]; while(i<lines.length && /^\s*>/.test(lines[i])) { q.push(lines[i].replace(/^\s*>\s?/,'')); i++; }
+          out.push(`<blockquote>${q.map(x=>`<p>${inlineMarkdown(x)}</p>`).join('')}</blockquote>`); continue;
+        }
+        if (i+1<lines.length && /\|/.test(line) && /^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?\s*$/.test(lines[i+1])) {
+          const head=splitTableRow(line), aligns=splitTableRow(lines[i+1]).map(c => c.startsWith(':')&&c.endsWith(':')?'center':c.endsWith(':')?'right':c.startsWith(':')?'left':''); i+=2;
+          const rows=[]; while(i<lines.length && /\|/.test(lines[i]) && !isBlank(lines[i])) { rows.push(splitTableRow(lines[i])); i++; }
+          out.push('<table><thead><tr>'+head.map((c,k)=>`<th${aligns[k]?` style="text-align:${aligns[k]}"`:''}>${inlineMarkdown(c)}</th>`).join('')+'</tr></thead><tbody>'+rows.map(r=>'<tr>'+head.map((_,k)=>`<td${aligns[k]?` style="text-align:${aligns[k]}"`:''}>${inlineMarkdown(r[k]||'')}</td>`).join('')+'</tr>').join('')+'</tbody></table>'); continue;
+        }
+        let listMatch=line.match(/^\s*([-+*]|\d+[.)])\s+(.+)$/);
+        if (listMatch) {
+          const ordered=/^\d/.test(listMatch[1]), items=[];
+          while(i<lines.length) {
+            const m=lines[i].match(/^\s*([-+*]|\d+[.)])\s+(.+)$/); if(!m || /^\d/.test(m[1])!==ordered) break;
+            let body=m[2], task=body.match(/^\[([ xX])\]\s+(.*)$/);
+            if(task) items.push(`<li class="task"><input type="checkbox" disabled ${task[1].toLowerCase()==='x'?'checked':''}>${inlineMarkdown(task[2])}</li>`); else items.push(`<li>${inlineMarkdown(body)}</li>`);
+            i++;
+          }
+          out.push(`<${ordered?'ol':'ul'}>${items.join('')}</${ordered?'ol':'ul'}>`); continue;
+        }
+        if (/^\s*</.test(line)) { out.push(`<p class="raw-html">${escapeHtml(line)}</p>`); i++; continue; }
+        const para=[line]; i++;
+        while(i<lines.length && !isBlank(lines[i]) && !/^(#{1,6})\s+/.test(lines[i]) && !/^\s*(```+|~~~+)/.test(lines[i]) && !/^\s*>/.test(lines[i]) && !/^\s*([-+*]|\d+[.)])\s+/.test(lines[i]) && !/^\s*\$\$\s*$/.test(lines[i]) && !/^\s*:::message/.test(lines[i]) && !(i+1<lines.length && /\|/.test(lines[i]) && /^\s*\|?\s*:?-{3,}:?/.test(lines[i+1]))) { para.push(lines[i]); i++; }
+        out.push(`<p>${para.map(inlineMarkdown).join('<br>')}</p>`);
+      }
+      return out.join('\n');
+    }
+
+    function getThemeClass(style) { return 'theme-' + (style==='custom' ? 'standard' : style); }
+    function applyTheme(el, style) { el.className = `md ${getThemeClass(style)}`; }
+    function render() {
+      const md=els.editor.value, html=markdownToHtml(md,state.style);
+      els.singlePreview.innerHTML=html; applyTheme(els.singlePreview,state.style); els.singlePreviewTitle.textContent=(state.style==='custom'?'Custom CSS':capitalize(state.style))+' Preview';
+      const htmlA=markdownToHtml(md,state.compareA), htmlB=markdownToHtml(md,state.compareB);
+      els.compareA.innerHTML=htmlA; els.compareB.innerHTML=htmlB; applyTheme(els.compareA,state.compareA); applyTheme(els.compareB,state.compareB);
+      const lines=md ? md.split(/\r?\n/).length : 0; els.editorStats.textContent=`${md.length} ${t('chars')} · ${lines} ${t('lines')}`;
+      updateSampleStateUI();
+      runCompatibility(md); scheduleSave();
+    }
+    function capitalize(s) { return s.charAt(0).toUpperCase()+s.slice(1); }
+
+    function analyzeCompatibility(md) {
+      const lines=md.replace(/\r\n?/g,'\n').split('\n'), issues=[], scores={github:100,qiita:100,zenn:100};
+      const add=(platform,severity,message,line,penalty)=>{ issues.push({platform,severity,message,line}); scores[platform]=Math.max(0,scores[platform]-penalty); };
+      lines.forEach((line,idx)=>{
+        const n=idx+1;
+        if (/^\s*:::message(?:\s+alert)?\s*$/.test(line)) { add('github','warn',':::message はGitHub Markdownでは専用ブロックとして解釈されません。',n,12); add('qiita','warn',':::message はZenn固有寄りの記法です。Qiita投稿前に表現を確認してください。',n,8); }
+        if (/^\s*\$\$\s*$/.test(line)) { add('github','info','数式の表示は投稿先や文脈によって差が出るため、公開前の確認を推奨します。',n,4); add('qiita','info','数式ブロックは公開前にQiita側のプレビューでも確認してください。',n,3); add('zenn','info','数式はこのアプリでは簡易表示です。Zenn本番の数式レンダリングとは異なります。',n,2); }
+        if (/^\s*</.test(line) && /<\/?[A-Za-z][^>]*>/.test(line)) { add('github','info','HTMLを含みます。許可されるタグ/属性は投稿先ごとに異なります。',n,5); add('qiita','info','HTMLを含みます。Qiita側で許可されるタグを確認してください。',n,5); add('zenn','warn','HTMLはZenn Markdownとの互換性に注意してください。',n,8); }
+        if (/!\[[^\]]*\]\(https?:\/\//i.test(line)) { issues.push({platform:'local',severity:'info',message:'外部画像はプライバシー優先のため、このHTMLでは読み込まずプレースホルダー表示します。',line:n}); }
+        if (/^\s*- \[[ xX]\]/.test(line)) { add('qiita','info','タスクリストの見え方はGitHubと完全には同じにならない場合があります。',n,2); add('zenn','info','タスクリストの見え方はGitHubと完全には同じにならない場合があります。',n,2); }
+        if (/\|/.test(line) && idx+1<lines.length && /^\s*\|?\s*:?-{3,}:?/.test(lines[idx+1])) { /* broadly portable */ }
+        if (/^\s*```[^\s`]+\s+[^\s]/.test(line)) { add('github','info','コードフェンスの言語指定に追加文字があります。ハイライト差分に注意してください。',n,2); add('qiita','info','コードブロックの言語指定は投稿先ごとに解釈差があります。',n,2); add('zenn','info','コードブロックの言語指定は投稿先ごとに解釈差があります。',n,2); }
+      });
+      if (/^---\s*\n[\s\S]*?\n---\s*$/m.test(md.slice(0,1200))) { add('github','info','先頭のFront MatterはREADME表示では本文扱いになる場合があります。',1,3); add('qiita','info','Front Matterは投稿方法によって扱いが異なります。',1,3); }
+      return {issues,scores};
+    }
+
+    function runCompatibility(md) {
+      const {issues,scores}=analyzeCompatibility(md);
+      ['github','qiita','zenn'].forEach(p=>{ const cap=capitalize(p), value=scores[p]; document.getElementById('score'+cap).textContent=value+'%'; document.getElementById('fill'+cap).style.width=value+'%'; });
+      if (!issues.length) { els.issues.innerHTML=`<div class="issue-empty">✓ ${escapeHtml(t('noIssues'))}</div>`; return; }
+      els.issues.innerHTML=issues.slice(0,24).map((x,i)=>`<button class="issue-row" type="button" data-issue-index="${i}" data-line="${x.line}"><span class="issue-icon ${x.severity}">${x.severity==='warn'?'!':'i'}</span><span class="issue-platform">${x.platform==='local'?'Local':capitalize(x.platform)}</span><span class="issue-message">${escapeHtml(x.message)}</span><span class="issue-line">${t('line')} ${x.line}</span></button>`).join('');
+    }
+
+    function scheduleSave() { els.saveStatus.textContent=t('saving'); clearTimeout(saveTimer); saveTimer=setTimeout(saveState,350); }
+    function saveState() { try { localStorage.setItem(STORAGE_KEY,JSON.stringify({...state,markdown:els.editor.value})); els.saveStatus.textContent=t('saved'); } catch { els.saveStatus.textContent='LocalStorage error'; } }
+    function loadState() {
+      try {
+        const raw=localStorage.getItem(STORAGE_KEY);
+        if(!raw) return false;
+        const saved=JSON.parse(raw);
+        if(typeof saved.samplePristine!=='boolean') saved.samplePristine=saved.markdown===defaultMarkdown;
+        state={...state,...saved};
+        return true;
+      } catch { return false; }
+    }
+    function updateSampleStateUI() { els.sampleState.classList.toggle('visible',state.samplePristine && els.editor.value===defaultMarkdown); }
+    function leaveSampleMode() { if(state.samplePristine){ state.samplePristine=false; updateSampleStateUI(); } }
+    function newDocument() {
+      state.samplePristine=false;
+      els.editor.value='';
+      pushHistory(true);
+      render();
+      els.editor.focus();
+      showToast(t('newDocumentReady'));
+    }
+    function pushHistory(immediate=false) { clearTimeout(historyTimer); const run=()=>{ const value=els.editor.value; if(history[historyIndex]===value)return; history=history.slice(0,historyIndex+1); history.push(value); if(history.length>100) history.shift(); historyIndex=history.length-1; }; if(immediate)run(); else historyTimer=setTimeout(run,350); }
+    function undo() { if(historyIndex>0){ historyIndex--; els.editor.value=history[historyIndex]; render(); } }
+    function redo() { if(historyIndex<history.length-1){ historyIndex++; els.editor.value=history[historyIndex]; render(); } }
+
+    function setStyle(style) {
+      state.style=style; document.querySelectorAll('[data-style]').forEach(b=>b.classList.toggle('active',b.dataset.style===style));
+      if(style==='custom') { els.customCssEditor.value=state.customCss; if(!state.customCss) els.customCssDialog.showModal(); }
+      render();
+    }
+    function setMode(mode) { state.mode=mode; els.workspace.classList.toggle('compare',mode==='compare'); document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode)); requestAnimationFrame(()=>syncScrollGroup(els.editor)); saveState(); }
+    function setMobileView(view) { state.mobileView=view; els.workspace.classList.remove('mobile-editor','mobile-preview','mobile-compare'); els.workspace.classList.add('mobile-'+view); document.querySelectorAll('[data-mobile-view]').forEach(b=>b.classList.toggle('active',b.dataset.mobileView===view)); if(view==='compare') setMode('compare'); saveState(); }
+    function setLanguage(lang) { state.lang=lang; document.documentElement.lang=lang; document.querySelectorAll('[data-i18n]').forEach(el=>{ const key=el.dataset.i18n; if(t(key)) el.textContent=t(key); }); document.getElementById('languageButton').textContent=lang==='ja'?'EN':'JA'; render(); saveState(); }
+
+    function selectLine(line) { const lines=els.editor.value.split('\n'); let start=0; for(let i=0;i<line-1;i++)start+=lines[i].length+1; const end=start+(lines[line-1]||'').length; els.editor.focus(); els.editor.setSelectionRange(start,end); if(window.innerWidth<=720)setMobileView('editor'); const ratio=start/Math.max(1,els.editor.value.length); els.editor.scrollTop=(els.editor.scrollHeight-els.editor.clientHeight)*ratio; }
+    function formatSelection(type) {
+      const e=els.editor, start=e.selectionStart, end=e.selectionEnd, selected=e.value.slice(start,end), before=e.value.slice(0,start), after=e.value.slice(end); let replacement=selected, selectOffset=0;
+      if(type==='bold'){ replacement=`**${selected||'bold'}**`; selectOffset=2; }
+      if(type==='italic'){ replacement=`*${selected||'italic'}*`; selectOffset=1; }
+      if(type==='heading'){ replacement=(start===0||before.endsWith('\n')?'':'\n')+`## ${selected||'Heading'}`; selectOffset=replacement.indexOf(selected||'Heading'); }
+      if(type==='link'){ replacement=`[${selected||'link text'}](https://example.com)`; selectOffset=1; }
+      if(type==='code'){ replacement=selected.includes('\n')?`\n\`\`\`\n${selected||'code'}\n\`\`\`\n`:`\`${selected||'code'}\``; selectOffset=replacement.indexOf(selected||'code'); }
+      if(type==='list'){ replacement=(start===0||before.endsWith('\n')?'':'\n')+(selected||'item').split('\n').map(x=>`- ${x}`).join('\n'); selectOffset=replacement.indexOf(selected||'item'); }
+      leaveSampleMode(); e.value=before+replacement+after; e.focus(); const targetText=selected||({bold:'bold',italic:'italic',heading:'Heading',link:'link text',code:'code',list:'item'}[type]); const pos=start+Math.max(0,selectOffset); e.setSelectionRange(pos,pos+targetText.length); pushHistory(true); render();
+    }
+
+    function scrollRatio(el) { const max=el.scrollHeight-el.clientHeight; return max>0 ? el.scrollTop/max : 0; }
+    function setScrollRatio(el,ratio) { const max=el.scrollHeight-el.clientHeight; if(max>0) el.scrollTop=max*ratio; }
+    function syncScrollGroup(source) {
+      if(!state.syncScroll||syncing)return;
+      syncing=true;
+      const ratio=scrollRatio(source);
+      const group=state.mode==='compare' ? [els.editor,els.compareScrollA,els.compareScrollB] : [els.editor,els.singlePreviewScroll];
+      group.forEach(target=>{ if(target!==source && target.clientHeight>0) setScrollRatio(target,ratio); });
+      requestAnimationFrame(()=>syncing=false);
+    }
+
+    async function copyMarkdown() { try { await navigator.clipboard.writeText(els.editor.value); showToast(t('copied')); } catch { try { els.editor.select(); document.execCommand('copy'); showToast(t('copied')); } catch { showToast(t('copyFailed')); } } }
+    function downloadMarkdown() { const blob=new Blob([els.editor.value],{type:'text/markdown;charset=utf-8'}), a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='document.md'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); showToast(t('downloaded')); }
+    function readFile(file) { if(!file)return; if(file.size>5*1024*1024){ showToast('File is too large (max 5 MB)'); return; } const name=file.name.toLowerCase(); if(!(name.endsWith('.md')||name.endsWith('.markdown')||name.endsWith('.mdown')||name.endsWith('.mkd')||file.type.startsWith('text/'))){ showToast(t('invalidFile')); return; } const reader=new FileReader(); reader.onload=()=>{ state.samplePristine=false; els.editor.value=String(reader.result||''); pushHistory(true); render(); showToast(t('opened')); }; reader.readAsText(file); }
+
+    document.getElementById('openButton').addEventListener('click',()=>els.fileInput.click());
+    document.getElementById('downloadButton').addEventListener('click',downloadMarkdown);
+    document.getElementById('copyButton').addEventListener('click',copyMarkdown);
+    document.getElementById('undoButton').addEventListener('click',undo); document.getElementById('redoButton').addEventListener('click',redo);
+    document.getElementById('helpButton').addEventListener('click',()=>els.helpDialog.showModal());
+    document.getElementById('languageButton').addEventListener('click',()=>setLanguage(state.lang==='ja'?'en':'ja'));
+    document.querySelectorAll('[data-close-dialog]').forEach(b=>b.addEventListener('click',()=>document.getElementById(b.dataset.closeDialog).close()));
+    document.querySelectorAll('dialog').forEach(d=>d.addEventListener('click',e=>{ if(e.target===d){ const r=d.getBoundingClientRect(); if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close(); } }));
+    document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));
+    document.querySelectorAll('[data-style]').forEach(b=>b.addEventListener('click',()=>setStyle(b.dataset.style)));
+    document.querySelectorAll('[data-mobile-view]').forEach(b=>b.addEventListener('click',()=>setMobileView(b.dataset.mobileView)));
+    document.querySelectorAll('[data-format]').forEach(b=>b.addEventListener('click',()=>formatSelection(b.dataset.format)));
+    els.fileInput.addEventListener('change',()=>{ readFile(els.fileInput.files[0]); els.fileInput.value=''; });
+    els.newDocumentButton.addEventListener('click',newDocument);
+    els.editor.addEventListener('input',()=>{ leaveSampleMode(); pushHistory(); render(); });
+    els.editor.addEventListener('scroll',()=>syncScrollGroup(els.editor));
+    els.singlePreviewScroll.addEventListener('scroll',()=>syncScrollGroup(els.singlePreviewScroll));
+    els.compareScrollA.addEventListener('scroll',()=>syncScrollGroup(els.compareScrollA));
+    els.compareScrollB.addEventListener('scroll',()=>syncScrollGroup(els.compareScrollB));
+    els.editor.addEventListener('keydown',e=>{ if(e.key==='Tab'){ e.preventDefault(); leaveSampleMode(); const s=e.selectionStart; e.value=e.value.slice(0,s)+'  '+e.value.slice(e.selectionEnd); e.setSelectionRange(s+2,s+2); pushHistory(true); render(); } if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){ e.preventDefault(); downloadMarkdown(); } });
+    ['dragenter','dragover'].forEach(ev=>els.editorPane.addEventListener(ev,e=>{ e.preventDefault(); els.editorPane.classList.add('dragging'); }));
+    ['dragleave','drop'].forEach(ev=>els.editorPane.addEventListener(ev,e=>{ e.preventDefault(); els.editorPane.classList.remove('dragging'); })); els.editorPane.addEventListener('drop',e=>readFile(e.dataTransfer.files[0]));
+    els.syncScroll.addEventListener('change',()=>{ state.syncScroll=els.syncScroll.checked; saveState(); });
+    els.compareStyleA.addEventListener('change',()=>{ state.compareA=els.compareStyleA.value; render(); }); els.compareStyleB.addEventListener('change',()=>{ state.compareB=els.compareStyleB.value; render(); });
+    els.issues.addEventListener('click',e=>{ const row=e.target.closest('[data-line]'); if(row)selectLine(Number(row.dataset.line)); });
+    document.getElementById('applyCssButton').addEventListener('click',()=>{ state.customCss=els.customCssEditor.value; els.customCssStyle.textContent=state.customCss; els.customCssDialog.close(); setStyle('custom'); showToast(t('cssApplied')); });
+    document.getElementById('resetCssButton').addEventListener('click',()=>{ state.customCss=''; els.customCssEditor.value=''; els.customCssStyle.textContent=''; saveState(); showToast(t('cssReset')); });
+    document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='hidden')saveState(); }); window.addEventListener('beforeunload',saveState);
+
+    const hadSavedState=loadState(); els.editor.value=hadSavedState && typeof state.markdown==='string' ? state.markdown : defaultMarkdown; if(!hadSavedState) state.samplePristine=true; els.compareStyleA.value=state.compareA; els.compareStyleB.value=state.compareB; els.syncScroll.checked=state.syncScroll!==false; els.customCssStyle.textContent=state.customCss||''; els.customCssEditor.value=state.customCss||'';
+    setMode(state.mode); setMobileView(state.mobileView); setLanguage(state.lang); setStyle(state.style); history=[els.editor.value]; historyIndex=0; render();
+  })();
+  </script>
+</body>
+</html>
