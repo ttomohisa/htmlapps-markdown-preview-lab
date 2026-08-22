@@ -14,6 +14,8 @@ Markdownを外部へ送信せず、GitHub / Qiita / Zenn 風の見え方を比�
 
 GitHub Pagesから最初のHTMLを読み込んだ後、Markdownの編集・プレビュー・互換性チェック・自動保存・ファイル読み込み・保存はブラウザー内で処理されます。入力したMarkdownがアプリからサーバーへ送信されることはありません。
 
+![Markdownのレンダリングスタイルを並べて比較するMarkdown Preview Lab](assets/screenshot.png)
+
 ## 主な機能
 
 - 左にMarkdown、右にリアルタイムプレビュー

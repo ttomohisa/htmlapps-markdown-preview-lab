@@ -14,6 +14,8 @@ A privacy-focused, single-HTML Markdown editor for writing locally, comparing Gi
 
 GitHub Pages delivers only the initial HTML. After it loads, Markdown editing, rendering, compatibility checks, autosave, file import, and export are processed locally in your browser. Your Markdown is not uploaded by the app.
 
+![Markdown Preview Lab comparing rendered Markdown styles side by side](assets/screenshot.png)
+
 ## Features
 
 - Side-by-side Markdown editor and live preview
