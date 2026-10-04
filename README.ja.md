@@ -224,3 +224,6 @@ GitHub Pagesがまだ有効になっていない場合、同梱ワークフロ�
 Copyright © 2026 ttomohisa
 
 このプロジェクトは [MIT License](LICENSE) で公開されています。
+
+### 編集欄のキーボード検証
+Tabで空白2文字を挿入し、Shift+Tabで編集欄からフォーカスを移動できます。`scripts/check-repository.ps1` 後、既存のNode.js用Playwright環境で `node tests/editor-tab.cjs` を実行します。環境が外部にある場合は `NODE_PATH` にnode_modulesを指定します。`PLAYWRIGHT_BROWSER_CHANNEL` の既定値は `msedge` です。両生成HTMLを直接開いて編集・Undo/Redo・自動保存・ダウンロード・キーボード移動を検証します。

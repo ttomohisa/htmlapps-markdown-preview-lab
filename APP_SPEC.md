@@ -23,3 +23,7 @@ A browser-only Markdown editor that compares GitHub, Qiita, and Zenn-inspired re
 
 ## Rendering note
 GitHub, Qiita, and Zenn modes are approximations. This project does not bundle or claim to exactly reproduce each service's official renderer.
+
+## Editor keyboard behavior
+- Plain Tab replaces the selected range with two spaces in both editors and records an undoable change.
+- Shift+Tab keeps native focus navigation; other modified Tab shortcuts are not intercepted.
