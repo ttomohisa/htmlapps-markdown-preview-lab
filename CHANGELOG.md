@@ -10,3 +10,8 @@
 - Replaced the link formatting glyph with a conventional chain-link icon.
 - Added a large modal editor for focused Markdown input.
 - Added a persistent output filename field with automatic `.md` extension handling.
+
+## Audit follow-up — 2026-10-04
+- Fix Tab handling to target the textarea rather than the KeyboardEvent. Preserve the pre-Tab text for undo, including immediately preceding edits and expanded-editor changes.
+- Keep Shift+Tab and browser-modified Tab shortcuts available for keyboard navigation.
+- Add generated-artifact browser regression coverage for ranges, caret, history, autosave and download.

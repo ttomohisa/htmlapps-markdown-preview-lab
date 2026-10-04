@@ -765,6 +765,17 @@ $$
       requestAnimationFrame(()=>els.editor.focus());
     }
 
+    function insertEditorTab(event) {
+      if(event.key!=='Tab'||event.shiftKey||event.ctrlKey||event.altKey||event.metaKey)return;
+      event.preventDefault();
+      pushHistory(true);
+      const editor=event.currentTarget;
+      editor.setRangeText('  ',editor.selectionStart,editor.selectionEnd,'end');
+      if(editor===els.expandedEditor)syncExpandedEditor();
+      else { leaveSampleMode(); render(); }
+      pushHistory(true);
+    }
+
     async function copyMarkdown() { try { await navigator.clipboard.writeText(els.editor.value); showToast(t('copied')); } catch { try { els.editor.select(); document.execCommand('copy'); showToast(t('copied')); } catch { showToast(t('copyFailed')); } } }
     function normalizedFilename() { let name=(els.filenameInput.value||state.outputFilename||'document').trim().replace(/\.(?:md|markdown|mdown|mkd)$/i,'').replace(/[<>:"/\\|?*\u0000-\u001F]/g,'-').replace(/[. ]+$/g,'').trim(); if(!name) name='document'; state.outputFilename=name; els.filenameInput.value=name; return name+'.md'; }
     function downloadMarkdown() { const blob=new Blob([els.editor.value],{type:'text/markdown;charset=utf-8'}), a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=normalizedFilename(); document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); saveState(); showToast(t('downloaded')); }
@@ -776,7 +787,7 @@ $$
     els.filenameInput.addEventListener('blur',()=>{ normalizedFilename(); saveState(); });
     els.expandEditorButton.addEventListener('click',openExpandedEditor);
     els.expandedEditor.addEventListener('input',syncExpandedEditor);
-    els.expandedEditor.addEventListener('keydown',e=>{ if(e.key==='Tab'){ e.preventDefault(); const start=e.target.selectionStart; e.target.value=e.target.value.slice(0,start)+'  '+e.target.value.slice(e.target.selectionEnd); e.target.setSelectionRange(start+2,start+2); syncExpandedEditor(); } if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){ e.preventDefault(); downloadMarkdown(); } });
+    els.expandedEditor.addEventListener('keydown',e=>{ insertEditorTab(e); if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){ e.preventDefault(); downloadMarkdown(); } });
     els.expandedEditorDialog.addEventListener('close',closeExpandedEditorSync);
     document.getElementById('copyButton').addEventListener('click',copyMarkdown);
     document.getElementById('undoButton').addEventListener('click',undo); document.getElementById('redoButton').addEventListener('click',redo);
@@ -795,7 +806,7 @@ $$
     els.singlePreviewScroll.addEventListener('scroll',()=>syncScrollGroup(els.singlePreviewScroll));
     els.compareScrollA.addEventListener('scroll',()=>syncScrollGroup(els.compareScrollA));
     els.compareScrollB.addEventListener('scroll',()=>syncScrollGroup(els.compareScrollB));
-    els.editor.addEventListener('keydown',e=>{ if(e.key==='Tab'){ e.preventDefault(); leaveSampleMode(); const s=e.selectionStart; e.value=e.value.slice(0,s)+'  '+e.value.slice(e.selectionEnd); e.setSelectionRange(s+2,s+2); pushHistory(true); render(); } if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){ e.preventDefault(); downloadMarkdown(); } });
+    els.editor.addEventListener('keydown',e=>{ insertEditorTab(e); if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){ e.preventDefault(); downloadMarkdown(); } });
     ['dragenter','dragover'].forEach(ev=>els.editorPane.addEventListener(ev,e=>{ e.preventDefault(); els.editorPane.classList.add('dragging'); }));
     ['dragleave','drop'].forEach(ev=>els.editorPane.addEventListener(ev,e=>{ e.preventDefault(); els.editorPane.classList.remove('dragging'); })); els.editorPane.addEventListener('drop',e=>readFile(e.dataTransfer.files[0]));
     els.syncScroll.addEventListener('change',()=>{ state.syncScroll=els.syncScroll.checked; saveState(); });

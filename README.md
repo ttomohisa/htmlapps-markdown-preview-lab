@@ -221,3 +221,6 @@ Bug reports and feature proposals are welcome through GitHub Issues. See [CONTRI
 Copyright © 2026 ttomohisa
 
 Licensed under the [MIT License](LICENSE).
+
+### Editor keyboard regression
+Plain Tab inserts two spaces; Shift+Tab moves focus out of the editor. After `scripts/check-repository.ps1`, run `node tests/editor-tab.cjs` using an existing Node.js Playwright runtime. Set `NODE_PATH` to its node_modules directory; `PLAYWRIGHT_BROWSER_CHANNEL` defaults to `msedge`. The test opens both generated files locally and checks editing, undo/redo, autosave, download, and keyboard navigation.
