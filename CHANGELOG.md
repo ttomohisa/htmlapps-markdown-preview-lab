@@ -15,3 +15,8 @@
 - Fix Tab handling to target the textarea rather than the KeyboardEvent. Preserve the pre-Tab text for undo, including immediately preceding edits and expanded-editor changes.
 - Keep Shift+Tab and browser-modified Tab shortcuts available for keyboard navigation.
 - Add generated-artifact browser regression coverage for ranges, caret, history, autosave and download.
+
+## Link rendering follow-up — 2026-10-05
+- Preserve link query ampersands, underscore paths, and supported label formatting without rewriting generated attributes.
+- Keep remote image placeholders and autolink destinations outside the text-formatting pass.
+- Add dependency-free renderer regressions to the canonical check and rebuild the root downloadable HTML alongside both distributions, retaining the existing Tab editing/history fix.

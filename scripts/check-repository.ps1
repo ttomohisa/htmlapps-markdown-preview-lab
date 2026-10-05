@@ -11,4 +11,6 @@ if ([string]::IsNullOrWhiteSpace([string]$app.name)) { throw "app.config.json: n
 if ([string]::IsNullOrWhiteSpace([string]$app.slug)) { throw "app.config.json: slug is required" }
 if ([string]::IsNullOrWhiteSpace([string]$app.version)) { throw "app.config.json: version is required" }
 & (Join-Path $Root "build-standalone.ps1")
+& node (Join-Path $Root "tests/inline-links.cjs")
+if ($LASTEXITCODE -ne 0) { throw "Inline link regression tests failed." }
 Write-Host "[OK] Repository check passed." -ForegroundColor Green
