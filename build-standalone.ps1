@@ -11,6 +11,7 @@ $deps = Get-Content -Raw -Encoding UTF8 (Join-Path $Root "dependencies.json") | 
 if ($deps.dependencies.Count -ne 0) { throw "This repository currently expects zero runtime dependencies." }
 $output = Join-Path $Root $app.build.output
 Copy-Item -Force $Source $output
+Copy-Item -Force $Source (Join-Path $Root "markdown-preview-lab.html")
 @{ generatedAt = (Get-Date).ToUniversalTime().ToString("o"); dependencies = @(); runtimeNetworkBlocked = [bool]$app.build.blockRuntimeNetwork } | ConvertTo-Json -Depth 6 | Set-Content -Encoding UTF8 (Join-Path $Dist "dependency-manifest.json")
 New-Item -ItemType File -Force -Path (Join-Path $Dist ".nojekyll") | Out-Null
 & (Join-Path $Root "scripts\build-self-extract.ps1") -InputPath $output -OutputPath (Join-Path $Root $app.build.selfExtract.output)

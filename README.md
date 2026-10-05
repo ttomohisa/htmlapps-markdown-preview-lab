@@ -170,7 +170,9 @@ After editing `src/index.template.html`, validate and rebuild with:
 ./scripts/check-repository.ps1
 ```
 
-The repository check verifies the required template files, rebuilds the standalone HTML, and runs the included standalone validation.
+The repository check requires PowerShell and Node.js 18 or newer. It verifies the required template files, rebuilds the standalone HTML, and runs standalone validation plus the dependency-free inline-link regression tests. The build also refreshes `markdown-preview-lab.html`; source, root download, and both `dist` HTML files must stay byte-identical.
+
+To rerun only the renderer regressions after a build, run `node tests/inline-links.cjs`.
 
 ## Privacy and runtime network protection
 

@@ -227,3 +227,7 @@ Copyright © 2026 ttomohisa
 
 ### 編集欄のキーボード検証
 Tabで空白2文字を挿入し、Shift+Tabで編集欄からフォーカスを移動できます。`scripts/check-repository.ps1` 後、既存のNode.js用Playwright環境で `node tests/editor-tab.cjs` を実行します。環境が外部にある場合は `NODE_PATH` にnode_modulesを指定します。`PLAYWRIGHT_BROWSER_CHANNEL` の既定値は `msedge` です。両生成HTMLを直接開いて編集・Undo/Redo・自動保存・ダウンロード・キーボード移動を検証します。
+
+### リンク描画の回帰テスト
+
+`scripts/check-repository.ps1` は PowerShell と Node.js 18 以降を使い、ビルド・単体HTML検証・追加依存なしのリンク描画テストを実行します。ビルドはルートの `markdown-preview-lab.html` も更新し、ソースと両方の `dist` HTML の内容一致を確認します。描画テストだけを再実行する場合は、ビルド後に `node tests/inline-links.cjs` を実行してください。

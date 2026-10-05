@@ -570,15 +570,24 @@ $$
     function slugify(s) { return s.toLowerCase().replace(/<[^>]*>/g,'').replace(/[^\p{L}\p{N}\s-]/gu,'').trim().replace(/\s+/g,'-').slice(0,80); }
 
     function inlineMarkdown(text) {
-      let s = escapeHtml(text);
-      const code = [];
-      s = s.replace(/`([^`]+)`/g, (_, c) => { code.push(`<code>${c}</code>`); return `\u0000CODE${code.length-1}\u0000`; });
-      s = s.replace(/!\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g, (_, alt, url) => `<span class="image-placeholder" title="${escapeHtml(url)}">▧ <span>${alt || 'image'} · ${escapeHtml(url)}</span></span>`);
-      s = s.replace(/\[([^\]]+)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g, (_, label, url) => `<a href="${escapeHtml(safeUrl(url))}" target="_blank" rel="noopener noreferrer">${label}</a>`);
-      s = s.replace(/&lt;(https?:\/\/[^&\s]+)&gt;/g, (_, url) => `<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${url}</a>`);
-      s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/__([^_]+)__/g, '<strong>$1</strong>');
-      s = s.replace(/~~([^~]+)~~/g, '<del>$1</del>');
-      s = s.replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>').replace(/(^|[^_])_([^_\n]+)_/g, '$1<em>$2</em>');
+      const code = [], markup = [];
+      const restoreMarkup = value => value.replace(/\u0000MARKUP(\d+)\u0000/g, (_, i) => markup[Number(i)] || '');
+      // Resolve earlier fragments (such as an image inside a link label) before storing an outer one.
+      const protect = html => { markup.push(restoreMarkup(html)); return `\u0000MARKUP${markup.length-1}\u0000`; };
+      const formatText = value => {
+        let s = escapeHtml(value);
+        s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/__([^_]+)__/g, '<strong>$1</strong>');
+        s = s.replace(/~~([^~]+)~~/g, '<del>$1</del>');
+        return s.replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>').replace(/(^|[^_])_([^_\n]+)_/g, '$1<em>$2</em>');
+      };
+      let s = String(text);
+      s = s.replace(/`([^`]+)`/g, (_, c) => { code.push(`<code>${escapeHtml(c)}</code>`); return `\u0000CODE${code.length-1}\u0000`; });
+      // Parse raw destinations, escape them once, and keep generated HTML out of text formatting.
+      s = s.replace(/!\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g, (_, alt, url) => protect(`<span class="image-placeholder" title="${escapeHtml(url)}">▧ <span>${formatText(alt || 'image')} · ${escapeHtml(url)}</span></span>`));
+      s = s.replace(/\[([^\]]+)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g, (_, label, url) => protect(`<a href="${escapeHtml(safeUrl(url))}" target="_blank" rel="noopener noreferrer">${formatText(label)}</a>`));
+      s = s.replace(/<(https?:\/\/[^&<>\s]+)>/g, (_, url) => protect(`<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(url)}</a>`));
+      s = formatText(s);
+      s = restoreMarkup(s);
       s = s.replace(/\u0000CODE(\d+)\u0000/g, (_, i) => code[Number(i)] || '');
       return s;
     }
