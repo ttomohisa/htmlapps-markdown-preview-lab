@@ -104,8 +104,12 @@ Use the expand icon in the Markdown pane header to open a large focused editing 
 | Shortcut | Action |
 | --- | --- |
 | `Tab` | Insert two spaces in the Markdown editor |
+| `Ctrl` / `⌘` + `B` | Wrap the selection in bold Markdown, or insert and select `bold` |
+| `Ctrl` / `⌘` + `I` | Wrap the selection in italic Markdown, or insert and select `italic` |
 | `Ctrl` / `⌘` + `S` | Download the current Markdown using the output filename |
 | `Esc` | Close an open dialog using the browser's native dialog behavior |
+
+Formatting shortcuts work while either the main or expanded editor is focused. They insert the same markup as the toolbar helpers; they do not toggle existing markup. Alt/Shift combinations and text composition are left alone, and holding a formatting shortcut does not repeatedly wrap the selection. Undo restores the text immediately before any toolbar formatting action or formatting shortcut, including text typed just before it.
 
 ## Supported Markdown in v1.0
 
@@ -225,4 +229,6 @@ Copyright © 2026 ttomohisa
 Licensed under the [MIT License](LICENSE).
 
 ### Editor keyboard regression
+`scripts/check-repository.ps1` runs `node tests/editor-formatting.cjs` with no additional dependencies. It checks the application functions and editor event wiring in all four HTML variants, including formatting shortcuts, undo/redo boundaries, expanded-editor synchronization, LocalStorage save data, repeat/modifier/composition guards, and existing Tab/save handling. These Node checks do not simulate real-browser focus, layout, IME input, or native keyboard behavior.
+
 Plain Tab inserts two spaces; Shift+Tab moves focus out of the editor. After `scripts/check-repository.ps1`, run `node tests/editor-tab.cjs` using an existing Node.js Playwright runtime. Set `NODE_PATH` to its node_modules directory; `PLAYWRIGHT_BROWSER_CHANNEL` defaults to `msedge`. The test opens both generated files locally and checks editing, undo/redo, autosave, download, and keyboard navigation.

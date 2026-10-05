@@ -105,8 +105,12 @@ Markdown欄の見出しにある拡大アイコンを押すと、長文を編集
 | ショートカット | 操作 |
 | --- | --- |
 | `Tab` | Markdown編集欄へスペース2個を挿入 |
+| `Ctrl` / `⌘` + `B` | 選択範囲を太字記法で囲む。未選択時は `bold` を挿入して選択 |
+| `Ctrl` / `⌘` + `I` | 選択範囲を斜体記法で囲む。未選択時は `italic` を挿入して選択 |
 | `Ctrl` / `⌘` + `S` | 現在の出力ファイル名でMarkdownを保存 |
 | `Esc` | ブラウザー標準のdialog操作で開いているダイアログを閉じる |
+
+書式ショートカットは、通常・拡大どちらの編集欄でもフォーカス中に使えます。ツールバーと同じ記法を挿入し、既存記法の解除は行いません。Alt/Shiftとの組み合わせや文字変換中の入力は処理せず、押し続けても記法を重ねて挿入しません。ツールバーのすべての書式操作と書式ショートカットは、直前に入力した文章も含めて、Undoで書式適用前の内容へ戻せます。
 
 ## v1.0で対応する主なMarkdown
 
@@ -226,6 +230,8 @@ Copyright © 2026 ttomohisa
 このプロジェクトは [MIT License](LICENSE) で公開されています。
 
 ### 編集欄のキーボード検証
+`scripts/check-repository.ps1` は、追加依存なしの `node tests/editor-formatting.cjs` を実行します。4種類のHTMLで実際のアプリ関数とイベント接続を検証し、書式ショートカット・Undo/Redoの区切り・拡大欄との同期・LocalStorage保存データ・リピートや修飾キーや文字変換の除外・従来のTab/保存操作を確認します。このNode検証は、実ブラウザーのフォーカス・レイアウト・IME入力・標準キーボード動作を再現するものではありません。
+
 Tabで空白2文字を挿入し、Shift+Tabで編集欄からフォーカスを移動できます。`scripts/check-repository.ps1` 後、既存のNode.js用Playwright環境で `node tests/editor-tab.cjs` を実行します。環境が外部にある場合は `NODE_PATH` にnode_modulesを指定します。`PLAYWRIGHT_BROWSER_CHANNEL` の既定値は `msedge` です。両生成HTMLを直接開いて編集・Undo/Redo・自動保存・ダウンロード・キーボード移動を検証します。
 
 ### リンク描画の回帰テスト
