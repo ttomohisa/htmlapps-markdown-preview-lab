@@ -415,8 +415,8 @@
         <div class="editor-pane" id="editorPane">
           <div class="pane-head">
             <div class="format-bar" aria-label="Formatting toolbar">
-              <button class="format-button" type="button" data-format="bold" title="Bold">B</button>
-              <button class="format-button" type="button" data-format="italic" title="Italic"><i>I</i></button>
+              <button class="format-button" type="button" data-format="bold" data-i18n-title="boldShortcut" title="太字 (Ctrl/⌘+B)" aria-keyshortcuts="Control+b Meta+b">B</button>
+              <button class="format-button" type="button" data-format="italic" data-i18n-title="italicShortcut" title="斜体 (Ctrl/⌘+I)" aria-keyshortcuts="Control+i Meta+i"><i>I</i></button>
               <button class="format-button" type="button" data-format="heading" title="Heading">H</button>
               <button class="format-button" type="button" data-format="link" title="Link" aria-label="Link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
               <button class="format-button" type="button" data-format="code" title="Code">&lt;/&gt;</button>
@@ -471,6 +471,8 @@
     <div class="dialog-body">
       <h3 data-i18n="helpBasicTitle">基本操作</h3>
       <p data-i18n="helpBasic">左側にMarkdownを書くと右側へ即時反映します。スタイルを切り替えると、GitHub / Qiita / Zenn 風の見え方を比較できます。内容はLocalStorageへ自動保存されます。</p>
+      <h3 data-i18n="helpShortcutsTitle">編集ショートカット</h3>
+      <p data-i18n="helpShortcuts">通常・拡大どちらの編集欄でも、Ctrl/⌘+Bで太字、Ctrl/⌘+Iで斜体の記法を挿入します。未選択時は編集用の文字を挿入して選択します。書式操作はUndoで直前の文章へ戻せます。</p>
       <h3 data-i18n="helpCompareTitle">比較モード</h3>
       <p data-i18n="helpCompare">「比較」を選ぶと、右側に2種類のプレビューを同時表示します。スマホでは下の「比較」タブから2プレビューを上下に確認できます。</p>
       <h3 data-i18n="helpCompatTitle">互換性チェック</h3>
@@ -542,9 +544,11 @@ $$
 
     const I18N = {
       ja: {
+        boldShortcut:'太字 (Ctrl/⌘+B)', italicShortcut:'斜体 (Ctrl/⌘+I)', helpShortcutsTitle:'編集ショートカット', helpShortcuts:'通常・拡大どちらの編集欄でも、Ctrl/⌘+Bで太字、Ctrl/⌘+Iで斜体の記法を挿入します。未選択時は編集用の文字を挿入して選択します。書式操作はUndoで直前の文章へ戻せます。',
         brandMeta:'GitHub / Qiita / Zenn の見え方を比較', pageTitle:'Markdown エディタ', pageDesc:'同じMarkdownを GitHub / Qiita / Zenn 風に切り替え、投稿先ごとの互換性も確認できます。', localOnly:'ブラウザ内で処理', open:'開く', filename:'ファイル名', download:'保存', copy:'コピー', saved:'自動保存済み', saving:'保存中…', view:'表示', single:'通常', compare:'比較', style:'スタイル', sync:'スクロール同期', edit:'編集', preview:'プレビュー', approx:'近似プレビュー', drop:'Markdownファイルをドロップ', compatTitle:'投稿先の互換性チェック', compatDesc:'記法を簡易解析して、移植時に確認したい箇所を表示します。', heuristic:'※ スコアは独自ルールによる目安です。各サービスの公式レンダラーと完全一致するものではありません。', footer:'Markdownの内容は外部送信せず、ブラウザ内のLocalStorageに自動保存します。', helpTitle:'使い方と注意事項', helpBasicTitle:'基本操作', helpBasic:'左側にMarkdownを書くと右側へ即時反映します。スタイルを切り替えると、GitHub / Qiita / Zenn 風の見え方を比較できます。内容はLocalStorageへ自動保存されます。', helpCompareTitle:'比較モード', helpCompare:'「比較」を選ぶと、右側に2種類のプレビューを同時表示します。スマホでは下の「比較」タブから2プレビューを上下に確認できます。', helpCompatTitle:'互換性チェック', helpCompat:'GFM固有記法、Zennメッセージ、数式、HTMLなどを検出して注意点を表示します。判定は補助機能であり、各サービスの公式仕様を完全再現するものではありません。', helpPrivacyTitle:'プライバシー / オフライン', helpPrivacy:'外部ライブラリやCDNを使わず、このHTMLだけで動作します。CSPで外部通信を禁止しているため、Markdown内の外部画像は実画像を読み込まずプレースホルダーとして表示します。', helpSyntaxTitle:'v1.0で対応する主な記法', customCssHelp:'プレビュー用の .md を対象にCSSを書いてください。例: .md h2 { color: #16624f; }', reset:'リセット', apply:'適用', noIssues:'目立った互換性上の注意点はありません。', copied:'Markdownをコピーしました', copyFailed:'コピーできませんでした', downloaded:'Markdownファイルを保存しました', opened:'ファイルを読み込みました', invalidFile:'Markdown / テキストファイルを選んでください', cssApplied:'Custom CSSを適用しました', cssReset:'Custom CSSをリセットしました', line:'行', chars:'文字', lines:'行', warning:'注意', info:'情報', sampleViewing:'サンプル表示中', newDocument:'新規作成', newDocumentReady:'空のドキュメントを作成しました', expandEditor:'入力欄を拡大', expandedEditorTitle:'Markdownを大きく編集'
       },
       en: {
+        boldShortcut:'Bold (Ctrl/⌘+B)', italicShortcut:'Italic (Ctrl/⌘+I)', helpShortcutsTitle:'Editing shortcuts', helpShortcuts:'In either the main or expanded editor, Ctrl/⌘+B inserts bold markup and Ctrl/⌘+I inserts italic markup. With no selection, placeholder text is inserted and selected for editing. Undo restores the text immediately before formatting.',
         brandMeta:'Compare GitHub / Qiita / Zenn appearances', pageTitle:'Markdown Editor', pageDesc:'Switch the same Markdown between GitHub, Qiita and Zenn-inspired previews and check portability.', localOnly:'Runs in your browser', open:'Open', filename:'File name', download:'Save', copy:'Copy', saved:'Autosaved', saving:'Saving…', view:'View', single:'Single', compare:'Compare', style:'Style', sync:'Sync scroll', edit:'Edit', preview:'Preview', approx:'Approx. preview', drop:'Drop a Markdown file', compatTitle:'Platform compatibility check', compatDesc:'A lightweight syntax scan highlights areas worth checking before publishing elsewhere.', heuristic:'Scores are heuristic estimates and do not guarantee identical output to each platform’s official renderer.', footer:'Your Markdown is not uploaded and is autosaved only in this browser’s LocalStorage.', helpTitle:'Help & notes', helpBasicTitle:'Basics', helpBasic:'Write Markdown on the left and the preview updates immediately. Switch styles to compare GitHub, Qiita and Zenn-inspired appearances. Your draft is autosaved to LocalStorage.', helpCompareTitle:'Compare mode', helpCompare:'Compare mode shows two preview styles at once. On phones, use the Compare tab to view both previews vertically.', helpCompatTitle:'Compatibility check', helpCompat:'The checker detects GFM-specific syntax, Zenn message blocks, math, HTML and more. It is an assistive heuristic, not an exact implementation of each official parser.', helpPrivacyTitle:'Privacy / offline', helpPrivacy:'No CDN or external library is required. CSP blocks external network requests, so remote images in Markdown are shown as placeholders rather than fetched.', helpSyntaxTitle:'Main syntax in v1.0', customCssHelp:'Target the .md preview in your CSS. Example: .md h2 { color: #16624f; }', reset:'Reset', apply:'Apply', noIssues:'No notable portability issues detected.', copied:'Markdown copied', copyFailed:'Could not copy', downloaded:'Markdown file saved', opened:'File loaded', invalidFile:'Choose a Markdown or text file', cssApplied:'Custom CSS applied', cssReset:'Custom CSS reset', line:'Line', chars:'chars', lines:'lines', warning:'Warning', info:'Info', sampleViewing:'Sample', newDocument:'New document', newDocumentReady:'Started a blank document', expandEditor:'Expand editor', expandedEditorTitle:'Edit Markdown in a larger window'
       }
     };
@@ -729,15 +733,20 @@ $$
     function setLanguage(lang) { state.lang=lang; document.documentElement.lang=lang; document.querySelectorAll('[data-i18n]').forEach(el=>{ const key=el.dataset.i18n; if(t(key)) el.textContent=t(key); }); document.querySelectorAll('[data-i18n-title]').forEach(el=>{ const key=el.dataset.i18nTitle; if(t(key)) el.title=t(key); }); document.getElementById('languageButton').textContent=lang==='ja'?'EN':'JA'; render(); saveState(); }
 
     function selectLine(line) { const lines=els.editor.value.split('\n'); let start=0; for(let i=0;i<line-1;i++)start+=lines[i].length+1; const end=start+(lines[line-1]||'').length; els.editor.focus(); els.editor.setSelectionRange(start,end); if(window.innerWidth<=720)setMobileView('editor'); const ratio=start/Math.max(1,els.editor.value.length); els.editor.scrollTop=(els.editor.scrollHeight-els.editor.clientHeight)*ratio; }
-    function formatSelection(type) {
-      const e=els.editor, start=e.selectionStart, end=e.selectionEnd, selected=e.value.slice(start,end), before=e.value.slice(0,start), after=e.value.slice(end); let replacement=selected, selectOffset=0;
+    function formatSelection(type,e=els.editor) {
+      const start=e.selectionStart, end=e.selectionEnd, selected=e.value.slice(start,end), before=e.value.slice(0,start), after=e.value.slice(end); let replacement=selected, selectOffset=0;
       if(type==='bold'){ replacement=`**${selected||'bold'}**`; selectOffset=2; }
       if(type==='italic'){ replacement=`*${selected||'italic'}*`; selectOffset=1; }
       if(type==='heading'){ replacement=(start===0||before.endsWith('\n')?'':'\n')+`## ${selected||'Heading'}`; selectOffset=replacement.indexOf(selected||'Heading'); }
       if(type==='link'){ replacement=`[${selected||'link text'}](https://example.com)`; selectOffset=1; }
       if(type==='code'){ replacement=selected.includes('\n')?`\n\`\`\`\n${selected||'code'}\n\`\`\`\n`:`\`${selected||'code'}\``; selectOffset=replacement.indexOf(selected||'code'); }
       if(type==='list'){ replacement=(start===0||before.endsWith('\n')?'':'\n')+(selected||'item').split('\n').map(x=>`- ${x}`).join('\n'); selectOffset=replacement.indexOf(selected||'item'); }
-      leaveSampleMode(); e.value=before+replacement+after; e.focus(); const targetText=selected||({bold:'bold',italic:'italic',heading:'Heading',link:'link text',code:'code',list:'item'}[type]); const pos=start+Math.max(0,selectOffset); e.setSelectionRange(pos,pos+targetText.length); pushHistory(true); render();
+      // Commit pending typing before the formatting change becomes its own undo step.
+      if(e===els.expandedEditor)els.editor.value=e.value;
+      pushHistory(true);
+      leaveSampleMode(); e.value=before+replacement+after; e.focus(); const targetText=selected||({bold:'bold',italic:'italic',heading:'Heading',link:'link text',code:'code',list:'item'}[type]); const pos=start+Math.max(0,selectOffset); e.setSelectionRange(pos,pos+targetText.length);
+      if(e===els.expandedEditor) { els.editor.value=e.value; els.editor.setSelectionRange(e.selectionStart,e.selectionEnd); }
+      pushHistory(true); render();
     }
 
     function scrollRatio(el) { const max=el.scrollHeight-el.clientHeight; return max>0 ? el.scrollTop/max : 0; }
@@ -774,6 +783,14 @@ $$
       requestAnimationFrame(()=>els.editor.focus());
     }
 
+    function formatEditorShortcut(event) {
+      if(!(event.ctrlKey||event.metaKey)||event.altKey||event.shiftKey||event.isComposing||event.keyCode===229)return;
+      const key=event.key.toLowerCase();
+      if(key!=='b'&&key!=='i')return;
+      event.preventDefault();
+      if(!event.repeat)formatSelection(key==='b'?'bold':'italic',event.currentTarget);
+    }
+
     function insertEditorTab(event) {
       if(event.key!=='Tab'||event.shiftKey||event.ctrlKey||event.altKey||event.metaKey)return;
       event.preventDefault();
@@ -796,7 +813,7 @@ $$
     els.filenameInput.addEventListener('blur',()=>{ normalizedFilename(); saveState(); });
     els.expandEditorButton.addEventListener('click',openExpandedEditor);
     els.expandedEditor.addEventListener('input',syncExpandedEditor);
-    els.expandedEditor.addEventListener('keydown',e=>{ insertEditorTab(e); if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){ e.preventDefault(); downloadMarkdown(); } });
+    els.expandedEditor.addEventListener('keydown',e=>{ formatEditorShortcut(e); insertEditorTab(e); if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){ e.preventDefault(); downloadMarkdown(); } });
     els.expandedEditorDialog.addEventListener('close',closeExpandedEditorSync);
     document.getElementById('copyButton').addEventListener('click',copyMarkdown);
     document.getElementById('undoButton').addEventListener('click',undo); document.getElementById('redoButton').addEventListener('click',redo);
@@ -815,7 +832,7 @@ $$
     els.singlePreviewScroll.addEventListener('scroll',()=>syncScrollGroup(els.singlePreviewScroll));
     els.compareScrollA.addEventListener('scroll',()=>syncScrollGroup(els.compareScrollA));
     els.compareScrollB.addEventListener('scroll',()=>syncScrollGroup(els.compareScrollB));
-    els.editor.addEventListener('keydown',e=>{ insertEditorTab(e); if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){ e.preventDefault(); downloadMarkdown(); } });
+    els.editor.addEventListener('keydown',e=>{ formatEditorShortcut(e); insertEditorTab(e); if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){ e.preventDefault(); downloadMarkdown(); } });
     ['dragenter','dragover'].forEach(ev=>els.editorPane.addEventListener(ev,e=>{ e.preventDefault(); els.editorPane.classList.add('dragging'); }));
     ['dragleave','drop'].forEach(ev=>els.editorPane.addEventListener(ev,e=>{ e.preventDefault(); els.editorPane.classList.remove('dragging'); })); els.editorPane.addEventListener('drop',e=>readFile(e.dataTransfer.files[0]));
     els.syncScroll.addEventListener('change',()=>{ state.syncScroll=els.syncScroll.checked; saveState(); });

@@ -13,4 +13,6 @@ if ([string]::IsNullOrWhiteSpace([string]$app.version)) { throw "app.config.json
 & (Join-Path $Root "build-standalone.ps1")
 & node (Join-Path $Root "tests/inline-links.cjs")
 if ($LASTEXITCODE -ne 0) { throw "Inline link regression tests failed." }
+& node (Join-Path $Root "tests/editor-formatting.cjs")
+if ($LASTEXITCODE -ne 0) { throw "Editor formatting regression tests failed." }
 Write-Host "[OK] Repository check passed." -ForegroundColor Green

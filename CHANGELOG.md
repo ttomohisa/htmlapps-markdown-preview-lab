@@ -1,5 +1,11 @@
 # Changelog
 
+## Formatting shortcuts and undo — 2026-10-05
+- Add Ctrl/Cmd+B and Ctrl/Cmd+I in the main and expanded editors, reusing existing wrappers, placeholders, selection, and focus behavior.
+- Preserve the exact pre-format text for all six formatting helpers so immediate typing is not lost on Undo.
+- Synchronize expanded-editor formatting before history and autosave; ignore composition and Alt/Shift combinations, and prevent repeated keydown events from nesting markup.
+- Add Japanese/English shortcut hints and help, plus dependency-free editor regression coverage in the canonical check.
+
 ## 1.0
 - Added local Markdown editing and realtime preview.
 - Added GitHub, Qiita, Zenn, Standard, Minimal, Print, and Custom CSS styles.

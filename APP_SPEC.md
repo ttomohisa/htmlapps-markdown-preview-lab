@@ -27,3 +27,6 @@ GitHub, Qiita, and Zenn modes are approximations. This project does not bundle o
 ## Editor keyboard behavior
 - Plain Tab replaces the selected range with two spaces in both editors and records an undoable change.
 - Shift+Tab keeps native focus navigation; other modified Tab shortcuts are not intercepted.
+- Ctrl/Cmd+B and Ctrl/Cmd+I insert the existing bold and italic wrappers in the focused main or expanded editor, preserving selected text and selecting placeholder text when no range is selected.
+- Formatting shortcuts ignore Alt/Shift combinations and composition events; recognized repeated keydown events are consumed without repeated wrapping.
+- All six formatting helpers preserve an immediate pre-format undo state, including pending typed text; expanded formatting synchronizes the main value before history and autosave.
