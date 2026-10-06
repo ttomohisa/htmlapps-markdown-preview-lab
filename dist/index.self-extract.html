@@ -42,8 +42,9 @@
     .brand-mark { display:grid; place-items:center; width:38px; height:38px; flex:0 0 auto; border-radius:11px; background:var(--accent); color:#fff; box-shadow:var(--shadow-sm); }
     .brand-mark svg { width:21px; height:21px; display:block; }
     .brand-copy { min-width:0; }
-    .brand-name { margin:0; font-size:17px; line-height:1.2; letter-spacing:.01em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .version-badge { display:inline-flex; align-items:center; margin-left:7px; padding:1px 6px; border:1px solid var(--line); border-radius:999px; color:var(--muted); background:var(--surface-muted); font-size:10px; font-weight:650; vertical-align:2px; }
+    .brand-name { display:flex; align-items:center; margin:0; font-size:17px; line-height:1.2; letter-spacing:.01em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .brand-title { min-width:0; overflow:hidden; text-overflow:ellipsis; }
+    .version-badge { flex:0 0 auto; display:inline-flex; align-items:center; margin-left:7px; padding:1px 6px; border:1px solid var(--line); border-radius:999px; color:var(--muted); background:var(--surface-muted); font-size:10px; font-weight:650; vertical-align:2px; }
     .brand-meta { margin:2px 0 0; color:var(--muted); font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .header-actions { margin-left:auto; display:flex; align-items:center; gap:12px; }
     .language-button { padding:5px 1px; border:0; background:transparent; color:var(--muted); font-size:12px; font-weight:750; letter-spacing:.02em; cursor:pointer; transition:color .16s ease,opacity .16s ease; }
@@ -309,7 +310,7 @@
     }
     @media (max-width: 430px) {
       .brand-mark { width:33px; height:33px; }
-      .page-intro { gap:8px; }
+      .page-intro { gap:8px; flex-wrap:wrap; }
       .page-intro p { display:none; }
       .local-badge span.long { display:none; }
       .local-badge .short { display:inline; }
@@ -338,13 +339,13 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18v14H3z"/><path d="M6 15V9l3 3.5L12 9v6M15 9v6m-2.5-2.5L15 15l2.5-2.5"/></svg>
         </div>
         <div class="brand-copy">
-          <h1 class="brand-name">Markdown Preview Lab <span class="version-badge">v1.0</span></h1>
+          <h1 class="brand-name"><span class="brand-title">Markdown Preview Lab</span> <span class="version-badge">v1.0.1</span></h1>
           <p class="brand-meta" data-i18n="brandMeta">GitHub / Qiita / Zenn の見え方を比較</p>
         </div>
       </div>
       <div class="header-actions">
         <button class="language-button" id="languageButton" type="button" aria-label="Switch language">EN</button>
-        <button class="header-icon-button" id="helpButton" type="button" aria-label="使い方と注意事項" title="使い方と注意事項">
+        <button class="header-icon-button" id="helpButton" type="button" data-i18n-title="helpTitle" data-i18n-aria="helpTitle" aria-label="使い方と注意事項" title="使い方と注意事項">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.4 2.4 0 1 1 3.8 2c-.9.6-1.6 1.1-1.6 2.3"/><path d="M12 17h.01"/></svg>
         </button>
       </div>
@@ -357,9 +358,9 @@
         <h2 data-i18n="pageTitle">Markdown エディタ</h2>
         <p data-i18n="pageDesc">同じMarkdownを GitHub / Qiita / Zenn 風に切り替え、投稿先ごとの互換性も確認できます。</p>
       </div>
-      <div class="local-badge" title="No network access">
+      <div class="local-badge" data-i18n-title="localOnly" title="完全ローカル処理">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l7 3v5c0 4.8-2.9 8.2-7 10-4.1-1.8-7-5.2-7-10V6z"/><path d="m9 12 2 2 4-4"/></svg>
-        <span class="long" data-i18n="localOnly">ブラウザ内で処理</span><span class="short">Local</span>
+        <span class="long" data-i18n="localOnly">完全ローカル処理</span><span class="short" data-i18n="mobileLocal">完全ローカル処理</span>
       </div>
     </div>
 
@@ -479,7 +480,7 @@
       <p data-i18n="helpCompat">GFM固有記法、Zennメッセージ、数式、HTMLなどを検出して注意点を表示します。判定は補助機能であり、各サービスの公式仕様を完全再現するものではありません。</p>
       <h3 data-i18n="helpPrivacyTitle">プライバシー / オフライン</h3>
       <p data-i18n="helpPrivacy">外部ライブラリやCDNを使わず、このHTMLだけで動作します。CSPで外部通信を禁止しているため、Markdown内の外部画像は実画像を読み込まずプレースホルダーとして表示します。</p>
-      <h3 data-i18n="helpSyntaxTitle">v1.0で対応する主な記法</h3>
+      <h3 data-i18n="helpSyntaxTitle">v1.0.1で対応する主な記法</h3>
       <ul><li>見出し、太字、斜体、取り消し線、リンク、引用</li><li>順序付き/なしリスト、タスクリスト、テーブル</li><li>インラインコード、コードフェンス</li><li>簡易数式ブロック、Zenn風 message ブロック</li></ul>
     </div>
   </dialog>
@@ -544,12 +545,40 @@ $$
 
     const I18N = {
       ja: {
+        compatMessageGithub:":::message はGitHub Markdownでは専用ブロックとして解釈されません。",
+        compatMessageQiita:":::message はZenn固有寄りの記法です。Qiita投稿前に表現を確認してください。",
+        compatMathGithub:"数式の表示は投稿先や文脈によって差が出るため、公開前の確認を推奨します。",
+        compatMathQiita:"数式ブロックは公開前にQiita側のプレビューでも確認してください。",
+        compatMathZenn:"数式はこのアプリでは簡易表示です。Zenn本番の数式レンダリングとは異なります。",
+        compatHtmlGithub:"HTMLを含みます。許可されるタグ/属性は投稿先ごとに異なります。",
+        compatHtmlQiita:"HTMLを含みます。Qiita側で許可されるタグを確認してください。",
+        compatHtmlZenn:"HTMLはZenn Markdownとの互換性に注意してください。",
+        compatRemoteImage:"外部画像はプライバシー優先のため、このHTMLでは読み込まずプレースホルダー表示します。",
+        compatTaskList:"タスクリストの見え方はGitHubと完全には同じにならない場合があります。",
+        compatFenceGithub:"コードフェンスの言語指定に追加文字があります。ハイライト差分に注意してください。",
+        compatFenceOther:"コードブロックの言語指定は投稿先ごとに解釈差があります。",
+        compatFrontMatterGithub:"先頭のFront MatterはREADME表示では本文扱いになる場合があります。",
+        compatFrontMatterQiita:"Front Matterは投稿方法によって扱いが異なります。",
         boldShortcut:'太字 (Ctrl/⌘+B)', italicShortcut:'斜体 (Ctrl/⌘+I)', helpShortcutsTitle:'編集ショートカット', helpShortcuts:'通常・拡大どちらの編集欄でも、Ctrl/⌘+Bで太字、Ctrl/⌘+Iで斜体の記法を挿入します。未選択時は編集用の文字を挿入して選択します。書式操作はUndoで直前の文章へ戻せます。',
-        brandMeta:'GitHub / Qiita / Zenn の見え方を比較', pageTitle:'Markdown エディタ', pageDesc:'同じMarkdownを GitHub / Qiita / Zenn 風に切り替え、投稿先ごとの互換性も確認できます。', localOnly:'ブラウザ内で処理', open:'開く', filename:'ファイル名', download:'保存', copy:'コピー', saved:'自動保存済み', saving:'保存中…', view:'表示', single:'通常', compare:'比較', style:'スタイル', sync:'スクロール同期', edit:'編集', preview:'プレビュー', approx:'近似プレビュー', drop:'Markdownファイルをドロップ', compatTitle:'投稿先の互換性チェック', compatDesc:'記法を簡易解析して、移植時に確認したい箇所を表示します。', heuristic:'※ スコアは独自ルールによる目安です。各サービスの公式レンダラーと完全一致するものではありません。', footer:'Markdownの内容は外部送信せず、ブラウザ内のLocalStorageに自動保存します。', helpTitle:'使い方と注意事項', helpBasicTitle:'基本操作', helpBasic:'左側にMarkdownを書くと右側へ即時反映します。スタイルを切り替えると、GitHub / Qiita / Zenn 風の見え方を比較できます。内容はLocalStorageへ自動保存されます。', helpCompareTitle:'比較モード', helpCompare:'「比較」を選ぶと、右側に2種類のプレビューを同時表示します。スマホでは下の「比較」タブから2プレビューを上下に確認できます。', helpCompatTitle:'互換性チェック', helpCompat:'GFM固有記法、Zennメッセージ、数式、HTMLなどを検出して注意点を表示します。判定は補助機能であり、各サービスの公式仕様を完全再現するものではありません。', helpPrivacyTitle:'プライバシー / オフライン', helpPrivacy:'外部ライブラリやCDNを使わず、このHTMLだけで動作します。CSPで外部通信を禁止しているため、Markdown内の外部画像は実画像を読み込まずプレースホルダーとして表示します。', helpSyntaxTitle:'v1.0で対応する主な記法', customCssHelp:'プレビュー用の .md を対象にCSSを書いてください。例: .md h2 { color: #16624f; }', reset:'リセット', apply:'適用', noIssues:'目立った互換性上の注意点はありません。', copied:'Markdownをコピーしました', copyFailed:'コピーできませんでした', downloaded:'Markdownファイルを保存しました', opened:'ファイルを読み込みました', invalidFile:'Markdown / テキストファイルを選んでください', cssApplied:'Custom CSSを適用しました', cssReset:'Custom CSSをリセットしました', line:'行', chars:'文字', lines:'行', warning:'注意', info:'情報', sampleViewing:'サンプル表示中', newDocument:'新規作成', newDocumentReady:'空のドキュメントを作成しました', expandEditor:'入力欄を拡大', expandedEditorTitle:'Markdownを大きく編集'
+        brandMeta:'GitHub / Qiita / Zenn の見え方を比較', pageTitle:'Markdown エディタ', pageDesc:'同じMarkdownを GitHub / Qiita / Zenn 風に切り替え、投稿先ごとの互換性も確認できます。', localOnly:'完全ローカル処理', mobileLocal:'完全ローカル処理', open:'開く', filename:'ファイル名', download:'保存', copy:'コピー', saved:'自動保存済み', saving:'保存中…', view:'表示', single:'通常', compare:'比較', style:'スタイル', sync:'スクロール同期', edit:'編集', preview:'プレビュー', approx:'近似プレビュー', drop:'Markdownファイルをドロップ', compatTitle:'投稿先の互換性チェック', compatDesc:'記法を簡易解析して、移植時に確認したい箇所を表示します。', heuristic:'※ スコアは独自ルールによる目安です。各サービスの公式レンダラーと完全一致するものではありません。', footer:'Markdownの内容は外部送信せず、ブラウザ内のLocalStorageに自動保存します。', helpTitle:'使い方と注意事項', helpBasicTitle:'基本操作', helpBasic:'左側にMarkdownを書くと右側へ即時反映します。スタイルを切り替えると、GitHub / Qiita / Zenn 風の見え方を比較できます。内容はLocalStorageへ自動保存されます。', helpCompareTitle:'比較モード', helpCompare:'「比較」を選ぶと、右側に2種類のプレビューを同時表示します。スマホでは下の「比較」タブから2プレビューを上下に確認できます。', helpCompatTitle:'互換性チェック', helpCompat:'GFM固有記法、Zennメッセージ、数式、HTMLなどを検出して注意点を表示します。判定は補助機能であり、各サービスの公式仕様を完全再現するものではありません。', helpPrivacyTitle:'プライバシー / オフライン', helpPrivacy:'外部ライブラリやCDNを使わず、このHTMLだけで動作します。CSPで外部通信を禁止しているため、Markdown内の外部画像は実画像を読み込まずプレースホルダーとして表示します。', helpSyntaxTitle:'v1.0.1で対応する主な記法', customCssHelp:'プレビュー用の .md を対象にCSSを書いてください。例: .md h2 { color: #16624f; }', reset:'リセット', apply:'適用', noIssues:'目立った互換性上の注意点はありません。', copied:'Markdownをコピーしました', copyFailed:'コピーできませんでした', downloaded:'Markdownファイルを保存しました', opened:'ファイルを読み込みました', invalidFile:'Markdown / テキストファイルを選んでください', cssApplied:'Custom CSSを適用しました', cssReset:'Custom CSSをリセットしました', line:'行', chars:'文字', lines:'行', warning:'注意', info:'情報', sampleViewing:'サンプル表示中', newDocument:'新規作成', newDocumentReady:'空のドキュメントを作成しました', expandEditor:'入力欄を拡大', expandedEditorTitle:'Markdownを大きく編集'
       },
       en: {
+        compatMessageGithub:"GitHub Markdown does not interpret :::message as a dedicated block.",
+        compatMessageQiita:":::message is Zenn-style syntax. Check its appearance before publishing on Qiita.",
+        compatMathGithub:"Math rendering varies by platform and context. Check it before publishing.",
+        compatMathQiita:"Check math blocks in the Qiita preview before publishing.",
+        compatMathZenn:"Math is simplified in this app and differs from Zenn’s production rendering.",
+        compatHtmlGithub:"Contains HTML. Allowed tags and attributes vary by platform.",
+        compatHtmlQiita:"Contains HTML. Check which tags Qiita allows.",
+        compatHtmlZenn:"Check HTML compatibility with Zenn Markdown.",
+        compatRemoteImage:"For privacy, this app shows remote images as placeholders without loading them.",
+        compatTaskList:"Task lists may look different from GitHub’s rendering.",
+        compatFenceGithub:"The code fence has extra language metadata. Syntax highlighting may differ.",
+        compatFenceOther:"Code block language metadata is interpreted differently by each platform.",
+        compatFrontMatterGithub:"Leading Front Matter may appear as body text in a README.",
+        compatFrontMatterQiita:"Front Matter handling depends on the publishing method.",
         boldShortcut:'Bold (Ctrl/⌘+B)', italicShortcut:'Italic (Ctrl/⌘+I)', helpShortcutsTitle:'Editing shortcuts', helpShortcuts:'In either the main or expanded editor, Ctrl/⌘+B inserts bold markup and Ctrl/⌘+I inserts italic markup. With no selection, placeholder text is inserted and selected for editing. Undo restores the text immediately before formatting.',
-        brandMeta:'Compare GitHub / Qiita / Zenn appearances', pageTitle:'Markdown Editor', pageDesc:'Switch the same Markdown between GitHub, Qiita and Zenn-inspired previews and check portability.', localOnly:'Runs in your browser', open:'Open', filename:'File name', download:'Save', copy:'Copy', saved:'Autosaved', saving:'Saving…', view:'View', single:'Single', compare:'Compare', style:'Style', sync:'Sync scroll', edit:'Edit', preview:'Preview', approx:'Approx. preview', drop:'Drop a Markdown file', compatTitle:'Platform compatibility check', compatDesc:'A lightweight syntax scan highlights areas worth checking before publishing elsewhere.', heuristic:'Scores are heuristic estimates and do not guarantee identical output to each platform’s official renderer.', footer:'Your Markdown is not uploaded and is autosaved only in this browser’s LocalStorage.', helpTitle:'Help & notes', helpBasicTitle:'Basics', helpBasic:'Write Markdown on the left and the preview updates immediately. Switch styles to compare GitHub, Qiita and Zenn-inspired appearances. Your draft is autosaved to LocalStorage.', helpCompareTitle:'Compare mode', helpCompare:'Compare mode shows two preview styles at once. On phones, use the Compare tab to view both previews vertically.', helpCompatTitle:'Compatibility check', helpCompat:'The checker detects GFM-specific syntax, Zenn message blocks, math, HTML and more. It is an assistive heuristic, not an exact implementation of each official parser.', helpPrivacyTitle:'Privacy / offline', helpPrivacy:'No CDN or external library is required. CSP blocks external network requests, so remote images in Markdown are shown as placeholders rather than fetched.', helpSyntaxTitle:'Main syntax in v1.0', customCssHelp:'Target the .md preview in your CSS. Example: .md h2 { color: #16624f; }', reset:'Reset', apply:'Apply', noIssues:'No notable portability issues detected.', copied:'Markdown copied', copyFailed:'Could not copy', downloaded:'Markdown file saved', opened:'File loaded', invalidFile:'Choose a Markdown or text file', cssApplied:'Custom CSS applied', cssReset:'Custom CSS reset', line:'Line', chars:'chars', lines:'lines', warning:'Warning', info:'Info', sampleViewing:'Sample', newDocument:'New document', newDocumentReady:'Started a blank document', expandEditor:'Expand editor', expandedEditorTitle:'Edit Markdown in a larger window'
+        brandMeta:'Compare GitHub / Qiita / Zenn appearances', pageTitle:'Markdown Editor', pageDesc:'Switch the same Markdown between GitHub, Qiita and Zenn-inspired previews and check portability.', localOnly:'Completely local processing', mobileLocal:'Completely local processing', open:'Open', filename:'File name', download:'Save', copy:'Copy', saved:'Autosaved', saving:'Saving…', view:'View', single:'Single', compare:'Compare', style:'Style', sync:'Sync scroll', edit:'Edit', preview:'Preview', approx:'Approx. preview', drop:'Drop a Markdown file', compatTitle:'Platform compatibility check', compatDesc:'A lightweight syntax scan highlights areas worth checking before publishing elsewhere.', heuristic:'Scores are heuristic estimates and do not guarantee identical output to each platform’s official renderer.', footer:'Your Markdown is not uploaded and is autosaved only in this browser’s LocalStorage.', helpTitle:'Help & notes', helpBasicTitle:'Basics', helpBasic:'Write Markdown on the left and the preview updates immediately. Switch styles to compare GitHub, Qiita and Zenn-inspired appearances. Your draft is autosaved to LocalStorage.', helpCompareTitle:'Compare mode', helpCompare:'Compare mode shows two preview styles at once. On phones, use the Compare tab to view both previews vertically.', helpCompatTitle:'Compatibility check', helpCompat:'The checker detects GFM-specific syntax, Zenn message blocks, math, HTML and more. It is an assistive heuristic, not an exact implementation of each official parser.', helpPrivacyTitle:'Privacy / offline', helpPrivacy:'No CDN or external library is required. CSP blocks external network requests, so remote images in Markdown are shown as placeholders rather than fetched.', helpSyntaxTitle:'Main syntax in v1.0.1', customCssHelp:'Target the .md preview in your CSS. Example: .md h2 { color: #16624f; }', reset:'Reset', apply:'Apply', noIssues:'No notable portability issues detected.', copied:'Markdown copied', copyFailed:'Could not copy', downloaded:'Markdown file saved', opened:'File loaded', invalidFile:'Choose a Markdown or text file', cssApplied:'Custom CSS applied', cssReset:'Custom CSS reset', line:'Line', chars:'chars', lines:'lines', warning:'Warning', info:'Info', sampleViewing:'Sample', newDocument:'New document', newDocumentReady:'Started a blank document', expandEditor:'Expand editor', expandedEditorTitle:'Edit Markdown in a larger window'
       }
     };
 
@@ -573,6 +602,40 @@ $$
     function safeUrl(url) { try { const s=String(url).trim(); if (/^(https?:|mailto:|#|\/)/i.test(s)) return s; return '#'; } catch { return '#'; } }
     function slugify(s) { return s.toLowerCase().replace(/<[^>]*>/g,'').replace(/[^\p{L}\p{N}\s-]/gu,'').trim().replace(/\s+/g,'-').slice(0,80); }
 
+    // Share code boundaries between the preview renderer and compatibility scan.
+    function codeFenceStart(line) {
+      const match = line.match(/^\s*(`{3,}|~{3,})(.*)$/);
+      if (!match || (match[1][0]==='`' && match[2].includes('`'))) return null;
+      return { marker:match[1], info:match[2].trim() };
+    }
+    function codeFenceEnd(line, fence) {
+      return new RegExp('^\\s*'+fence.marker[0]+'{'+fence.marker.length+',}\\s*$').test(line);
+    }
+    function replaceInlineCode(text, replace) {
+      const value=String(text), runs=[...value.matchAll(/`+/g)];
+      const following=new Map(), closeSame=[], closeShorter=[];
+      for(let i=runs.length-1;i>=0;i--) {
+        const length=runs[i][0].length;
+        closeSame[i]=following.get(length); closeShorter[i]=following.get(length-1);
+        following.set(length,i);
+      }
+      let out='', offset=0;
+      for (let i=0; i<runs.length; i++) {
+        let open=runs[i];
+        let escapes=0; for(let j=open.index-1;j>=0 && value[j]==='\\';j--) escapes++;
+        if(escapes%2) {
+          if(open[0].length===1) continue;
+          open={0:open[0].slice(1),index:open.index+1};
+        }
+        const closeIndex=escapes%2 ? closeShorter[i] : closeSame[i];
+        if(closeIndex===undefined) continue;
+        const close=runs[closeIndex], end=close.index+close[0].length;
+        out+=value.slice(offset,open.index)+replace(value.slice(open.index+open[0].length,close.index),value.slice(open.index,end));
+        offset=end; i=closeIndex;
+      }
+      return out+value.slice(offset);
+    }
+
     function inlineMarkdown(text) {
       const code = [], markup = [];
       const restoreMarkup = value => value.replace(/\u0000MARKUP(\d+)\u0000/g, (_, i) => markup[Number(i)] || '');
@@ -585,7 +648,7 @@ $$
         return s.replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>').replace(/(^|[^_])_([^_\n]+)_/g, '$1<em>$2</em>');
       };
       let s = String(text);
-      s = s.replace(/`([^`]+)`/g, (_, c) => { code.push(`<code>${escapeHtml(c)}</code>`); return `\u0000CODE${code.length-1}\u0000`; });
+      s = replaceInlineCode(s, c => { code.push(`<code>${escapeHtml(c.replace(/\n/g,' '))}</code>`); return `\u0000CODE${code.length-1}\u0000`; });
       // Parse raw destinations, escape them once, and keep generated HTML out of text formatting.
       s = s.replace(/!\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g, (_, alt, url) => protect(`<span class="image-placeholder" title="${escapeHtml(url)}">▧ <span>${formatText(alt || 'image')} · ${escapeHtml(url)}</span></span>`));
       s = s.replace(/\[([^\]]+)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g, (_, label, url) => protect(`<a href="${escapeHtml(safeUrl(url))}" target="_blank" rel="noopener noreferrer">${formatText(label)}</a>`));
@@ -601,43 +664,56 @@ $$
       return s.split(/(?<!\\)\|/).map(x => x.trim().replace(/\\\|/g,'|'));
     }
 
-    function markdownToHtml(md, platform='standard') {
+    function frontMatterEnd(lines) {
+      return /^---\s*$/.test(lines[0]||'') ? lines.findIndex((line,i)=>i>0 && /^---\s*$/.test(line)) : -1;
+    }
+    function continuesParagraph(lines, i) {
+      const line=lines[i];
+      return !/^\s*$/.test(line) && !/^(#{1,6})\s+/.test(line) && !codeFenceStart(line) && !/^\s*>/.test(line) && !/^\s*([-+*]|\d+[.)])\s+/.test(line) && !/^\s*\$\$\s*$/.test(line) && !/^\s*:::message/.test(line) && !(i+1<lines.length && /\|/.test(line) && /^\s*\|?\s*:?-{3,}:?/.test(lines[i+1]));
+    }
+
+    function markdownToHtml(md, platform='standard', scan=null) {
       const lines = md.replace(/\r\n?/g,'\n').split('\n');
       let out = [], i=0;
       const isBlank = l => /^\s*$/.test(l);
+      const maskCode = value => replaceInlineCode(value,(_,span)=>span.replace(/[^\n]/g,' '));
+      const inspect = (value,index,inline=true) => { if(scan) scan(inline ? maskCode(value) : value,index); };
+      const inspectTable = (line,index) => { if(scan) scan(splitTableRow(line).map(maskCode).join(' | '),index); };
       while (i < lines.length) {
         let line = lines[i];
         if (isBlank(line)) { i++; continue; }
-        if (i===0 && /^---\s*$/.test(line)) {
-          let j=i+1; while (j<lines.length && !/^---\s*$/.test(lines[j])) j++;
-          if (j<lines.length) { i=j+1; continue; }
-        }
-        let fm = line.match(/^\s*(```+|~~~+)\s*([^\s]*)\s*$/);
+        if (i===0) { const end=frontMatterEnd(lines); if(end>=0) { i=end+1; continue; } }
+        const fm = codeFenceStart(line);
         if (fm) {
-          const fence=fm[1], lang=fm[2]||'', code=[]; i++;
-          while (i<lines.length && !new RegExp('^\\s*'+fence[0]+'{'+fence.length+',}\\s*$').test(lines[i])) { code.push(lines[i]); i++; }
+          if(scan) scan(fm.info,i,'fence');
+          const lang=fm.info.split(/\s+/)[0]||'', code=[]; i++;
+          while (i<lines.length && !codeFenceEnd(lines[i],fm)) { code.push(lines[i]); i++; }
           if (i<lines.length) i++;
           out.push(`<pre>${lang?`<span class="code-lang">${escapeHtml(lang)}</span>`:''}<code>${escapeHtml(code.join('\n'))}</code></pre>`); continue;
         }
         if (/^\s*\$\$\s*$/.test(line)) {
-          const math=[]; i++; while (i<lines.length && !/^\s*\$\$\s*$/.test(lines[i])) { math.push(lines[i]); i++; } if(i<lines.length)i++;
+          inspect(line,i,false);
+          const math=[]; i++; while (i<lines.length && !/^\s*\$\$\s*$/.test(lines[i])) { math.push(lines[i]); i++; }
+          if(i<lines.length) { inspect(lines[i],i,false); i++; }
           out.push(`<div class="math-block">${escapeHtml(math.join(' '))}</div>`); continue;
         }
         let msg=line.match(/^\s*:::message(?:\s+(alert))?\s*$/);
         if (msg) {
-          const body=[]; i++; while(i<lines.length && !/^\s*:::\s*$/.test(lines[i])) { body.push(lines[i]); i++; } if(i<lines.length)i++;
+          inspect(line,i,false);
+          const body=[]; i++; while(i<lines.length && !/^\s*:::\s*$/.test(lines[i])) { inspect(lines[i],i); body.push(lines[i]); i++; } if(i<lines.length)i++;
           out.push(`<div class="message-box${msg[1]?' alert':''}">${body.map(inlineMarkdown).join('<br>')}</div>`); continue;
         }
         let h=line.match(/^(#{1,6})\s+(.+)$/);
-        if (h) { const n=h[1].length, content=inlineMarkdown(h[2].replace(/\s+#+\s*$/,'')); out.push(`<h${n} id="${slugify(h[2])}">${content}</h${n}>`); i++; continue; }
+        if (h) { inspect(line,i); const n=h[1].length, content=inlineMarkdown(h[2].replace(/\s+#+\s*$/,'')); out.push(`<h${n} id="${slugify(h[2])}">${content}</h${n}>`); i++; continue; }
         if (/^\s{0,3}([-*_])(?:\s*\1){2,}\s*$/.test(line)) { out.push('<hr>'); i++; continue; }
         if (/^\s*>/.test(line)) {
-          const q=[]; while(i<lines.length && /^\s*>/.test(lines[i])) { q.push(lines[i].replace(/^\s*>\s?/,'')); i++; }
+          const q=[]; while(i<lines.length && /^\s*>/.test(lines[i])) { inspect(lines[i],i); q.push(lines[i].replace(/^\s*>\s?/,'')); i++; }
           out.push(`<blockquote>${q.map(x=>`<p>${inlineMarkdown(x)}</p>`).join('')}</blockquote>`); continue;
         }
         if (i+1<lines.length && /\|/.test(line) && /^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?\s*$/.test(lines[i+1])) {
+          inspectTable(line,i);
           const head=splitTableRow(line), aligns=splitTableRow(lines[i+1]).map(c => c.startsWith(':')&&c.endsWith(':')?'center':c.endsWith(':')?'right':c.startsWith(':')?'left':''); i+=2;
-          const rows=[]; while(i<lines.length && /\|/.test(lines[i]) && !isBlank(lines[i])) { rows.push(splitTableRow(lines[i])); i++; }
+          const rows=[]; while(i<lines.length && /\|/.test(lines[i]) && !isBlank(lines[i])) { inspectTable(lines[i],i); rows.push(splitTableRow(lines[i])); i++; }
           out.push('<table><thead><tr>'+head.map((c,k)=>`<th${aligns[k]?` style="text-align:${aligns[k]}"`:''}>${inlineMarkdown(c)}</th>`).join('')+'</tr></thead><tbody>'+rows.map(r=>'<tr>'+head.map((_,k)=>`<td${aligns[k]?` style="text-align:${aligns[k]}"`:''}>${inlineMarkdown(r[k]||'')}</td>`).join('')+'</tr>').join('')+'</tbody></table>'); continue;
         }
         let listMatch=line.match(/^\s*([-+*]|\d+[.)])\s+(.+)$/);
@@ -645,16 +721,18 @@ $$
           const ordered=/^\d/.test(listMatch[1]), items=[];
           while(i<lines.length) {
             const m=lines[i].match(/^\s*([-+*]|\d+[.)])\s+(.+)$/); if(!m || /^\d/.test(m[1])!==ordered) break;
+            inspect(lines[i],i);
             let body=m[2], task=body.match(/^\[([ xX])\]\s+(.*)$/);
             if(task) items.push(`<li class="task"><input type="checkbox" disabled ${task[1].toLowerCase()==='x'?'checked':''}>${inlineMarkdown(task[2])}</li>`); else items.push(`<li>${inlineMarkdown(body)}</li>`);
             i++;
           }
           out.push(`<${ordered?'ol':'ul'}>${items.join('')}</${ordered?'ol':'ul'}>`); continue;
         }
-        if (/^\s*</.test(line)) { out.push(`<p class="raw-html">${escapeHtml(line)}</p>`); i++; continue; }
-        const para=[line]; i++;
-        while(i<lines.length && !isBlank(lines[i]) && !/^(#{1,6})\s+/.test(lines[i]) && !/^\s*(```+|~~~+)/.test(lines[i]) && !/^\s*>/.test(lines[i]) && !/^\s*([-+*]|\d+[.)])\s+/.test(lines[i]) && !/^\s*\$\$\s*$/.test(lines[i]) && !/^\s*:::message/.test(lines[i]) && !(i+1<lines.length && /\|/.test(lines[i]) && /^\s*\|?\s*:?-{3,}:?/.test(lines[i+1]))) { para.push(lines[i]); i++; }
-        out.push(`<p>${para.map(inlineMarkdown).join('<br>')}</p>`);
+        if (/^\s*</.test(line)) { inspect(line,i,false); out.push(`<p class="raw-html">${escapeHtml(line)}</p>`); i++; continue; }
+        const paragraphStart=i, para=[line]; i++;
+        while(i<lines.length && continuesParagraph(lines,i)) { para.push(lines[i]); i++; }
+        inspect(para.join('\n'),paragraphStart);
+        out.push(`<p>${inlineMarkdown(para.join('\n')).replace(/\n/g,'<br>')}</p>`);
       }
       return out.join('\n');
     }
@@ -675,17 +753,27 @@ $$
     function analyzeCompatibility(md) {
       const lines=md.replace(/\r\n?/g,'\n').split('\n'), issues=[], scores={github:100,qiita:100,zenn:100};
       const add=(platform,severity,message,line,penalty)=>{ issues.push({platform,severity,message,line}); scores[platform]=Math.max(0,scores[platform]-penalty); };
-      lines.forEach((line,idx)=>{
-        const n=idx+1;
-        if (/^\s*:::message(?:\s+alert)?\s*$/.test(line)) { add('github','warn',':::message はGitHub Markdownでは専用ブロックとして解釈されません。',n,12); add('qiita','warn',':::message はZenn固有寄りの記法です。Qiita投稿前に表現を確認してください。',n,8); }
-        if (/^\s*\$\$\s*$/.test(line)) { add('github','info','数式の表示は投稿先や文脈によって差が出るため、公開前の確認を推奨します。',n,4); add('qiita','info','数式ブロックは公開前にQiita側のプレビューでも確認してください。',n,3); add('zenn','info','数式はこのアプリでは簡易表示です。Zenn本番の数式レンダリングとは異なります。',n,2); }
-        if (/^\s*</.test(line) && /<\/?[A-Za-z][^>]*>/.test(line)) { add('github','info','HTMLを含みます。許可されるタグ/属性は投稿先ごとに異なります。',n,5); add('qiita','info','HTMLを含みます。Qiita側で許可されるタグを確認してください。',n,5); add('zenn','warn','HTMLはZenn Markdownとの互換性に注意してください。',n,8); }
-        if (/!\[[^\]]*\]\(https?:\/\//i.test(line)) { issues.push({platform:'local',severity:'info',message:'外部画像はプライバシー優先のため、このHTMLでは読み込まずプレースホルダー表示します。',line:n}); }
-        if (/^\s*- \[[ xX]\]/.test(line)) { add('qiita','info','タスクリストの見え方はGitHubと完全には同じにならない場合があります。',n,2); add('zenn','info','タスクリストの見え方はGitHubと完全には同じにならない場合があります。',n,2); }
-        if (/\|/.test(line) && idx+1<lines.length && /^\s*\|?\s*:?-{3,}:?/.test(lines[idx+1])) { /* broadly portable */ }
-        if (/^\s*```[^\s`]+\s+[^\s]/.test(line)) { add('github','info','コードフェンスの言語指定に追加文字があります。ハイライト差分に注意してください。',n,2); add('qiita','info','コードブロックの言語指定は投稿先ごとに解釈差があります。',n,2); add('zenn','info','コードブロックの言語指定は投稿先ごとに解釈差があります。',n,2); }
+      // Reuse the renderer's block contexts instead of reparsing raw Markdown lines.
+      markdownToHtml(md,'standard',(text,start,kind)=>{
+        if(kind==='fence') {
+          if(/\S+\s+\S/.test(text)) {
+            add('github','info',t('compatFenceGithub'),start+1,2);
+            add('qiita','info',t('compatFenceOther'),start+1,2);
+            add('zenn','info',t('compatFenceOther'),start+1,2);
+          }
+          return;
+        }
+        text.split('\n').forEach((line,offset)=>{
+          const idx=start+offset;
+          const n=idx+1;
+          if (/^\s*:::message(?:\s+alert)?\s*$/.test(line)) { add('github','warn',t('compatMessageGithub'),n,12); add('qiita','warn',t('compatMessageQiita'),n,8); }
+          if (/^\s*\$\$\s*$/.test(line)) { add('github','info',t('compatMathGithub'),n,4); add('qiita','info',t('compatMathQiita'),n,3); add('zenn','info',t('compatMathZenn'),n,2); }
+          if (/^\s*</.test(line) && /<\/?[A-Za-z][^>]*>/.test(line)) { add('github','info',t('compatHtmlGithub'),n,5); add('qiita','info',t('compatHtmlQiita'),n,5); add('zenn','warn',t('compatHtmlZenn'),n,8); }
+          if (/!\[[^\]]*\]\(https?:\/\//i.test(line)) { issues.push({platform:'local',severity:'info',message:t('compatRemoteImage'),line:n}); }
+          if (/^\s*- \[[ xX]\]/.test(line)) { add('qiita','info',t('compatTaskList'),n,2); add('zenn','info',t('compatTaskList'),n,2); }
+        });
       });
-      if (/^---\s*\n[\s\S]*?\n---\s*$/m.test(md.slice(0,1200))) { add('github','info','先頭のFront MatterはREADME表示では本文扱いになる場合があります。',1,3); add('qiita','info','Front Matterは投稿方法によって扱いが異なります。',1,3); }
+      if (frontMatterEnd(lines)>=0) { add('github','info',t('compatFrontMatterGithub'),1,3); add('qiita','info',t('compatFrontMatterQiita'),1,3); }
       return {issues,scores};
     }
 
@@ -730,7 +818,7 @@ $$
     }
     function setMode(mode) { state.mode=mode; els.workspace.classList.toggle('compare',mode==='compare'); document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode)); requestAnimationFrame(()=>syncScrollGroup(els.editor)); saveState(); }
     function setMobileView(view) { state.mobileView=view; els.workspace.classList.remove('mobile-editor','mobile-preview','mobile-compare'); els.workspace.classList.add('mobile-'+view); document.querySelectorAll('[data-mobile-view]').forEach(b=>b.classList.toggle('active',b.dataset.mobileView===view)); if(view==='compare') setMode('compare'); saveState(); }
-    function setLanguage(lang) { state.lang=lang; document.documentElement.lang=lang; document.querySelectorAll('[data-i18n]').forEach(el=>{ const key=el.dataset.i18n; if(t(key)) el.textContent=t(key); }); document.querySelectorAll('[data-i18n-title]').forEach(el=>{ const key=el.dataset.i18nTitle; if(t(key)) el.title=t(key); }); document.getElementById('languageButton').textContent=lang==='ja'?'EN':'JA'; render(); saveState(); }
+    function setLanguage(lang) { state.lang=lang; document.documentElement.lang=lang; document.querySelectorAll('[data-i18n]').forEach(el=>{ const key=el.dataset.i18n; if(t(key)) el.textContent=t(key); }); document.querySelectorAll('[data-i18n-title]').forEach(el=>{ const key=el.dataset.i18nTitle; if(t(key)) el.title=t(key); }); document.querySelectorAll('[data-i18n-aria]').forEach(el=>el.setAttribute('aria-label',t(el.dataset.i18nAria))); document.getElementById('languageButton').textContent=lang==='ja'?'EN':'JA'; document.getElementById('languageButton').setAttribute('aria-label',lang==='ja'?'英語に切り替え':'Switch to Japanese'); render(); saveState(); }
 
     function selectLine(line) { const lines=els.editor.value.split('\n'); let start=0; for(let i=0;i<line-1;i++)start+=lines[i].length+1; const end=start+(lines[line-1]||'').length; els.editor.focus(); els.editor.setSelectionRange(start,end); if(window.innerWidth<=720)setMobileView('editor'); const ratio=start/Math.max(1,els.editor.value.length); els.editor.scrollTop=(els.editor.scrollHeight-els.editor.clientHeight)*ratio; }
     function formatSelection(type,e=els.editor) {

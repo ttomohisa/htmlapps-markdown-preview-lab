@@ -15,4 +15,6 @@ if ([string]::IsNullOrWhiteSpace([string]$app.version)) { throw "app.config.json
 if ($LASTEXITCODE -ne 0) { throw "Inline link regression tests failed." }
 & node (Join-Path $Root "tests/editor-formatting.cjs")
 if ($LASTEXITCODE -ne 0) { throw "Editor formatting regression tests failed." }
+& node (Join-Path $Root "tests/compatibility-header.cjs")
+if ($LASTEXITCODE -ne 0) { throw "Compatibility and header regression tests failed." }
 Write-Host "[OK] Repository check passed." -ForegroundColor Green
