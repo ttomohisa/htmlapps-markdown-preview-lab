@@ -111,7 +111,7 @@ Use the expand icon in the Markdown pane header to open a large focused editing 
 
 Formatting shortcuts work while either the main or expanded editor is focused. They insert the same markup as the toolbar helpers; they do not toggle existing markup. Alt/Shift combinations and text composition are left alone, and holding a formatting shortcut does not repeatedly wrap the selection. Undo restores the text immediately before any toolbar formatting action or formatting shortcut, including text typed just before it.
 
-## Supported Markdown in v1.0
+## Supported Markdown in v1.0.1
 
 The built-in renderer covers commonly used Markdown syntax including:
 

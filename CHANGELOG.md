@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.1 — 2026-10-06
+- Ignore fenced and inline code in compatibility warnings while preserving real HTML warnings, scores, and source-line navigation. Share code boundaries with the preview renderer.
+- Translate all compatibility messages and Help accessibility labels when switching between Japanese and English.
+- Use 完全ローカル処理 / Completely local processing on desktop and mobile, and keep the target-language label and accessible name aligned.
+- Normalize the previous 1.0 release to a three-part version and increment the patch to 1.0.1 in configuration, header, and help.
+- Add dependency-free scanner, localization, and release regressions to the canonical repository check.
+
 ## Formatting shortcuts and undo — 2026-10-05
 - Add Ctrl/Cmd+B and Ctrl/Cmd+I in the main and expanded editors, reusing existing wrappers, placeholders, selection, and focus behavior.
 - Preserve the exact pre-format text for all six formatting helpers so immediate typing is not lost on Undo.
