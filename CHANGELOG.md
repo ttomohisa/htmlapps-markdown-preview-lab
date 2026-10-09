@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2 - 2026-10-09
+
+- Add a real English catalog screenshot and use it in the English README, preserving app behavior and the supplied icon.
+
 ## 1.0.1 — 2026-10-06
 - Ignore fenced and inline code in compatibility warnings while preserving real HTML warnings, scores, and source-line navigation. Share code boundaries with the preview renderer.
 - Translate all compatibility messages and Help accessibility labels when switching between Japanese and English.

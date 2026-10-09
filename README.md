@@ -14,7 +14,7 @@ A privacy-focused, single-HTML Markdown editor for writing locally, comparing Gi
 
 GitHub Pages delivers only the initial HTML. After it loads, Markdown editing, rendering, compatibility checks, autosave, file import, and export are processed locally in your browser. Your Markdown is not uploaded by the app.
 
-![Markdown Preview Lab comparing rendered Markdown styles side by side](assets/screenshot.png)
+![Markdown Preview Lab comparing rendered Markdown styles side by side](assets/screenshot-en.png)
 
 ## Features
 
@@ -111,7 +111,7 @@ Use the expand icon in the Markdown pane header to open a large focused editing 
 
 Formatting shortcuts work while either the main or expanded editor is focused. They insert the same markup as the toolbar helpers; they do not toggle existing markup. Alt/Shift combinations and text composition are left alone, and holding a formatting shortcut does not repeatedly wrap the selection. Undo restores the text immediately before any toolbar formatting action or formatting shortcut, including text typed just before it.
 
-## Supported Markdown in v1.0.1
+## Supported Markdown in v1.0.2
 
 The built-in renderer covers commonly used Markdown syntax including:
 
