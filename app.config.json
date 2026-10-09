@@ -3,7 +3,7 @@
   "name": "Markdown Preview Lab",
   "nameJa": "Markdown Preview Lab",
   "slug": "htmlapps-markdown-preview-lab",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A fully local Markdown editor for comparing GitHub, Qiita, and Zenn-inspired previews and portability.",
   "descriptionJa": "GitHub・Qiita・Zenn風プレビューと互換性をブラウザ内だけで比較できるMarkdownエディタです。",
   "defaultLanguage": "auto",

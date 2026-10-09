@@ -1,7 +1,7 @@
 # Application Specification
 
 ## Product
-**Markdown Preview Lab v1.0.1**
+**Markdown Preview Lab v1.0.2**
 
 A browser-only Markdown editor that compares GitHub, Qiita, and Zenn-inspired rendering and highlights portability concerns.
 

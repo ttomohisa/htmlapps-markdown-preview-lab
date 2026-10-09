@@ -155,10 +155,10 @@ for (const variant of variants) {
   });
   test(`${variant}: release version is consistently patch-incremented`, () => {
     const app = JSON.parse(fs.readFileSync(path.join(root, 'app.config.json'), 'utf8'));
-    assert.equal(app.version, '1.0.1');
+    assert.equal(app.version, '1.0.2');
     assert.ok(source.includes(`<span class="version-badge">v${app.version}</span>`));
     assert.ok(source.includes(`helpSyntaxTitle:'Main syntax in v${app.version}'`));
     assert.ok(source.includes(`helpSyntaxTitle:'v${app.version}で対応する主な記法'`));
-    assert.match(fs.readFileSync(path.join(root, 'CHANGELOG.md'), 'utf8'), /^## 1\.0\.1\b/m);
+    assert.match(fs.readFileSync(path.join(root, 'CHANGELOG.md'), 'utf8'), /^## 1\.0\.2\b/m);
   });
 }
