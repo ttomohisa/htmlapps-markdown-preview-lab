@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.3 - 2026-10-10
+
+- Keep the page behind Help and editor/settings dialogs stationary while their own content remains scrollable.
+- Reopen saved Custom CSS from its existing style control without changing automatic draft restoration.
+- Restore expanded-editor focus to a visible control after a desktop/mobile layout change, without interrupting a newer dialog.
+- Add actual-handler regressions and modal layout contracts to the canonical check; preserve the existing local-processing shield.
+
 ## 1.0.2 - 2026-10-09
 
 - Add a real English catalog screenshot and use it in the English README, preserving app behavior and the supplied icon.

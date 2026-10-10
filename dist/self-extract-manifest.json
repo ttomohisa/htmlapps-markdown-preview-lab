@@ -1,5 +1,5 @@
 {
   "reason": "The source is already fully self-contained and has zero external runtime dependencies.",
-  "sha256": "3e46dbfbb22618c7b4d1c71ef8ca9527afbe1c60f9352dbb64fb507baf9aca96",
+  "sha256": "63e52b2e7135f9eaba03d0c2f9bcbe2d08dabec32a027204a570aa7a062c3421",
   "mode": "identity-copy"
 }
