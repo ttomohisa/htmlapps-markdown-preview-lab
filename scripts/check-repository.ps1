@@ -19,4 +19,6 @@ if ($LASTEXITCODE -ne 0) { throw "Editor formatting regression tests failed." }
 if ($LASTEXITCODE -ne 0) { throw "Compatibility and header regression tests failed." }
 & node (Join-Path $Root "tests/dialog-layout-focus.cjs")
 if ($LASTEXITCODE -ne 0) { throw "Dialog layout and focus regression tests failed." }
+& node (Join-Path $Root "tests/editor-header-layout.cjs")
+if ($LASTEXITCODE -ne 0) { throw "Editor header layout regression tests failed." }
 Write-Host "[OK] Repository check passed." -ForegroundColor Green

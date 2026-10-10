@@ -2,6 +2,8 @@
 
 ## 1.0.3 - 2026-10-10
 
+- Keep the sample New document action, formatting controls and editor statistics separated when the editor header wraps.
+
 - Keep the page behind Help and editor/settings dialogs stationary while their own content remains scrollable.
 - Reopen saved Custom CSS from its existing style control without changing automatic draft restoration.
 - Restore expanded-editor focus to a visible control after a desktop/mobile layout change, without interrupting a newer dialog.
