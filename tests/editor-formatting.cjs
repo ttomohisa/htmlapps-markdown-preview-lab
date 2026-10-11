@@ -26,6 +26,7 @@ function harness(source) {
   const timers = new Map(), storage = new Map(), downloads = [], renders = [];
   function element() {
     return {
+      isConnected: true, disabled: false, getClientRects() { return [{}]; },
       value: 'base', selectionStart: 0, selectionEnd: 0, listeners: {},
       focus() { focused = this; },
       setSelectionRange(start, end) { this.selectionStart = start; this.selectionEnd = end; },
@@ -45,7 +46,8 @@ function harness(source) {
   const els = { editor, expandedEditor, saveStatus: {} };
   const context = vm.createContext({
     els,
-    document: { querySelectorAll(selector) { assert.equal(selector, '[data-format]'); return buttons; } },
+    getComputedStyle() { return { visibility: 'visible' }; },
+    document: { querySelector() { return null; }, getElementById() { return null; }, querySelectorAll(selector) { assert.equal(selector, '[data-format]'); return buttons; } },
     setTimeout(callback, delay) { const id = ++sequence; timers.set(id, { callback, at: now + delay }); return id; },
     clearTimeout(id) { timers.delete(id); },
     requestAnimationFrame(callback) { callback(); },

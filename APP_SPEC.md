@@ -1,7 +1,7 @@
 # Application Specification
 
 ## Product
-**Markdown Preview Lab v1.0.2**
+**Markdown Preview Lab v1.0.3**
 
 A browser-only Markdown editor that compares GitHub, Qiita, and Zenn-inspired rendering and highlights portability concerns.
 
@@ -14,7 +14,7 @@ A browser-only Markdown editor that compares GitHub, Qiita, and Zenn-inspired re
 - Open and save `.md` files.
 - Undo / redo and formatting helpers.
 - Compatibility checker with heuristic scores.
-- First-run sample document. While the untouched sample is shown, display a **New document** action instead of a destructive delete control. The action disappears after the user starts editing or opens a file.
+- First-run sample document. While the untouched sample is shown, display a **New document** action instead of a destructive delete control. The action disappears after the user starts editing or opens a file. The editor header wraps its controls and statistics without overlapping, while the text input and drop area use the remaining pane height.
 
 ## Privacy
 - No runtime external requests.

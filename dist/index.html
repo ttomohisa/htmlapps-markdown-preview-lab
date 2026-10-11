@@ -32,6 +32,7 @@
     }
     * { box-sizing: border-box; }
     html { min-height: 100%; background: var(--bg); scroll-behavior: smooth; }
+    html:has(dialog:modal), body:has(dialog:modal) { overflow:hidden; }
     body { margin:0; min-height:100vh; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP","Yu Gothic UI","Hiragino Kaku Gothic ProN",Meiryo,sans-serif; font-size:15px; line-height:1.5; -webkit-font-smoothing:antialiased; }
     button, textarea, select, input { font: inherit; }
     button { color: inherit; }
@@ -92,8 +93,10 @@
     .sync-toggle input { accent-color:var(--accent); }
     .editor-shell { display:grid; grid-template-columns:minmax(360px, .9fr) minmax(0, 1.1fr); height:clamp(520px, calc(100dvh - 250px), 820px); min-height:520px; }
     .editor-pane, .preview-pane { min-width:0; min-height:0; position:relative; background:#fff; }
-    .editor-pane { border-right:1px solid var(--line); }
+    .editor-pane { display:grid; grid-template-rows:auto minmax(0,1fr); border-right:1px solid var(--line); }
     .pane-head { height:42px; display:flex; align-items:center; gap:8px; padding:0 11px; border-bottom:1px solid var(--line); background:#fafaf8; }
+    .editor-pane > .pane-head { height:auto; min-height:42px; flex-wrap:wrap; row-gap:4px; padding:6px 11px; }
+    .editor-pane > .pane-head > * { flex-shrink:0; }
     .pane-title { font-size:12px; font-weight:800; letter-spacing:.015em; }
     .pane-meta { margin-left:auto; color:var(--muted); font-size:10px; white-space:nowrap; }
     .sample-state { display:none; align-items:center; gap:7px; margin-left:auto; min-width:0; }
@@ -102,16 +105,16 @@
     .sample-new-button { padding:4px 7px; border:0; border-radius:7px; background:transparent; color:var(--accent); font-size:10px; font-weight:800; cursor:pointer; white-space:nowrap; }
     .sample-new-button:hover { background:var(--accent-soft); }
     .sample-state.visible + .pane-meta { margin-left:0; }
-    .format-bar { display:flex; align-items:center; gap:2px; padding-right:5px; border-right:1px solid var(--line); margin-right:3px; }
+    .format-bar { display:flex; max-width:100%; min-width:0; overflow-x:auto; align-items:center; gap:2px; padding-right:5px; border-right:1px solid var(--line); margin-right:3px; }
     .format-button { width:29px; height:29px; display:grid; place-items:center; border:0; border-radius:7px; background:transparent; color:var(--muted); font-size:12px; font-weight:800; cursor:pointer; }
     .format-button:hover { background:var(--surface-muted); color:var(--text); }
     .format-button svg { width:15px; height:15px; display:block; }
     .pane-action-button { width:28px; height:28px; display:grid; place-items:center; flex:0 0 auto; border:0; border-radius:7px; background:transparent; color:var(--muted); cursor:pointer; }
     .pane-action-button:hover { background:var(--surface-muted); color:var(--text); }
     .pane-action-button svg { width:15px; height:15px; display:block; }
-    #editor { width:100%; height:calc(100% - 42px); resize:none; border:0; outline:0; padding:18px 20px 36px; background:#fff; color:#252724; font:14px/1.72 ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace; tab-size:2; caret-color:var(--accent); }
+    #editor { grid-area:2 / 1; width:100%; height:100%; min-height:0; resize:none; border:0; outline:0; padding:18px 20px 36px; background:#fff; color:#252724; font:14px/1.72 ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace; tab-size:2; caret-color:var(--accent); }
     #editor::selection { background:#cfe7df; }
-    .drop-overlay { position:absolute; inset:42px 0 0; z-index:5; display:none; place-items:center; background:rgba(225,240,234,.92); color:var(--accent); font-weight:800; border:2px dashed var(--accent); }
+    .drop-overlay { grid-area:2 / 1; position:relative; inset:auto; min-height:0; z-index:5; display:none; place-items:center; background:rgba(225,240,234,.92); color:var(--accent); font-weight:800; border:2px dashed var(--accent); }
     .editor-pane.dragging .drop-overlay { display:grid; }
     .preview-scroll { height:calc(100% - 42px); overflow:auto; overscroll-behavior:contain; background:#fff; }
     .preview-wrap { min-height:100%; padding:28px clamp(22px,4vw,52px) 60px; }
@@ -288,7 +291,7 @@
       .mobile-view-switch .seg-button { flex:1; }
       .editor-shell,.workspace.compare .editor-shell { display:block; height:calc(100dvh - 258px); min-height:470px; }
       .editor-pane,.single-preview,.compare-pane { display:none !important; height:100%; border:0; }
-      .workspace.mobile-editor .editor-pane { display:block !important; }
+      .workspace.mobile-editor .editor-pane { display:grid !important; }
       .workspace.mobile-preview .single-preview { display:block !important; }
       .workspace.mobile-compare .compare-pane { display:grid !important; grid-template-columns:1fr; height:100%; }
       .workspace.mobile-compare .editor-pane { display:none !important; }
@@ -339,7 +342,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18v14H3z"/><path d="M6 15V9l3 3.5L12 9v6M15 9v6m-2.5-2.5L15 15l2.5-2.5"/></svg>
         </div>
         <div class="brand-copy">
-          <h1 class="brand-name"><span class="brand-title">Markdown Preview Lab</span> <span class="version-badge">v1.0.2</span></h1>
+          <h1 class="brand-name"><span class="brand-title">Markdown Preview Lab</span> <span class="version-badge">v1.0.3</span></h1>
           <p class="brand-meta" data-i18n="brandMeta">GitHub / Qiita / Zenn の見え方を比較</p>
         </div>
       </div>
@@ -480,7 +483,7 @@
       <p data-i18n="helpCompat">GFM固有記法、Zennメッセージ、数式、HTMLなどを検出して注意点を表示します。判定は補助機能であり、各サービスの公式仕様を完全再現するものではありません。</p>
       <h3 data-i18n="helpPrivacyTitle">プライバシー / オフライン</h3>
       <p data-i18n="helpPrivacy">外部ライブラリやCDNを使わず、このHTMLだけで動作します。CSPで外部通信を禁止しているため、Markdown内の外部画像は実画像を読み込まずプレースホルダーとして表示します。</p>
-      <h3 data-i18n="helpSyntaxTitle">v1.0.2で対応する主な記法</h3>
+      <h3 data-i18n="helpSyntaxTitle">v1.0.3で対応する主な記法</h3>
       <ul><li>見出し、太字、斜体、取り消し線、リンク、引用</li><li>順序付き/なしリスト、タスクリスト、テーブル</li><li>インラインコード、コードフェンス</li><li>簡易数式ブロック、Zenn風 message ブロック</li></ul>
     </div>
   </dialog>
@@ -560,7 +563,7 @@ $$
         compatFrontMatterGithub:"先頭のFront MatterはREADME表示では本文扱いになる場合があります。",
         compatFrontMatterQiita:"Front Matterは投稿方法によって扱いが異なります。",
         boldShortcut:'太字 (Ctrl/⌘+B)', italicShortcut:'斜体 (Ctrl/⌘+I)', helpShortcutsTitle:'編集ショートカット', helpShortcuts:'通常・拡大どちらの編集欄でも、Ctrl/⌘+Bで太字、Ctrl/⌘+Iで斜体の記法を挿入します。未選択時は編集用の文字を挿入して選択します。書式操作はUndoで直前の文章へ戻せます。',
-        brandMeta:'GitHub / Qiita / Zenn の見え方を比較', pageTitle:'Markdown エディタ', pageDesc:'同じMarkdownを GitHub / Qiita / Zenn 風に切り替え、投稿先ごとの互換性も確認できます。', localOnly:'完全ローカル処理', mobileLocal:'完全ローカル処理', open:'開く', filename:'ファイル名', download:'保存', copy:'コピー', saved:'自動保存済み', saving:'保存中…', view:'表示', single:'通常', compare:'比較', style:'スタイル', sync:'スクロール同期', edit:'編集', preview:'プレビュー', approx:'近似プレビュー', drop:'Markdownファイルをドロップ', compatTitle:'投稿先の互換性チェック', compatDesc:'記法を簡易解析して、移植時に確認したい箇所を表示します。', heuristic:'※ スコアは独自ルールによる目安です。各サービスの公式レンダラーと完全一致するものではありません。', footer:'Markdownの内容は外部送信せず、ブラウザ内のLocalStorageに自動保存します。', helpTitle:'使い方と注意事項', helpBasicTitle:'基本操作', helpBasic:'左側にMarkdownを書くと右側へ即時反映します。スタイルを切り替えると、GitHub / Qiita / Zenn 風の見え方を比較できます。内容はLocalStorageへ自動保存されます。', helpCompareTitle:'比較モード', helpCompare:'「比較」を選ぶと、右側に2種類のプレビューを同時表示します。スマホでは下の「比較」タブから2プレビューを上下に確認できます。', helpCompatTitle:'互換性チェック', helpCompat:'GFM固有記法、Zennメッセージ、数式、HTMLなどを検出して注意点を表示します。判定は補助機能であり、各サービスの公式仕様を完全再現するものではありません。', helpPrivacyTitle:'プライバシー / オフライン', helpPrivacy:'外部ライブラリやCDNを使わず、このHTMLだけで動作します。CSPで外部通信を禁止しているため、Markdown内の外部画像は実画像を読み込まずプレースホルダーとして表示します。', helpSyntaxTitle:'v1.0.2で対応する主な記法', customCssHelp:'プレビュー用の .md を対象にCSSを書いてください。例: .md h2 { color: #16624f; }', reset:'リセット', apply:'適用', noIssues:'目立った互換性上の注意点はありません。', copied:'Markdownをコピーしました', copyFailed:'コピーできませんでした', downloaded:'Markdownファイルを保存しました', opened:'ファイルを読み込みました', invalidFile:'Markdown / テキストファイルを選んでください', cssApplied:'Custom CSSを適用しました', cssReset:'Custom CSSをリセットしました', line:'行', chars:'文字', lines:'行', warning:'注意', info:'情報', sampleViewing:'サンプル表示中', newDocument:'新規作成', newDocumentReady:'空のドキュメントを作成しました', expandEditor:'入力欄を拡大', expandedEditorTitle:'Markdownを大きく編集'
+        brandMeta:'GitHub / Qiita / Zenn の見え方を比較', pageTitle:'Markdown エディタ', pageDesc:'同じMarkdownを GitHub / Qiita / Zenn 風に切り替え、投稿先ごとの互換性も確認できます。', localOnly:'完全ローカル処理', mobileLocal:'完全ローカル処理', open:'開く', filename:'ファイル名', download:'保存', copy:'コピー', saved:'自動保存済み', saving:'保存中…', view:'表示', single:'通常', compare:'比較', style:'スタイル', sync:'スクロール同期', edit:'編集', preview:'プレビュー', approx:'近似プレビュー', drop:'Markdownファイルをドロップ', compatTitle:'投稿先の互換性チェック', compatDesc:'記法を簡易解析して、移植時に確認したい箇所を表示します。', heuristic:'※ スコアは独自ルールによる目安です。各サービスの公式レンダラーと完全一致するものではありません。', footer:'Markdownの内容は外部送信せず、ブラウザ内のLocalStorageに自動保存します。', helpTitle:'使い方と注意事項', helpBasicTitle:'基本操作', helpBasic:'左側にMarkdownを書くと右側へ即時反映します。スタイルを切り替えると、GitHub / Qiita / Zenn 風の見え方を比較できます。内容はLocalStorageへ自動保存されます。', helpCompareTitle:'比較モード', helpCompare:'「比較」を選ぶと、右側に2種類のプレビューを同時表示します。スマホでは下の「比較」タブから2プレビューを上下に確認できます。', helpCompatTitle:'互換性チェック', helpCompat:'GFM固有記法、Zennメッセージ、数式、HTMLなどを検出して注意点を表示します。判定は補助機能であり、各サービスの公式仕様を完全再現するものではありません。', helpPrivacyTitle:'プライバシー / オフライン', helpPrivacy:'外部ライブラリやCDNを使わず、このHTMLだけで動作します。CSPで外部通信を禁止しているため、Markdown内の外部画像は実画像を読み込まずプレースホルダーとして表示します。', helpSyntaxTitle:'v1.0.3で対応する主な記法', customCssHelp:'プレビュー用の .md を対象にCSSを書いてください。例: .md h2 { color: #16624f; }', reset:'リセット', apply:'適用', noIssues:'目立った互換性上の注意点はありません。', copied:'Markdownをコピーしました', copyFailed:'コピーできませんでした', downloaded:'Markdownファイルを保存しました', opened:'ファイルを読み込みました', invalidFile:'Markdown / テキストファイルを選んでください', cssApplied:'Custom CSSを適用しました', cssReset:'Custom CSSをリセットしました', line:'行', chars:'文字', lines:'行', warning:'注意', info:'情報', sampleViewing:'サンプル表示中', newDocument:'新規作成', newDocumentReady:'空のドキュメントを作成しました', expandEditor:'入力欄を拡大', expandedEditorTitle:'Markdownを大きく編集'
       },
       en: {
         compatMessageGithub:"GitHub Markdown does not interpret :::message as a dedicated block.",
@@ -578,7 +581,7 @@ $$
         compatFrontMatterGithub:"Leading Front Matter may appear as body text in a README.",
         compatFrontMatterQiita:"Front Matter handling depends on the publishing method.",
         boldShortcut:'Bold (Ctrl/⌘+B)', italicShortcut:'Italic (Ctrl/⌘+I)', helpShortcutsTitle:'Editing shortcuts', helpShortcuts:'In either the main or expanded editor, Ctrl/⌘+B inserts bold markup and Ctrl/⌘+I inserts italic markup. With no selection, placeholder text is inserted and selected for editing. Undo restores the text immediately before formatting.',
-        brandMeta:'Compare GitHub / Qiita / Zenn appearances', pageTitle:'Markdown Editor', pageDesc:'Switch the same Markdown between GitHub, Qiita and Zenn-inspired previews and check portability.', localOnly:'Completely local processing', mobileLocal:'Completely local processing', open:'Open', filename:'File name', download:'Save', copy:'Copy', saved:'Autosaved', saving:'Saving…', view:'View', single:'Single', compare:'Compare', style:'Style', sync:'Sync scroll', edit:'Edit', preview:'Preview', approx:'Approx. preview', drop:'Drop a Markdown file', compatTitle:'Platform compatibility check', compatDesc:'A lightweight syntax scan highlights areas worth checking before publishing elsewhere.', heuristic:'Scores are heuristic estimates and do not guarantee identical output to each platform’s official renderer.', footer:'Your Markdown is not uploaded and is autosaved only in this browser’s LocalStorage.', helpTitle:'Help & notes', helpBasicTitle:'Basics', helpBasic:'Write Markdown on the left and the preview updates immediately. Switch styles to compare GitHub, Qiita and Zenn-inspired appearances. Your draft is autosaved to LocalStorage.', helpCompareTitle:'Compare mode', helpCompare:'Compare mode shows two preview styles at once. On phones, use the Compare tab to view both previews vertically.', helpCompatTitle:'Compatibility check', helpCompat:'The checker detects GFM-specific syntax, Zenn message blocks, math, HTML and more. It is an assistive heuristic, not an exact implementation of each official parser.', helpPrivacyTitle:'Privacy / offline', helpPrivacy:'No CDN or external library is required. CSP blocks external network requests, so remote images in Markdown are shown as placeholders rather than fetched.', helpSyntaxTitle:'Main syntax in v1.0.2', customCssHelp:'Target the .md preview in your CSS. Example: .md h2 { color: #16624f; }', reset:'Reset', apply:'Apply', noIssues:'No notable portability issues detected.', copied:'Markdown copied', copyFailed:'Could not copy', downloaded:'Markdown file saved', opened:'File loaded', invalidFile:'Choose a Markdown or text file', cssApplied:'Custom CSS applied', cssReset:'Custom CSS reset', line:'Line', chars:'chars', lines:'lines', warning:'Warning', info:'Info', sampleViewing:'Sample', newDocument:'New document', newDocumentReady:'Started a blank document', expandEditor:'Expand editor', expandedEditorTitle:'Edit Markdown in a larger window'
+        brandMeta:'Compare GitHub / Qiita / Zenn appearances', pageTitle:'Markdown Editor', pageDesc:'Switch the same Markdown between GitHub, Qiita and Zenn-inspired previews and check portability.', localOnly:'Completely local processing', mobileLocal:'Completely local processing', open:'Open', filename:'File name', download:'Save', copy:'Copy', saved:'Autosaved', saving:'Saving…', view:'View', single:'Single', compare:'Compare', style:'Style', sync:'Sync scroll', edit:'Edit', preview:'Preview', approx:'Approx. preview', drop:'Drop a Markdown file', compatTitle:'Platform compatibility check', compatDesc:'A lightweight syntax scan highlights areas worth checking before publishing elsewhere.', heuristic:'Scores are heuristic estimates and do not guarantee identical output to each platform’s official renderer.', footer:'Your Markdown is not uploaded and is autosaved only in this browser’s LocalStorage.', helpTitle:'Help & notes', helpBasicTitle:'Basics', helpBasic:'Write Markdown on the left and the preview updates immediately. Switch styles to compare GitHub, Qiita and Zenn-inspired appearances. Your draft is autosaved to LocalStorage.', helpCompareTitle:'Compare mode', helpCompare:'Compare mode shows two preview styles at once. On phones, use the Compare tab to view both previews vertically.', helpCompatTitle:'Compatibility check', helpCompat:'The checker detects GFM-specific syntax, Zenn message blocks, math, HTML and more. It is an assistive heuristic, not an exact implementation of each official parser.', helpPrivacyTitle:'Privacy / offline', helpPrivacy:'No CDN or external library is required. CSP blocks external network requests, so remote images in Markdown are shown as placeholders rather than fetched.', helpSyntaxTitle:'Main syntax in v1.0.3', customCssHelp:'Target the .md preview in your CSS. Example: .md h2 { color: #16624f; }', reset:'Reset', apply:'Apply', noIssues:'No notable portability issues detected.', copied:'Markdown copied', copyFailed:'Could not copy', downloaded:'Markdown file saved', opened:'File loaded', invalidFile:'Choose a Markdown or text file', cssApplied:'Custom CSS applied', cssReset:'Custom CSS reset', line:'Line', chars:'chars', lines:'lines', warning:'Warning', info:'Info', sampleViewing:'Sample', newDocument:'New document', newDocumentReady:'Started a blank document', expandEditor:'Expand editor', expandedEditorTitle:'Edit Markdown in a larger window'
       }
     };
 
@@ -811,9 +814,9 @@ $$
     function undo() { if(historyIndex>0){ historyIndex--; els.editor.value=history[historyIndex]; render(); } }
     function redo() { if(historyIndex<history.length-1){ historyIndex++; els.editor.value=history[historyIndex]; render(); } }
 
-    function setStyle(style) {
+    function setStyle(style, editCustom=false) {
       state.style=style; document.querySelectorAll('[data-style]').forEach(b=>b.classList.toggle('active',b.dataset.style===style));
-      if(style==='custom') { els.customCssEditor.value=state.customCss; if(!state.customCss) els.customCssDialog.showModal(); }
+      if(style==='custom') { els.customCssEditor.value=state.customCss; if((editCustom||!state.customCss)&&!els.customCssDialog.open) els.customCssDialog.showModal(); }
       render();
     }
     function setMode(mode) { state.mode=mode; els.workspace.classList.toggle('compare',mode==='compare'); document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode)); requestAnimationFrame(()=>syncScrollGroup(els.editor)); saveState(); }
@@ -868,7 +871,12 @@ $$
     function closeExpandedEditorSync() {
       if(els.editor.value!==els.expandedEditor.value) { els.editor.value=els.expandedEditor.value; pushHistory(true); render(); }
       els.editor.setSelectionRange(els.expandedEditor.selectionStart,els.expandedEditor.selectionEnd);
-      requestAnimationFrame(()=>els.editor.focus());
+      requestAnimationFrame(()=>{
+        if(document.querySelector('dialog[open]'))return;
+        const targets=[els.editor,els.expandEditorButton,document.querySelector('[data-mobile-view].active'),document.getElementById('openButton')];
+        const target=targets.find(el=>el?.isConnected&&!el.disabled&&el.getClientRects().length&&getComputedStyle(el).visibility!=='hidden');
+        target?.focus();
+      });
     }
 
     function formatEditorShortcut(event) {
@@ -910,7 +918,7 @@ $$
     document.querySelectorAll('[data-close-dialog]').forEach(b=>b.addEventListener('click',()=>document.getElementById(b.dataset.closeDialog).close()));
     document.querySelectorAll('dialog').forEach(d=>d.addEventListener('click',e=>{ if(e.target===d){ const r=d.getBoundingClientRect(); if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close(); } }));
     document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));
-    document.querySelectorAll('[data-style]').forEach(b=>b.addEventListener('click',()=>setStyle(b.dataset.style)));
+    document.querySelectorAll('[data-style]').forEach(b=>b.addEventListener('click',()=>setStyle(b.dataset.style, true)));
     document.querySelectorAll('[data-mobile-view]').forEach(b=>b.addEventListener('click',()=>setMobileView(b.dataset.mobileView)));
     document.querySelectorAll('[data-format]').forEach(b=>b.addEventListener('click',()=>formatSelection(b.dataset.format)));
     els.fileInput.addEventListener('change',()=>{ readFile(els.fileInput.files[0]); els.fileInput.value=''; });
