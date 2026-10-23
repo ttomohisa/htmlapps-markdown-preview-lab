@@ -135,7 +135,7 @@ for (const variant of variants) {
     const h = harness(source);
     for (const [lang, badge, next, aria, help] of [
       ['ja', '完全ローカル処理', 'EN', '英語に切り替え', '使い方と注意事項'],
-      ['en', 'Completely local processing', 'JA', 'Switch to Japanese', 'Help & notes'],
+      ['en', 'Fully local processing', 'JA', 'Switch to Japanese', 'Help & notes'],
       ['ja', '完全ローカル処理', 'EN', '英語に切り替え', '使い方と注意事項'],
     ]) {
       h.context.setLanguage(lang);

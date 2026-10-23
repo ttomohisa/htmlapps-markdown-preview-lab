@@ -30,3 +30,7 @@ GitHub, Qiita, and Zenn modes are approximations. This project does not bundle o
 - Ctrl/Cmd+B and Ctrl/Cmd+I insert the existing bold and italic wrappers in the focused main or expanded editor, preserving selected text and selecting placeholder text when no range is selected.
 - Formatting shortcuts ignore Alt/Shift combinations and composition events; recognized repeated keydown events are consumed without repeated wrapping.
 - All six formatting helpers preserve an immediate pre-format undo state, including pending typed text; expanded formatting synchronizes the main value before history and autosave.
+
+## Smartphone informational footer
+
+Hide only the informational footer at the existing smartphone layout query `(max-width: 720px)`; preserve desktop visibility and functional controls. Both equivalent Japanese local-processing labels use Fully local processing in English.

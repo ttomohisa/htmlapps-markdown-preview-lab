@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Hide only the informational footer at the existing smartphone layout query `(max-width: 720px)`; preserve desktop visibility and functional controls. Both equivalent Japanese local-processing labels use Fully local processing in English.
+
+
 ## 1.0.3 - 2026-10-10
 
 - Keep the sample New document action, formatting controls and editor statistics separated when the editor header wraps.
