@@ -1,7 +1,7 @@
 # Application Specification
 
 ## Product
-**Markdown Preview Lab v1.0.3**
+**Markdown Preview Lab v1.0.4**
 
 A browser-only Markdown editor that compares GitHub, Qiita, and Zenn-inspired rendering and highlights portability concerns.
 
@@ -34,3 +34,7 @@ GitHub, Qiita, and Zenn modes are approximations. This project does not bundle o
 ## Smartphone informational footer
 
 Hide only the informational footer at the existing smartphone layout query `(max-width: 720px)`; preserve desktop visibility and functional controls. Both equivalent Japanese local-processing labels use Fully local processing in English.
+
+## Header visibility
+
+Restore the round bottom dot in the Help question-mark icon without changing layout or controls. Verify Japanese and English at 320px, 360px, 390px and desktop widths.
