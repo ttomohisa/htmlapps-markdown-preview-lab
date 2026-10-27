@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.4 - 2026-10-27
+
+- Restore the round bottom dot in the Help question-mark icon without changing layout or controls.
+
 ## Unreleased
 
 - Hide only the informational footer at the existing smartphone layout query `(max-width: 720px)`; preserve desktop visibility and functional controls. Both equivalent Japanese local-processing labels use Fully local processing in English.

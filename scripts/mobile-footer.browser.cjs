@@ -6,7 +6,7 @@ const cfg={"slug": "markdown-preview-lab", "bp": 720, "end": "#helpDialog .dialo
 const evidence=path.resolve('test-results/mobile-footer');
 async function main(){
  fs.mkdirSync(evidence,{recursive:true});const browser=await chromium.launch();
- try{for(const language of ['ja','en'])for(const [width,height,touch]of [[1360,900,false],[cfg.bp+1,568,false],[cfg.bp,568,false],[320,568,false],[393,252,false],...(cfg.slug==='presentation-remote'?[[900,500,false]]:[])]){
+ try{for(const language of ['ja','en'])for(const [width,height,touch]of [[1360,900,false],[cfg.bp+1,568,false],[cfg.bp,568,false],[320,568,false],[360,640,false],[390,844,false],[393,252,false],...(cfg.slug==='presentation-remote'?[[900,500,false]]:[])]){
  const context=await browser.newContext({viewport:{width,height},locale:language,reducedMotion:'reduce',hasTouch:touch});
  const page=await context.newPage(),errors=[],requests=[],label=`${language}-${width}x${height}${touch?'-coarse':''}`;
  page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});page.on('request',r=>{if(/^https?:/.test(r.url()))requests.push(r.url());});
@@ -14,6 +14,11 @@ async function main(){
  await page.goto(pathToFileURL(path.resolve(__dirname,'../dist/index.html')).href);
  await page.locator('#helpButton').waitFor();
  if(await page.locator('html').getAttribute('lang')!==language)await page.locator('#languageButton').click();
+ assert.equal(await page.locator('#helpButton svg path').last().evaluate(el=>getComputedStyle(el).strokeLinecap),'round',label+': Help dot has round caps');
+ const headerVersion=page.locator('.brand-name .version-badge');
+ assert.equal((await headerVersion.textContent()).trim(),'v'+require('../app.config.json').version,label+': current header version');
+ assert.equal(await headerVersion.isVisible(),true,label+': header version visible');
+ assert.ok(await headerVersion.evaluate(el=>{const r=el.getBoundingClientRect();if(r.left<0||r.right>innerWidth||r.top<0||r.bottom>innerHeight||el.scrollWidth>el.clientWidth+1)return false;for(let p=el.parentElement;p;p=p.parentElement){const s=getComputedStyle(p),b=p.getBoundingClientRect();if(/hidden|clip/.test(s.overflowX)&&(r.left<b.left-1||r.right>b.right+1))return false;if(/hidden|clip/.test(s.overflowY)&&(r.top<b.top-1||r.bottom>b.bottom+1))return false;}return true;}),label+': version is not clipped');
  const badge=page.locator('[data-i18n="'+cfg.badge+'"]');
  assert.equal((await badge.textContent()).trim(),cfg.slug==='presentation-remote'?(language==='ja'?'資料はアップロードしません':'The deck is not uploaded'):(language==='ja'?'完全ローカル処理':'Fully local processing'));
  for(const key of ['localOnly','mobileLocal']){const labelNode=page.locator('[data-i18n="'+key+'"]');assert.equal(await labelNode.textContent(),language==='ja'?'完全ローカル処理':'Fully local processing');if(await labelNode.isVisible())assert.ok(await labelNode.evaluate(el=>{const r=el.getBoundingClientRect(),p=el.parentElement.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth&&r.left>=p.left-1&&r.right<=p.right+1&&r.top>=p.top-1&&r.bottom<=p.bottom+1;}),label+': visible '+key+' fits');}
