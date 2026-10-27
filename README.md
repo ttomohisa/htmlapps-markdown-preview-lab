@@ -232,3 +232,14 @@ Licensed under the [MIT License](LICENSE).
 `scripts/check-repository.ps1` runs `node tests/editor-formatting.cjs` with no additional dependencies. It checks the application functions and editor event wiring in all four HTML variants, including formatting shortcuts, undo/redo boundaries, expanded-editor synchronization, LocalStorage save data, repeat/modifier/composition guards, and existing Tab/save handling. These Node checks do not simulate real-browser focus, layout, IME input, or native keyboard behavior.
 
 Plain Tab inserts two spaces; Shift+Tab moves focus out of the editor. After `scripts/check-repository.ps1`, run `node tests/editor-tab.cjs` using an existing Node.js Playwright runtime. Set `NODE_PATH` to its node_modules directory; `PLAYWRIGHT_BROWSER_CHANNEL` defaults to `msedge`. The test opens both generated files locally and checks editing, undo/redo, autosave, download, and keyboard navigation.
+
+
+### Retention, recovery and output scope
+
+Markdown, applied CSS and view/filename settings autosave together in this browser. Unapplied CSS and Undo history stay in the tab. Persistent save/read errors include Retry and retain current work; corrupt data is not overwritten. If readable stored work conflicts with new tab work, save the Markdown and keep the CSS draft before reloading. Startup and language rendering do not write the draft.
+
+Save/Copy contains all current Markdown text; .md excludes rendered previews, CSS, settings and Undo. Save reports Download started with its captured editable filename. Failed downloads/copies retain separate translated recovery. Opening a file preserves pending typing as an Undo step, ignores obsolete reads and keeps a filename edited while loading.
+
+Reset Custom CSS confirms its exact scope and starts on Cancel; Markdown/settings/history remain. Failed persistence retains applied and draft CSS. Language uses URL/common/JSON legacy/browser/English priority, preserving selection, CSS drafts and active work. A failed common-language write remains screen-only; normal autosave keeps the legacy lang value unchanged.
+
+The build embeds the fixed dependency-free common UI v1 component. All three shipped copies remain byte-identical, including the existing identity-copy self-extract release. The repository check adds complete strict-ID app initialization and storage/file/native-action regressions for source and every shipped copy. Native keyboard/dialog focus, touch geometry and browser permissions still require manual acceptance.

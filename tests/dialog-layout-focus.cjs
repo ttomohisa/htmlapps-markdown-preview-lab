@@ -15,7 +15,7 @@ function harness(source){
   const context=vm.createContext({els,document:{querySelector(s){if(s==='dialog[open]')return modal;if(s==='[data-mobile-view].active')return mobile;throw Error('Unexpected selector '+s);},getElementById(id){assert.equal(id,'openButton');return open;},querySelectorAll(s){assert.equal(s,'[data-style]');return[custom,github];}},requestAnimationFrame(fn){frames.push(fn);},getComputedStyle(el){return {visibility:el.visible?'visible':'hidden'};},render(){},pushHistory(){}});
   const listener=source.split('\n').find(s=>s.includes("document.querySelectorAll('[data-style]')")&&s.includes('addEventListener'));
   assert.ok(listener,'actual explicit style-control listener');
-  vm.runInContext("const state={style:'github',customCss:'.md h1 { color: #16624f; }'};\n"+section(source,'    function setStyle(','    function setMode(')+section(source,'    function closeExpandedEditorSync(','    function formatEditorShortcut(')+listener,context);
+  vm.runInContext("let persistenceLock=false,initializing=false,cssDraftInitialized=false;const state={style:'github',customCss:'.md h1 { color: #16624f; }'};\n"+section(source,'    function setStyle(','    function setMode(')+section(source,'    function closeExpandedEditorSync(','    function formatEditorShortcut(')+listener,context);
   return {els,mobile,open,custom,github,context,focus:()=>focused,flush(){while(frames.length)frames.shift()();},modal(value){modal=value;},state:()=>JSON.parse(vm.runInContext('JSON.stringify(state)',context))};
 }
 for(const variant of variants){const source=fs.readFileSync(path.join(__dirname,'..',variant),'utf8');

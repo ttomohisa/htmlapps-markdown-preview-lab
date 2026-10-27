@@ -311,6 +311,11 @@
       .issue-row { grid-template-columns:22px 68px minmax(0,1fr); }
       .issue-line { display:none; }
     }
+    .ui-feedback { padding: 8px 12px; min-width: 0; max-width: 100%; overflow-wrap: anywhere; font-size: 12px; border-bottom: 1px solid var(--line); }
+    .ui-feedback p { margin: 4px 0; }
+    #helpDialog[open], #customCssDialog[open], #cssConfirmDialog[open] { display: flex; flex-direction: column; }
+    #helpDialog .dialog-header, #customCssDialog .dialog-header, #cssConfirmDialog .dialog-header { flex: 0 0 auto; }
+    #helpDialog .dialog-body, #customCssDialog .dialog-body, #cssConfirmDialog .dialog-body { flex: 1 1 auto; min-height: 0; max-height: none; overflow: auto; }
     @media (max-width: 430px) {
       .brand-mark { width:33px; height:33px; }
       .page-intro { gap:8px; flex-wrap:wrap; }
@@ -334,6 +339,118 @@
     }
       @media (max-width: 720px) { body > footer { display: none; } }
   </style>
+  <style>/* Browser Kitty shared UI conventions 1.0.0. Explicit opt-in only. */
+[data-bk-button] { min-height: 44px; border: 1px solid #BFC1BA; background: #FFFFFF; color: #202823; cursor: pointer; opacity: 1; }
+[data-bk-button][data-bk-variant="primary"] { background: #16624F; border-color: #16624F; color: #FFFFFF; }
+[data-bk-button][data-bk-variant="primary"]:hover:not(:disabled) { background: #0E503F; border-color: #0E503F; }
+[data-bk-button][data-bk-variant="secondary"] { background: #FFFFFF; color: #202823; border-color: #BFC1BA; }
+[data-bk-button][data-bk-variant="secondary"]:hover:not(:disabled) { background: #FFFFFF; color: #202823; border-color: #BFC1BA; }
+[data-bk-button][data-bk-variant="danger"] { background: #B3261E; border-color: #B3261E; color: #FFFFFF; }
+[data-bk-button][data-bk-variant="danger"]:hover:not(:disabled) { background: #8C1D18; border-color: #8C1D18; color: #FFFFFF; }
+[data-bk-button]:focus-visible, [data-bk-header-action]:focus-visible { outline: 2px solid #16624F; outline-offset: 2px; }
+[data-bk-button]:disabled, [data-bk-button]:disabled:hover, [data-bk-button]:disabled:active { background: #E7EBE7; color: #59635C; border-color: #E7EBE7; cursor: not-allowed; opacity: 1; transform: none; }
+[data-bk-button][data-bk-state="busy"], [data-bk-button][data-bk-state="stopping"], [data-bk-button][data-bk-state="busy"]:hover, [data-bk-button][data-bk-state="stopping"]:hover { background: #E1F0EA; color: #16624F; border-color: #E1F0EA; cursor: wait; opacity: 1; }
+[data-bk-button][data-bk-state="busy"]::before, [data-bk-button][data-bk-state="stopping"]::before { content: ''; display: inline-block; width: .85em; height: .85em; margin-inline-end: .45em; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; vertical-align: -.1em; animation: bk-ui-spin .85s linear infinite; }
+[data-bk-header-action] { min-width: 44px; min-height: 44px; }
+[data-bk-save-status] { display: block; font-size: .85rem; color: #59635C; overflow-wrap: anywhere; }
+[data-bk-save-status="error"] { color: #B3261E; }
+@keyframes bk-ui-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { [data-bk-button] { transition: none; } [data-bk-button]::before { animation: none !important; } }
+</style>
+  <script data-bk-ui-version="1.0.0">/* Browser Kitty shared UI conventions 1.0.0. Build-time embed only; no network. */
+(function (root) {
+  'use strict';
+  const version = '1.0.0';
+  const languageKey = 'browser-kitty:ui-language:v1';
+  const validLanguage = value => value === 'ja' || value === 'en';
+  function safely(read, fallback) { try { return read(); } catch (_) { return fallback; } }
+  function dependency(options, key, readDefault, fallback) {
+    return safely(() => Object.prototype.hasOwnProperty.call(options, key) ? options[key] : readDefault(), fallback);
+  }
+  function storageFrom(options) { return dependency(options, 'storage', () => root.localStorage, null); }
+  function urlFrom(options) { return dependency(options, 'url', () => root.location.href, ''); }
+  function parseUrl(value) { return safely(() => new URL(String(value), 'https://browser-kitty.invalid/'), null); }
+  function readLanguage(storage, key) { return safely(() => storage && storage.getItem(key), null); }
+  function resolveLanguage(options = {}) {
+    const url = parseUrl(urlFrom(options));
+    const query = url && url.searchParams.get('lang');
+    if (validLanguage(query)) return query;
+    const storage = storageFrom(options);
+    const shared = readLanguage(storage, languageKey);
+    if (validLanguage(shared)) return shared;
+    for (const key of options.legacyKeys || []) {
+      const legacy = readLanguage(storage, key);
+      if (validLanguage(legacy)) return legacy;
+    }
+    const languages = dependency(options, 'languages', () => root.navigator.languages || [root.navigator.language], []);
+    for (const value of languages || []) {
+      const language = String(value).toLowerCase().split('-')[0];
+      if (validLanguage(language)) return language;
+    }
+    return 'en';
+  }
+  function chooseLanguage(language, options = {}) {
+    if (!validLanguage(language)) throw new TypeError('Unsupported language: ' + language);
+    const storage = storageFrom(options);
+    const persisted = safely(() => { if (!storage) return false; storage.setItem(languageKey, language); return true; }, false);
+    const url = parseUrl(urlFrom(options));
+    const history = dependency(options, 'history', () => root.history, null);
+    const urlUpdated = safely(() => {
+      if (!url || !url.searchParams.has('lang') || !history) return false;
+      url.searchParams.set('lang', language);
+      history.replaceState(history.state, '', url.href);
+      return true;
+    }, false);
+    return { language, persisted, urlUpdated };
+  }
+  const copy = {
+    en: {
+      sessionOnly: 'Your work will be lost when this tab closes',
+      manualSave: 'Your work is not saved automatically. Save a project file to continue editing later.',
+      dirty: 'Unsaved changes', saving: 'Saving…', saved: 'Saved in this browser',
+      saveFailed: 'Could not save in this browser', downloadStarted: 'Download started',
+      previousResult: 'Previous result', stopping: 'Stopping…', stopProcessing: 'Stop processing', cancel: 'Cancel',
+      languageSessionOnly: 'Language applies to this screen only'
+    },
+    ja: {
+      sessionOnly: '作業内容はこのタブを閉じると消えます',
+      manualSave: '自動保存されません。続きの編集には作業ファイルを保存してください',
+      dirty: '未保存の変更があります', saving: '保存しています…', saved: 'このブラウザーに保存済み',
+      saveFailed: 'このブラウザーに保存できませんでした', downloadStarted: '保存を開始しました',
+      previousResult: '前回の結果', stopping: '中止しています…', stopProcessing: '処理を中止', cancel: 'キャンセル',
+      languageSessionOnly: '言語はこの画面だけに適用されます'
+    }
+  };
+  function text(key, language = 'en', values = {}) {
+    const locale = validLanguage(language) ? language : 'en';
+    let value = copy[locale][key] || copy.en[key] || String(key);
+    if (key === 'saved' && values.time) value += (locale === 'ja' ? '・' : ' · ') + String(values.time);
+    return value.replace(/\{([a-zA-Z0-9_]+)\}/g, (match, name) => Object.prototype.hasOwnProperty.call(values, name) ? String(values[name]) : match);
+  }
+  function setButtonState(button, state) {
+    if (!['ready', 'unavailable', 'busy', 'stopping'].includes(state)) throw new TypeError('Unsupported button state: ' + state);
+    button.disabled = state !== 'ready';
+    button.setAttribute('data-bk-state', state);
+    if (state === 'busy' || state === 'stopping') button.setAttribute('aria-busy', 'true');
+    else button.removeAttribute('aria-busy');
+  }
+  function setSaveStatus(element, options = {}) {
+    const mode = options.mode || 'session';
+    const state = options.state || 'dirty';
+    if (!['session', 'manual', 'autosave'].includes(mode)) throw new TypeError('Unsupported save mode: ' + mode);
+    if (!['dirty', 'saving', 'saved', 'error'].includes(state)) throw new TypeError('Unsupported save state: ' + state);
+    const key = mode === 'session' ? 'sessionOnly' : mode === 'manual' ? 'manualSave' : state === 'error' ? 'saveFailed' : state;
+    element.textContent = text(key, options.language, { time: options.time });
+    element.setAttribute('role', 'status');
+    element.setAttribute('aria-live', 'polite');
+    element.setAttribute('data-bk-save-status', state);
+    element.setAttribute('data-bk-save-mode', mode);
+  }
+  const api = Object.freeze({ version, languageKey, resolveLanguage, chooseLanguage, text, setButtonState, setSaveStatus });
+  root.BrowserKittyUI = api;
+  if (typeof module === 'object' && module.exports) module.exports = api;
+})(typeof globalThis === 'object' ? globalThis : window);
+</script>
 </head>
 <body>
   <header class="app-header">
@@ -348,8 +465,8 @@
         </div>
       </div>
       <div class="header-actions">
-        <button class="language-button" id="languageButton" type="button" aria-label="Switch language">EN</button>
-        <button class="header-icon-button" id="helpButton" type="button" data-i18n-title="helpTitle" data-i18n-aria="helpTitle" aria-label="使い方と注意事項" title="使い方と注意事項">
+        <button class="language-button" id="languageButton" data-bk-header-action type="button" aria-label="Switch language">EN</button>
+        <button class="header-icon-button" id="helpButton" data-bk-header-action type="button" data-i18n-title="helpTitle" data-i18n-aria="helpTitle" aria-label="使い方と注意事項" title="使い方と注意事項">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.4 2.4 0 1 1 3.8 2c-.9.6-1.6 1.1-1.6 2.3"/><path d="M12 17h.01"/></svg>
         </button>
       </div>
@@ -368,23 +485,24 @@
       </div>
     </div>
 
-    <section class="workspace mobile-editor" id="workspace" aria-label="Markdown editor workspace">
+    <section class="workspace mobile-editor" id="workspace" data-i18n-aria="workspaceLabel" aria-label="Markdown editor workspace">
       <div class="workspace-toolbar">
         <div class="button-row">
-          <button class="button" id="openButton" type="button"><span class="icon-text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h6l2 2h10v10H3z"/><path d="M3 7v12"/></svg><span class="label-mobile-hide" data-i18n="open">開く</span></span></button>
-          <label class="filename-control"><span data-i18n="filename">ファイル名</span><span class="filename-box"><input class="filename-input" id="filenameInput" type="text" value="document" maxlength="120" autocomplete="off" spellcheck="false" aria-label="Output file name"><span class="filename-suffix">.md</span></span></label>
-          <button class="button" id="downloadButton" type="button"><span class="icon-text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg><span class="label-mobile-hide" data-i18n="download">保存</span></span></button>
-          <button class="button" id="copyButton" type="button"><span class="icon-text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span class="label-optional" data-i18n="copy">コピー</span></span></button>
+          <button class="button" id="openButton" data-i18n-aria="open" data-bk-button data-bk-variant="secondary" type="button"><span class="icon-text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h6l2 2h10v10H3z"/><path d="M3 7v12"/></svg><span class="label-mobile-hide" data-i18n="open">開く</span></span></button>
+          <label class="filename-control"><span data-i18n="filename">ファイル名</span><span class="filename-box"><input class="filename-input" id="filenameInput" data-i18n-aria="filename" type="text" value="document" maxlength="120" autocomplete="off" spellcheck="false" aria-label="Output file name"><span class="filename-suffix">.md</span></span></label>
+          <button class="button" id="downloadButton" data-i18n-aria="saveMarkdown" data-bk-button data-bk-variant="primary" type="button"><span class="icon-text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg><span class="label-mobile-hide" data-i18n="download">保存</span></span></button>
+          <button class="button" id="copyButton" data-i18n-aria="copyMarkdownLabel" data-bk-button data-bk-variant="secondary" type="button"><span class="icon-text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span class="label-optional" data-i18n="copy">コピー</span></span></button>
         </div>
         <div class="toolbar-divider"></div>
         <div class="button-row">
-          <button class="button" id="undoButton" type="button" aria-label="Undo" title="Undo">↶</button>
-          <button class="button" id="redoButton" type="button" aria-label="Redo" title="Redo">↷</button>
+          <button class="button" id="undoButton" data-i18n-title="undo" data-i18n-aria="undo" data-bk-button data-bk-variant="secondary" type="button" aria-label="Undo" title="Undo">↶</button>
+          <button class="button" id="redoButton" data-i18n-title="redo" data-i18n-aria="redo" data-bk-button data-bk-variant="secondary" type="button" aria-label="Redo" title="Redo">↷</button>
         </div>
         <div class="toolbar-spacer"></div>
-        <div class="save-status"><span class="save-dot"></span><span id="saveStatus" data-i18n="saved">自動保存済み</span></div>
+
       </div>
 
+      <div class="ui-feedback"><p data-i18n="retentionScope"></p><p id="saveStatus" data-bk-save-status role="status" aria-live="polite"></p><button id="retryDraftButton" type="button" data-bk-button data-bk-variant="secondary" data-i18n="retrySave" hidden></button><p id="languageStatus" role="status" aria-live="polite"></p><p id="copyStatus" role="status" aria-live="polite"></p><p id="downloadStatus" role="status" aria-live="polite"></p><p id="fileStatus" role="status" aria-live="polite"></p><p data-i18n="outputScope"></p></div>
       <div class="workspace-controls">
         <div class="control-group mode-group">
           <span class="control-label" data-i18n="view">表示</span>
@@ -419,20 +537,20 @@
       <div class="editor-shell">
         <div class="editor-pane" id="editorPane">
           <div class="pane-head">
-            <div class="format-bar" aria-label="Formatting toolbar">
+            <div class="format-bar" data-i18n-aria="formattingLabel" aria-label="Formatting toolbar">
               <button class="format-button" type="button" data-format="bold" data-i18n-title="boldShortcut" title="太字 (Ctrl/⌘+B)" aria-keyshortcuts="Control+b Meta+b">B</button>
               <button class="format-button" type="button" data-format="italic" data-i18n-title="italicShortcut" title="斜体 (Ctrl/⌘+I)" aria-keyshortcuts="Control+i Meta+i"><i>I</i></button>
-              <button class="format-button" type="button" data-format="heading" title="Heading">H</button>
-              <button class="format-button" type="button" data-format="link" title="Link" aria-label="Link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-              <button class="format-button" type="button" data-format="code" title="Code">&lt;/&gt;</button>
-              <button class="format-button" type="button" data-format="list" title="List">•</button>
+              <button class="format-button" type="button" data-format="heading" data-i18n-title="formatHeading" data-i18n-aria="formatHeading" title="Heading">H</button>
+              <button class="format-button" type="button" data-format="link" data-i18n-title="formatLink" data-i18n-aria="formatLink" title="Link" aria-label="Link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
+              <button class="format-button" type="button" data-format="code" data-i18n-title="formatCode" data-i18n-aria="formatCode" title="Code">&lt;/&gt;</button>
+              <button class="format-button" type="button" data-format="list" data-i18n-title="formatList" data-i18n-aria="formatList" title="List">•</button>
             </div>
             <span class="pane-title">Markdown</span>
-            <button class="pane-action-button" id="expandEditorButton" type="button" data-i18n-title="expandEditor" title="入力欄を拡大" aria-label="Expand editor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H3v5"/><path d="M16 3h5v5"/><path d="M8 21H3v-5"/><path d="M16 21h5v-5"/></svg></button>
-            <div class="sample-state" id="sampleState"><span class="sample-label" data-i18n="sampleViewing">サンプル表示中</span><button class="sample-new-button" id="newDocumentButton" type="button" data-i18n="newDocument">新規作成</button></div>
+            <button class="pane-action-button" id="expandEditorButton" data-i18n-aria="expandEditor" type="button" data-i18n-title="expandEditor" title="入力欄を拡大" aria-label="Expand editor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H3v5"/><path d="M16 3h5v5"/><path d="M8 21H3v-5"/><path d="M16 21h5v-5"/></svg></button>
+            <div class="sample-state" id="sampleState"><span class="sample-label" data-i18n="sampleViewing">サンプル表示中</span><button class="sample-new-button" id="newDocumentButton" data-bk-button data-bk-variant="secondary" type="button" data-i18n="newDocument">新規作成</button></div>
             <span class="pane-meta" id="editorStats">0 chars · 0 lines</span>
           </div>
-          <textarea id="editor" spellcheck="false" aria-label="Markdown input"></textarea>
+          <textarea id="editor" data-i18n-aria="markdownInput" spellcheck="false" aria-label="Markdown input"></textarea>
           <div class="drop-overlay" data-i18n="drop">Markdownファイルをドロップ</div>
         </div>
 
@@ -443,11 +561,11 @@
 
         <div class="preview-pane compare-pane">
           <div class="compare-cell">
-            <div class="pane-head"><select id="compareStyleA" aria-label="Comparison style A"><option value="github">GitHub</option><option value="qiita">Qiita</option><option value="zenn">Zenn</option><option value="standard">Standard</option><option value="minimal">Minimal</option><option value="print">Print</option><option value="custom">Custom CSS</option></select><span class="pane-meta">A</span></div>
+            <div class="pane-head"><select id="compareStyleA" data-i18n-aria="compareStyleALabel" aria-label="Comparison style A"><option value="github">GitHub</option><option value="qiita">Qiita</option><option value="zenn">Zenn</option><option value="standard">Standard</option><option value="minimal">Minimal</option><option value="print">Print</option><option value="custom">Custom CSS</option></select><span class="pane-meta">A</span></div>
             <div class="preview-scroll" id="compareScrollA"><div class="preview-wrap"><article class="md theme-github" id="comparePreviewA"></article></div></div>
           </div>
           <div class="compare-cell">
-            <div class="pane-head"><select id="compareStyleB" aria-label="Comparison style B"><option value="qiita">Qiita</option><option value="github">GitHub</option><option value="zenn">Zenn</option><option value="standard">Standard</option><option value="minimal">Minimal</option><option value="print">Print</option><option value="custom">Custom CSS</option></select><span class="pane-meta">B</span></div>
+            <div class="pane-head"><select id="compareStyleB" data-i18n-aria="compareStyleBLabel" aria-label="Comparison style B"><option value="qiita">Qiita</option><option value="github">GitHub</option><option value="zenn">Zenn</option><option value="standard">Standard</option><option value="minimal">Minimal</option><option value="print">Print</option><option value="custom">Custom CSS</option></select><span class="pane-meta">B</span></div>
             <div class="preview-scroll" id="compareScrollB"><div class="preview-wrap"><article class="md theme-qiita" id="comparePreviewB"></article></div></div>
           </div>
         </div>
@@ -472,7 +590,7 @@
   <footer><span data-i18n="footer">Markdownの内容は外部送信せず、ブラウザ内のLocalStorageに自動保存します。</span></footer>
 
   <dialog id="helpDialog">
-    <div class="dialog-header"><h2 data-i18n="helpTitle">使い方と注意事項</h2><button class="dialog-close" type="button" data-close-dialog="helpDialog" aria-label="Close">×</button></div>
+    <div class="dialog-header"><h2 data-i18n="helpTitle">使い方と注意事項</h2><button class="dialog-close" type="button" data-close-dialog="helpDialog" data-i18n-aria="close" data-i18n-title="close" aria-label="Close">×</button></div>
     <div class="dialog-body">
       <h3 data-i18n="helpBasicTitle">基本操作</h3>
       <p data-i18n="helpBasic">左側にMarkdownを書くと右側へ即時反映します。スタイルを切り替えると、GitHub / Qiita / Zenn 風の見え方を比較できます。内容はLocalStorageへ自動保存されます。</p>
@@ -484,25 +602,28 @@
       <p data-i18n="helpCompat">GFM固有記法、Zennメッセージ、数式、HTMLなどを検出して注意点を表示します。判定は補助機能であり、各サービスの公式仕様を完全再現するものではありません。</p>
       <h3 data-i18n="helpPrivacyTitle">プライバシー / オフライン</h3>
       <p data-i18n="helpPrivacy">外部ライブラリやCDNを使わず、このHTMLだけで動作します。CSPで外部通信を禁止しているため、Markdown内の外部画像は実画像を読み込まずプレースホルダーとして表示します。</p>
+      <p data-i18n="retentionScope"></p><p data-i18n="outputScope"></p>
       <h3 data-i18n="helpSyntaxTitle">v1.0.4で対応する主な記法</h3>
-      <ul><li>見出し、太字、斜体、取り消し線、リンク、引用</li><li>順序付き/なしリスト、タスクリスト、テーブル</li><li>インラインコード、コードフェンス</li><li>簡易数式ブロック、Zenn風 message ブロック</li></ul>
+      <ul><li data-i18n="syntaxInline">見出し、太字、斜体、取り消し線、リンク、引用</li><li data-i18n="syntaxLists">順序付き/なしリスト、タスクリスト、テーブル</li><li data-i18n="syntaxCode">インラインコード、コードフェンス</li><li data-i18n="syntaxExtra">簡易数式ブロック、Zenn風 message ブロック</li></ul>
     </div>
   </dialog>
 
   <dialog id="expandedEditorDialog">
-    <div class="dialog-header expanded-editor-header"><h2 data-i18n="expandedEditorTitle">Markdownを大きく編集</h2><button class="dialog-close" type="button" data-close-dialog="expandedEditorDialog" aria-label="Close">×</button></div>
-    <div class="expanded-editor-body"><textarea id="expandedEditor" spellcheck="false" aria-label="Expanded Markdown input"></textarea></div>
+    <div class="dialog-header expanded-editor-header"><h2 data-i18n="expandedEditorTitle">Markdownを大きく編集</h2><button class="dialog-close" type="button" data-close-dialog="expandedEditorDialog" data-i18n-aria="close" data-i18n-title="close" aria-label="Close">×</button></div>
+    <div class="expanded-editor-body"><textarea id="expandedEditor" data-i18n-aria="expandedMarkdownInput" spellcheck="false" aria-label="Expanded Markdown input"></textarea></div>
   </dialog>
 
   <dialog id="customCssDialog">
-    <div class="dialog-header"><h2>Custom CSS</h2><button class="dialog-close" type="button" data-close-dialog="customCssDialog" aria-label="Close">×</button></div>
+    <div class="dialog-header"><h2>Custom CSS</h2><button class="dialog-close" type="button" data-close-dialog="customCssDialog" data-i18n-aria="close" data-i18n-title="close" aria-label="Close">×</button></div>
     <div class="dialog-body">
       <p data-i18n="customCssHelp">プレビュー用の <code>.md</code> を対象にCSSを書いてください。例: <code>.md h2 { color: #16624f; }</code></p>
       <textarea class="custom-css-editor" id="customCssEditor" spellcheck="false" aria-label="Custom CSS"></textarea>
-      <div class="dialog-actions"><button class="button" id="resetCssButton" type="button" data-i18n="reset">リセット</button><button class="button primary" id="applyCssButton" type="button" data-i18n="apply">適用</button></div>
+      <p id="cssResetStatus" role="status" aria-live="polite"></p>
+      <div class="dialog-actions"><button class="button" id="resetCssButton" data-bk-button data-bk-variant="danger" type="button" data-i18n="reset">リセット</button><button class="button primary" id="applyCssButton" data-bk-button data-bk-variant="primary" type="button" data-i18n="apply">適用</button></div>
     </div>
   </dialog>
 
+  <dialog id="cssConfirmDialog" aria-labelledby="cssConfirmTitle"><div class="dialog-header"><h2 id="cssConfirmTitle" data-i18n="cssResetTitle"></h2><button class="dialog-close" type="button" data-close-dialog="cssConfirmDialog" data-i18n-aria="close" aria-label="Close">×</button></div><div class="dialog-body"><p id="cssConfirmMessage"></p><div class="dialog-actions"><button id="cssConfirmCancel" type="button" data-bk-button data-bk-variant="secondary" data-i18n="cancel"></button><button id="cssConfirmOk" type="button" data-bk-button data-bk-variant="danger" data-i18n="reset"></button></div></div></dialog>
   <style id="customCssStyle"></style>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -549,6 +670,41 @@ $$
 
     const I18N = {
       ja: {
+        saveMarkdown:"Markdownファイルを保存",
+        copyMarkdownLabel:"Markdown本文をコピー",
+        markdownInput:"Markdown本文の入力",
+        expandedMarkdownInput:"拡大したMarkdown本文の入力",
+        compareStyleALabel:"比較スタイルA",
+        compareStyleBLabel:"比較スタイルB",
+        workspaceLabel:"Markdown編集とプレビュー",
+        formattingLabel:"文章の書式",
+        formatHeading:"見出し",
+        formatLink:"リンク",
+        formatCode:"コード",
+        formatList:"リスト",
+        syntaxInline:"見出し、太字、斜体、取り消し線、リンク、引用",
+        syntaxLists:"順序付き/なしリスト、タスクリスト、テーブル",
+        syntaxCode:"インラインコード、コードフェンス",
+        syntaxExtra:"簡易数式ブロック、Zenn風 message ブロック",
+        retentionScope:"Markdown本文・適用済みCSS・表示設定をこのブラウザーへ自動保存します。未適用のCSS下書きとUndo履歴はタブ内だけです。保存失敗時は作業を残し、再試行できます。",
+        outputScope:"保存／コピーは現在のMarkdown本文全体です。プレビュー、CSS、表示設定、Undo履歴は.mdファイルに含みません。読み込みは本文を置き換えますが、Undoで直前の文章へ戻せます。ファイル名は編集できます。",
+        retrySave:"現在の下書きと設定を再保存",
+        draftSaveFailed:"下書きと設定を保存できませんでした。現在の文章・CSS・ファイル名は残っています。再試行するか、Markdownをファイル保存してください。",
+        draftReadFailed:"保存済み下書きを読み込めませんでした。保存データは変更していません。再試行するか、現在のMarkdownをファイル保存し、CSS下書きを控えてからストレージを修復／再読み込みしてください。",
+        draftRecoveryConflict:"保存済み下書きは読み込める状態に戻りましたが、このタブにも新しい作業があります。現在のMarkdownを保存し、CSS下書きを控えてから再読み込みしてください。保存済みデータは上書きしていません。",
+        copyFailedRecovery:"コピーできませんでした。Markdown本文を選択して手動でコピーするか、再試行してください。",
+        downloadFailed:"ダウンロードを開始できませんでした。文章とファイル名は保持しています。保存を再試行してください。",
+        fileReading:"ファイルを読み込んでいます…",
+        fileTooLarge:"ファイルは最大5MBまでです。",
+        fileReadFailed:"ファイルを読み込めませんでした。現在の文章は保持しています。ファイルを再選択してください。",
+        fileChanged:"読み込み中に現在の文章が変わったため、古い読み込みを反映しませんでした。現在の作業を残しています。再度ファイルを選択してください。",
+        cssResetTitle:"Custom CSSをリセット",
+        cssResetScope:"適用済みのCustom CSSと未適用のCSS下書きだけを消去します。元に戻せません。Markdown本文、ファイル名、表示設定、Undo履歴は残ります。",
+        cssResetFailed:"CSSをリセットできませんでした。適用済みCSSと下書きは保持しています。保存先を確認してから、再度リセットしてください。",
+        cancel:"キャンセル",
+        close:"閉じる",
+        undo:"元に戻す",
+        redo:"やり直す",
         compatMessageGithub:":::message はGitHub Markdownでは専用ブロックとして解釈されません。",
         compatMessageQiita:":::message はZenn固有寄りの記法です。Qiita投稿前に表現を確認してください。",
         compatMathGithub:"数式の表示は投稿先や文脈によって差が出るため、公開前の確認を推奨します。",
@@ -567,6 +723,41 @@ $$
         brandMeta:'GitHub / Qiita / Zenn の見え方を比較', pageTitle:'Markdown エディタ', pageDesc:'同じMarkdownを GitHub / Qiita / Zenn 風に切り替え、投稿先ごとの互換性も確認できます。', localOnly:'完全ローカル処理', mobileLocal:'完全ローカル処理', open:'開く', filename:'ファイル名', download:'保存', copy:'コピー', saved:'自動保存済み', saving:'保存中…', view:'表示', single:'通常', compare:'比較', style:'スタイル', sync:'スクロール同期', edit:'編集', preview:'プレビュー', approx:'近似プレビュー', drop:'Markdownファイルをドロップ', compatTitle:'投稿先の互換性チェック', compatDesc:'記法を簡易解析して、移植時に確認したい箇所を表示します。', heuristic:'※ スコアは独自ルールによる目安です。各サービスの公式レンダラーと完全一致するものではありません。', footer:'Markdownの内容は外部送信せず、ブラウザ内のLocalStorageに自動保存します。', helpTitle:'使い方と注意事項', helpBasicTitle:'基本操作', helpBasic:'左側にMarkdownを書くと右側へ即時反映します。スタイルを切り替えると、GitHub / Qiita / Zenn 風の見え方を比較できます。内容はLocalStorageへ自動保存されます。', helpCompareTitle:'比較モード', helpCompare:'「比較」を選ぶと、右側に2種類のプレビューを同時表示します。スマホでは下の「比較」タブから2プレビューを上下に確認できます。', helpCompatTitle:'互換性チェック', helpCompat:'GFM固有記法、Zennメッセージ、数式、HTMLなどを検出して注意点を表示します。判定は補助機能であり、各サービスの公式仕様を完全再現するものではありません。', helpPrivacyTitle:'プライバシー / オフライン', helpPrivacy:'外部ライブラリやCDNを使わず、このHTMLだけで動作します。CSPで外部通信を禁止しているため、Markdown内の外部画像は実画像を読み込まずプレースホルダーとして表示します。', helpSyntaxTitle:'v1.0.4で対応する主な記法', customCssHelp:'プレビュー用の .md を対象にCSSを書いてください。例: .md h2 { color: #16624f; }', reset:'リセット', apply:'適用', noIssues:'目立った互換性上の注意点はありません。', copied:'Markdownをコピーしました', copyFailed:'コピーできませんでした', downloaded:'Markdownファイルを保存しました', opened:'ファイルを読み込みました', invalidFile:'Markdown / テキストファイルを選んでください', cssApplied:'Custom CSSを適用しました', cssReset:'Custom CSSをリセットしました', line:'行', chars:'文字', lines:'行', warning:'注意', info:'情報', sampleViewing:'サンプル表示中', newDocument:'新規作成', newDocumentReady:'空のドキュメントを作成しました', expandEditor:'入力欄を拡大', expandedEditorTitle:'Markdownを大きく編集'
       },
       en: {
+        saveMarkdown:"Save Markdown file",
+        copyMarkdownLabel:"Copy Markdown text",
+        markdownInput:"Markdown input",
+        expandedMarkdownInput:"Expanded Markdown input",
+        compareStyleALabel:"Comparison style A",
+        compareStyleBLabel:"Comparison style B",
+        workspaceLabel:"Markdown editing and previews",
+        formattingLabel:"Formatting toolbar",
+        formatHeading:"Heading",
+        formatLink:"Link",
+        formatCode:"Code",
+        formatList:"List",
+        syntaxInline:"Headings, bold, italic, strikethrough, links and quotations",
+        syntaxLists:"Ordered/unordered lists, task lists and tables",
+        syntaxCode:"Inline code and fenced code blocks",
+        syntaxExtra:"Simple math blocks and Zenn-inspired message blocks",
+        retentionScope:"Markdown, applied CSS and view settings autosave in this browser. Unapplied CSS drafts and Undo history stay in this tab. Save failures retain work beside Retry.",
+        outputScope:"Save/Copy includes the entire current Markdown text. The .md file excludes previews, CSS, settings and Undo history. Opening a file replaces the text with a real Undo step; the filename remains editable.",
+        retrySave:"Retry saving current draft and settings",
+        draftSaveFailed:"Could not save draft and settings. Current Markdown, CSS and filename are retained. Retry, or save Markdown to a file.",
+        draftReadFailed:"Could not read the saved draft. Stored data is unchanged. Retry, or save current Markdown and keep a copy of the CSS draft before repairing storage/reloading.",
+        draftRecoveryConflict:"The saved draft is readable again, but this tab also has new work. Save current Markdown and keep the CSS draft before reloading. Stored data was not overwritten.",
+        copyFailedRecovery:"Could not copy. Select the Markdown text and copy manually, or retry Copy.",
+        downloadFailed:"Could not start the download. Text and filename are retained. Retry Save.",
+        fileReading:"Reading file…",
+        fileTooLarge:"The maximum file size is 5 MB.",
+        fileReadFailed:"Could not read the file. Current text is retained. Choose the file again.",
+        fileChanged:"Current text changed while the file was loading, so the old read was not applied. Your work is retained. Choose the file again.",
+        cssResetTitle:"Reset Custom CSS",
+        cssResetScope:"Remove only applied Custom CSS and the unapplied CSS draft? This cannot be undone. Markdown, filename, view choices and Undo history remain.",
+        cssResetFailed:"Could not reset CSS. Applied CSS and the draft are retained. Check storage, then try Reset again.",
+        cancel:"Cancel",
+        close:"Close",
+        undo:"Undo",
+        redo:"Redo",
         compatMessageGithub:"GitHub Markdown does not interpret :::message as a dedicated block.",
         compatMessageQiita:":::message is Zenn-style syntax. Check its appearance before publishing on Qiita.",
         compatMathGithub:"Math rendering varies by platform and context. Check it before publishing.",
@@ -597,11 +788,28 @@ $$
       helpDialog: document.getElementById('helpDialog'), customCssDialog: document.getElementById('customCssDialog'), customCssEditor: document.getElementById('customCssEditor'), customCssStyle: document.getElementById('customCssStyle')
     };
 
+    let legacyLanguage='en';
+    let initializing=true,workspaceRevision=0,documentRevision=0,lastDocument=null,filenameRevision=0,fileSequence=0,fileBusy=false,activeFile=null,copyBusy=false,downloadBusy=false,languageFailure=false;
+    let persistenceLock=false,saveAfterLock=false,cssRevision=0,cssResetPending=false,cssConfirmResolver=null,cssConfirmOpener=null;
+    const draftStorage={state:'dirty',blocked:false,errorKey:'',at:null},deliveryStatus={copy:'',download:'',filename:'',file:'',css:''};
+    let cssReturnFocusOwned=false;
+    let toastKey='',toastCommon='',toastSuffix='',cssDraftInitialized=false,cssTransaction=null,releaseCssTransaction=null;
     let state = { lang:'ja', style:'github', mode:'single', mobileView:'editor', compareA:'github', compareB:'qiita', customCss:'', syncScroll:true, samplePristine:true, outputFilename:'document' };
     let history = [], historyIndex = -1, historyTimer = null, saveTimer = null, toastTimer = null, syncing = false;
 
+    function resolveAppLanguage(){const storage={getItem(key){const raw=localStorage.getItem(key);if(key!==STORAGE_KEY)return raw;try{const saved=JSON.parse(raw);return saved&&typeof saved==='object'&&!Array.isArray(saved)?saved.lang:null;}catch{return null;}}};return BrowserKittyUI.resolveLanguage({storage,legacyKeys:[STORAGE_KEY]});}
+    function parseStoredState(raw){if(raw===null)return null;const saved=JSON.parse(raw),styles=['github','qiita','zenn','standard','minimal','print','custom'];if(!saved||typeof saved!=='object'||Array.isArray(saved)||typeof saved.markdown!=='string')throw Error('Invalid stored draft');for(const key of ['customCss','outputFilename'])if(key in saved&&typeof saved[key]!=='string')throw Error('Invalid '+key);for(const key of ['syncScroll','samplePristine'])if(key in saved&&typeof saved[key]!=='boolean')throw Error('Invalid '+key);for(const key of ['style','compareA','compareB'])if(key in saved&&!styles.includes(saved[key]))throw Error('Invalid '+key);if('mode'in saved&&!['single','compare'].includes(saved.mode))throw Error('Invalid mode');if('mobileView'in saved&&!['editor','preview','compare'].includes(saved.mobileView))throw Error('Invalid mobile view');if('lang'in saved&&!['ja','en'].includes(saved.lang))throw Error('Invalid language');return saved;}
+    function storedStateComplete(saved){return ['lang','style','mode','mobileView','compareA','compareB','customCss','syncScroll','outputFilename'].every(key=>key in saved);}
+    function commitState(snapshot){if(draftStorage.blocked){draftStorage.state='error';if(!draftStorage.errorKey)draftStorage.errorKey='draftReadFailed';renderUiConventions();return false;}try{localStorage.setItem(STORAGE_KEY,JSON.stringify({...snapshot,lang:legacyLanguage}));draftStorage.state='saved';draftStorage.errorKey='';draftStorage.at=Date.now();renderUiConventions();return true;}catch{draftStorage.state='error';draftStorage.errorKey='draftSaveFailed';renderUiConventions();return false;}}
+    function retryStorage(){if(persistenceLock)return false;if(draftStorage.blocked){try{const restored=parseStoredState(localStorage.getItem(STORAGE_KEY));if(restored&&workspaceRevision>0&&!(restored.markdown===els.editor.value&&(restored.customCss||'')===state.customCss)){draftStorage.errorKey='draftRecoveryConflict';renderUiConventions();return false;}if(restored&&workspaceRevision>0){draftStorage.blocked=false;draftStorage.errorKey='';return saveState();}if(restored){const complete=storedStateComplete(restored),currentLanguage=state.lang;state={...state,...restored};if(typeof restored.samplePristine!=='boolean')state.samplePristine=restored.markdown===defaultMarkdown;draftStorage.blocked=false;draftStorage.errorKey='';draftStorage.state=complete?'saved':'dirty';draftStorage.at=null;initializing=true;initializeEditors(true,currentLanguage);initializing=false;renderUiConventions();return true;}draftStorage.blocked=false;draftStorage.errorKey='';}catch{draftStorage.errorKey='draftReadFailed';renderUiConventions();return false;}}return saveState();}
+    function updateHistoryButtons(){BrowserKittyUI.setButtonState(document.getElementById('undoButton'),historyIndex>0&&!persistenceLock?'ready':'unavailable');BrowserKittyUI.setButtonState(document.getElementById('redoButton'),historyIndex<history.length-1&&!persistenceLock?'ready':'unavailable');}
+    function renderUiConventions(){BrowserKittyUI.setSaveStatus(els.saveStatus,{mode:'autosave',state:draftStorage.state,language:state.lang,time:draftStorage.at===null?'':new Date(draftStorage.at).toLocaleTimeString(state.lang,{hour:'2-digit',minute:'2-digit'})});if(draftStorage.errorKey)els.saveStatus.textContent=t(draftStorage.errorKey);document.getElementById('retryDraftButton').hidden=draftStorage.state!=='error';document.getElementById('retryDraftButton').disabled=persistenceLock;document.getElementById('languageStatus').textContent=languageFailure?BrowserKittyUI.text('languageSessionOnly',state.lang):'';document.getElementById('copyStatus').textContent=deliveryStatus.copy?t(deliveryStatus.copy):'';document.getElementById('downloadStatus').textContent=deliveryStatus.download==='started'?BrowserKittyUI.text('downloadStarted',state.lang)+': '+deliveryStatus.filename:deliveryStatus.download?t(deliveryStatus.download):'';document.getElementById('fileStatus').textContent=fileBusy?t('fileReading'):deliveryStatus.file?t(deliveryStatus.file):'';document.getElementById('cssResetStatus').textContent=deliveryStatus.css?t(deliveryStatus.css):'';BrowserKittyUI.setButtonState(document.getElementById('copyButton'),copyBusy?'busy':'ready');BrowserKittyUI.setButtonState(document.getElementById('downloadButton'),downloadBusy?'busy':'ready');BrowserKittyUI.setButtonState(document.getElementById('openButton'),fileBusy?'busy':persistenceLock?'unavailable':'ready');BrowserKittyUI.setButtonState(document.getElementById('resetCssButton'),cssResetPending?'busy':'ready');BrowserKittyUI.setButtonState(document.getElementById('applyCssButton'),persistenceLock?'unavailable':'ready');updateHistoryButtons();refreshCssConfirm();if(els.toast.classList.contains('show')){if(toastCommon)els.toast.textContent=BrowserKittyUI.text(toastCommon,state.lang)+(toastSuffix?': '+toastSuffix:'');else if(toastKey)els.toast.textContent=t(toastKey);}}
+    function refreshCssConfirm(){if(!cssConfirmResolver)return;document.getElementById('cssConfirmMessage').textContent=t('cssResetScope');}
+    function finishCssConfirm(accepted=false){if(!cssConfirmResolver)return;const resolve=cssConfirmResolver,opener=cssConfirmOpener,dialog=document.getElementById('cssConfirmDialog'),active=document.activeElement,owned=dialog.contains(active)||active===document.getElementById('cssConfirmCancel')||active===document.getElementById('cssConfirmOk');cssReturnFocusOwned=owned||active===document.body||active===opener;cssConfirmResolver=null;cssConfirmOpener=null;if(dialog.open)dialog.close();resolve(accepted);}
+    function confirmCssReset(opener=document.activeElement){if(cssConfirmResolver)return Promise.resolve(false);cssConfirmOpener=opener;return new Promise(resolve=>{cssConfirmResolver=resolve;refreshCssConfirm();document.getElementById('cssConfirmDialog').showModal();requestAnimationFrame(()=>{if(cssConfirmResolver===resolve)document.getElementById('cssConfirmCancel').focus();});});}
+    async function resetCss(){if(cssResetPending)return;const resetOpener=document.activeElement;let applied=false;cssReturnFocusOwned=false;cssResetPending=true;persistenceLock=true;cssTransaction=new Promise(resolve=>{releaseCssTransaction=resolve;});saveAfterLock=saveTimer!==null;clearTimeout(saveTimer);saveTimer=null;const revision=workspaceRevision,css=state.customCss,draft=els.customCssEditor.value,source=els.editor.value,name=els.filenameInput.value;renderUiConventions();try{const accepted=await confirmCssReset(resetOpener);if(!accepted||revision!==workspaceRevision||state.customCss!==css||els.customCssEditor.value!==draft||els.editor.value!==source||els.filenameInput.value!==name)return;const saved=commitState({...state,customCss:'',markdown:els.editor.value});if(!saved){deliveryStatus.css='cssResetFailed';return;}state.customCss='';els.customCssEditor.value='';els.customCssStyle.textContent='';cssRevision++;workspaceRevision++;deliveryStatus.css='';saveAfterLock=false;applied=true;if(cssReturnFocusOwned)els.customCssEditor.focus();showToast(t('cssReset'));}finally{cssResetPending=false;persistenceLock=false;const pending=saveAfterLock;saveAfterLock=false;renderUiConventions();if(!applied&&cssReturnFocusOwned&&resetOpener?.isConnected&&!resetOpener.disabled)resetOpener.focus();if(pending)scheduleSave();const release=releaseCssTransaction;cssTransaction=null;releaseCssTransaction=null;release?.();}}
     function t(key) { return (I18N[state.lang] && I18N[state.lang][key]) || I18N.ja[key] || key; }
-    function showToast(message) { clearTimeout(toastTimer); els.toast.textContent = message; els.toast.classList.add('show'); toastTimer = setTimeout(() => els.toast.classList.remove('show'), 1800); }
+    function showToast(message,{common='',suffix=''}={}) { toastCommon=common;toastSuffix=suffix;toastKey=Object.keys(I18N[state.lang]).find(key=>t(key)===message)||'';clearTimeout(toastTimer); els.toast.textContent = message; els.toast.classList.add('show'); toastTimer = setTimeout(() => els.toast.classList.remove('show'), 1800); }
     function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
     function safeUrl(url) { try { const s=String(url).trim(); if (/^(https?:|mailto:|#|\/)/i.test(s)) return s; return '#'; } catch { return '#'; } }
     function slugify(s) { return s.toLowerCase().replace(/<[^>]*>/g,'').replace(/[^\p{L}\p{N}\s-]/gu,'').trim().replace(/\s+/g,'-').slice(0,80); }
@@ -744,8 +952,9 @@ $$
     function getThemeClass(style) { return 'theme-' + (style==='custom' ? 'standard' : style); }
     function applyTheme(el, style) { el.className = `md ${getThemeClass(style)}`; }
     function render() {
+      if(lastDocument!==els.editor.value){lastDocument=els.editor.value;documentRevision++;}
       const md=els.editor.value, html=markdownToHtml(md,state.style);
-      els.singlePreview.innerHTML=html; applyTheme(els.singlePreview,state.style); els.singlePreviewTitle.textContent=(state.style==='custom'?'Custom CSS':capitalize(state.style))+' Preview';
+      els.singlePreview.innerHTML=html; applyTheme(els.singlePreview,state.style); els.singlePreviewTitle.textContent=(state.style==='custom'?'Custom CSS':capitalize(state.style))+' '+t('preview');
       const htmlA=markdownToHtml(md,state.compareA), htmlB=markdownToHtml(md,state.compareB);
       els.compareA.innerHTML=htmlA; els.compareB.innerHTML=htmlB; applyTheme(els.compareA,state.compareA); applyTheme(els.compareB,state.compareB);
       const lines=md ? md.split(/\r?\n/).length : 0; els.editorStats.textContent=`${md.length} ${t('chars')} · ${lines} ${t('lines')}`;
@@ -788,22 +997,13 @@ $$
       els.issues.innerHTML=issues.slice(0,24).map((x,i)=>`<button class="issue-row" type="button" data-issue-index="${i}" data-line="${x.line}"><span class="issue-icon ${x.severity}">${x.severity==='warn'?'!':'i'}</span><span class="issue-platform">${x.platform==='local'?'Local':capitalize(x.platform)}</span><span class="issue-message">${escapeHtml(x.message)}</span><span class="issue-line">${t('line')} ${x.line}</span></button>`).join('');
     }
 
-    function scheduleSave() { els.saveStatus.textContent=t('saving'); clearTimeout(saveTimer); saveTimer=setTimeout(saveState,350); }
-    function saveState() { try { localStorage.setItem(STORAGE_KEY,JSON.stringify({...state,markdown:els.editor.value})); els.saveStatus.textContent=t('saved'); } catch { els.saveStatus.textContent='LocalStorage error'; } }
-    function loadState() {
-      try {
-        const raw=localStorage.getItem(STORAGE_KEY);
-        if(!raw) return false;
-        const saved=JSON.parse(raw);
-        if(typeof saved.samplePristine!=='boolean') saved.samplePristine=saved.markdown===defaultMarkdown;
-        state={...state,...saved};
-        return true;
-      } catch { return false; }
-    }
+    function scheduleSave(){if(initializing)return;workspaceRevision++;if(persistenceLock){saveAfterLock=true;return;}if(draftStorage.state!=='error')draftStorage.state='dirty';clearTimeout(saveTimer);saveTimer=setTimeout(()=>{saveTimer=null;saveState();},350);renderUiConventions();}
+    function saveState(){if(initializing)return false;if(persistenceLock){saveAfterLock=true;return false;}workspaceRevision++;clearTimeout(saveTimer);saveTimer=null;return commitState({...state,markdown:els.editor.value});}
+    function loadState(){try{const raw=localStorage.getItem(STORAGE_KEY),saved=parseStoredState(raw);if(saved===null)return false;const complete=storedStateComplete(saved);if(typeof saved.samplePristine!=='boolean')saved.samplePristine=saved.markdown===defaultMarkdown;state={...state,...saved};draftStorage.state=complete?'saved':'dirty';return true;}catch{draftStorage.state='error';draftStorage.blocked=true;draftStorage.errorKey='draftReadFailed';return false;}}
     function updateSampleStateUI() { els.sampleState.classList.toggle('visible',state.samplePristine && els.editor.value===defaultMarkdown); }
     function leaveSampleMode() { if(state.samplePristine){ state.samplePristine=false; updateSampleStateUI(); } }
     function newDocument() {
-      state.samplePristine=false;
+      if(persistenceLock)return;state.samplePristine=false;
       state.outputFilename='document'; els.filenameInput.value=state.outputFilename;
       els.editor.value='';
       pushHistory(true);
@@ -811,22 +1011,21 @@ $$
       els.editor.focus();
       showToast(t('newDocumentReady'));
     }
-    function pushHistory(immediate=false) { clearTimeout(historyTimer); const run=()=>{ const value=els.editor.value; if(history[historyIndex]===value)return; history=history.slice(0,historyIndex+1); history.push(value); if(history.length>100) history.shift(); historyIndex=history.length-1; }; if(immediate)run(); else historyTimer=setTimeout(run,350); }
-    function undo() { if(historyIndex>0){ historyIndex--; els.editor.value=history[historyIndex]; render(); } }
-    function redo() { if(historyIndex<history.length-1){ historyIndex++; els.editor.value=history[historyIndex]; render(); } }
+    function pushHistory(immediate=false) { clearTimeout(historyTimer); const run=()=>{ const value=els.editor.value; if(history[historyIndex]===value)return; history=history.slice(0,historyIndex+1); history.push(value); if(history.length>100) history.shift(); historyIndex=history.length-1;updateHistoryButtons(); }; if(immediate)run(); else historyTimer=setTimeout(run,350); }
+    function undo() { if(persistenceLock)return; if(historyIndex>0){ historyIndex--; els.editor.value=history[historyIndex]; render(); } }
+    function redo() { if(persistenceLock)return; if(historyIndex<history.length-1){ historyIndex++; els.editor.value=history[historyIndex]; render(); } }
 
     function setStyle(style, editCustom=false) {
-      state.style=style; document.querySelectorAll('[data-style]').forEach(b=>b.classList.toggle('active',b.dataset.style===style));
-      if(style==='custom') { els.customCssEditor.value=state.customCss; if((editCustom||!state.customCss)&&!els.customCssDialog.open) els.customCssDialog.showModal(); }
+      if(persistenceLock)return;state.style=style; document.querySelectorAll('[data-style]').forEach(b=>b.classList.toggle('active',b.dataset.style===style));
+      if(style==='custom') { if(!cssDraftInitialized){els.customCssEditor.value=state.customCss;cssDraftInitialized=true;} if((editCustom||(!initializing&&!state.customCss))&&!els.customCssDialog.open) els.customCssDialog.showModal(); }
       render();
     }
-    function setMode(mode) { state.mode=mode; els.workspace.classList.toggle('compare',mode==='compare'); document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode)); requestAnimationFrame(()=>syncScrollGroup(els.editor)); saveState(); }
-    function setMobileView(view) { state.mobileView=view; els.workspace.classList.remove('mobile-editor','mobile-preview','mobile-compare'); els.workspace.classList.add('mobile-'+view); document.querySelectorAll('[data-mobile-view]').forEach(b=>b.classList.toggle('active',b.dataset.mobileView===view)); if(view==='compare') setMode('compare'); saveState(); }
-    function setLanguage(lang) { state.lang=lang; document.documentElement.lang=lang; document.querySelectorAll('[data-i18n]').forEach(el=>{ const key=el.dataset.i18n; if(t(key)) el.textContent=t(key); }); document.querySelectorAll('[data-i18n-title]').forEach(el=>{ const key=el.dataset.i18nTitle; if(t(key)) el.title=t(key); }); document.querySelectorAll('[data-i18n-aria]').forEach(el=>el.setAttribute('aria-label',t(el.dataset.i18nAria))); document.getElementById('languageButton').textContent=lang==='ja'?'EN':'JA'; document.getElementById('languageButton').setAttribute('aria-label',lang==='ja'?'英語に切り替え':'Switch to Japanese'); render(); saveState(); }
-
+    function setMode(mode) { if(persistenceLock)return;state.mode=mode; els.workspace.classList.toggle('compare',mode==='compare'); document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode)); requestAnimationFrame(()=>syncScrollGroup(els.editor)); saveState(); }
+    function setMobileView(view) { if(persistenceLock)return;state.mobileView=view; els.workspace.classList.remove('mobile-editor','mobile-preview','mobile-compare'); els.workspace.classList.add('mobile-'+view); document.querySelectorAll('[data-mobile-view]').forEach(b=>b.classList.toggle('active',b.dataset.mobileView===view)); if(view==='compare') setMode('compare'); saveState(); }
+    function setLanguage(lang,{explicit=true}={}){if(explicit){const choice=BrowserKittyUI.chooseLanguage(lang);state.lang=choice.language;languageFailure=!choice.persisted;}else state.lang=lang;document.documentElement.lang=state.lang;document.title='Markdown Preview Lab';document.querySelectorAll('[data-i18n]').forEach(el=>{const key=el.dataset.i18n;if(t(key))el.textContent=t(key);});document.querySelectorAll('[data-i18n-title]').forEach(el=>{const key=el.dataset.i18nTitle;if(t(key))el.title=t(key);});document.querySelectorAll('[data-i18n-aria]').forEach(el=>el.setAttribute('aria-label',t(el.dataset.i18nAria)));document.getElementById('languageButton').textContent=state.lang==='ja'?'EN':'JA';document.getElementById('languageButton').setAttribute('aria-label',state.lang==='ja'?'英語に切り替え':'Switch to Japanese');document.getElementById('languageButton').title=document.getElementById('languageButton').getAttribute('aria-label');const md=els.editor.value,lines=md?md.split(/\r?\n/).length:0;els.editorStats.textContent=md.length+' '+t('chars')+' · '+lines+' '+t('lines');els.singlePreviewTitle.textContent=(state.style==='custom'?'Custom CSS':capitalize(state.style))+' '+t('preview');runCompatibility(md);renderUiConventions();}
     function selectLine(line) { const lines=els.editor.value.split('\n'); let start=0; for(let i=0;i<line-1;i++)start+=lines[i].length+1; const end=start+(lines[line-1]||'').length; els.editor.focus(); els.editor.setSelectionRange(start,end); if(window.innerWidth<=720)setMobileView('editor'); const ratio=start/Math.max(1,els.editor.value.length); els.editor.scrollTop=(els.editor.scrollHeight-els.editor.clientHeight)*ratio; }
     function formatSelection(type,e=els.editor) {
-      const start=e.selectionStart, end=e.selectionEnd, selected=e.value.slice(start,end), before=e.value.slice(0,start), after=e.value.slice(end); let replacement=selected, selectOffset=0;
+      if(persistenceLock)return;const start=e.selectionStart, end=e.selectionEnd, selected=e.value.slice(start,end), before=e.value.slice(0,start), after=e.value.slice(end); let replacement=selected, selectOffset=0;
       if(type==='bold'){ replacement=`**${selected||'bold'}**`; selectOffset=2; }
       if(type==='italic'){ replacement=`*${selected||'italic'}*`; selectOffset=1; }
       if(type==='heading'){ replacement=(start===0||before.endsWith('\n')?'':'\n')+`## ${selected||'Heading'}`; selectOffset=replacement.indexOf(selected||'Heading'); }
@@ -899,14 +1098,14 @@ $$
       pushHistory(true);
     }
 
-    async function copyMarkdown() { try { await navigator.clipboard.writeText(els.editor.value); showToast(t('copied')); } catch { try { els.editor.select(); document.execCommand('copy'); showToast(t('copied')); } catch { showToast(t('copyFailed')); } } }
+    async function copyMarkdown(){if(copyBusy)return;const value=els.editor.value,revision=documentRevision,current=()=>revision===documentRevision&&els.editor.value===value;copyBusy=true;renderUiConventions();try{try{await navigator.clipboard.writeText(value);}catch{if(!current())return;const previous=document.activeElement;let temp=null;try{temp=document.createElement('textarea');temp.value=value;temp.style.position='fixed';temp.style.opacity='0';document.body.appendChild(temp);temp.focus();temp.select();if(!document.execCommand('copy'))throw Error('Copy failed');}finally{const owned=temp&&document.activeElement===temp;temp?.remove();if(owned&&previous?.isConnected)previous.focus();}}if(current()){deliveryStatus.copy='copied';showToast(t('copied'));}}catch{if(current())deliveryStatus.copy='copyFailedRecovery';}finally{copyBusy=false;renderUiConventions();}}
     function normalizedFilename() { let name=(els.filenameInput.value||state.outputFilename||'document').trim().replace(/\.(?:md|markdown|mdown|mkd)$/i,'').replace(/[<>:"/\\|?*\u0000-\u001F]/g,'-').replace(/[. ]+$/g,'').trim(); if(!name) name='document'; state.outputFilename=name; els.filenameInput.value=name; return name+'.md'; }
-    function downloadMarkdown() { const blob=new Blob([els.editor.value],{type:'text/markdown;charset=utf-8'}), a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=normalizedFilename(); document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); saveState(); showToast(t('downloaded')); }
-    function readFile(file) { if(!file)return; if(file.size>5*1024*1024){ showToast('File is too large (max 5 MB)'); return; } const name=file.name.toLowerCase(); if(!(name.endsWith('.md')||name.endsWith('.markdown')||name.endsWith('.mdown')||name.endsWith('.mkd')||file.type.startsWith('text/'))){ showToast(t('invalidFile')); return; } const reader=new FileReader(); reader.onload=()=>{ state.samplePristine=false; state.outputFilename=file.name.replace(/\.(?:md|markdown|mdown|mkd)$/i,'')||'document'; els.filenameInput.value=state.outputFilename; els.editor.value=String(reader.result||''); pushHistory(true); render(); showToast(t('opened')); }; reader.readAsText(file); }
+    function downloadMarkdown(){if(downloadBusy)return;const value=els.editor.value,filename=normalizedFilename();downloadBusy=true;renderUiConventions();let url='',anchor=null,handedOff=false;try{const blob=new Blob([value],{type:'text/markdown;charset=utf-8'});url=URL.createObjectURL(blob);anchor=document.createElement('a');anchor.href=url;anchor.download=filename;document.body.appendChild(anchor);anchor.click();handedOff=true;deliveryStatus.download='started';deliveryStatus.filename=filename;saveState();showToast(BrowserKittyUI.text('downloadStarted',state.lang)+': '+filename,{common:'downloadStarted',suffix:filename});}catch{deliveryStatus.download='downloadFailed';}finally{anchor?.remove();if(url){if(handedOff)setTimeout(()=>URL.revokeObjectURL(url),1000);else URL.revokeObjectURL(url);}downloadBusy=false;renderUiConventions();}}
+    function readFile(file){if(!file||persistenceLock||(fileBusy&&activeFile===file))return;const sequence=++fileSequence,revision=documentRevision,source=els.editor.value,nameRevision=filenameRevision;activeFile=file;fileBusy=false;if(file.size>5*1024*1024){activeFile=null;deliveryStatus.file='fileTooLarge';renderUiConventions();return;}const name=file.name.toLowerCase();if(!(name.endsWith('.md')||name.endsWith('.markdown')||name.endsWith('.mdown')||name.endsWith('.mkd')||file.type.startsWith('text/'))){activeFile=null;deliveryStatus.file='invalidFile';renderUiConventions();return;}fileBusy=true;renderUiConventions();const reader=new FileReader();const finish=()=>{if(sequence===fileSequence){fileBusy=false;activeFile=null;renderUiConventions();}};reader.onerror=()=>{if(sequence===fileSequence)deliveryStatus.file='fileReadFailed';finish();};reader.onabort=()=>{if(sequence===fileSequence)deliveryStatus.file='fileReadFailed';finish();};reader.onload=async()=>{if(persistenceLock)await cssTransaction;if(sequence!==fileSequence)return;if(revision!==documentRevision||els.editor.value!==source){deliveryStatus.file='fileChanged';finish();return;}pushHistory(true);state.samplePristine=false;if(nameRevision===filenameRevision){state.outputFilename=file.name.replace(/\.(?:md|markdown|mdown|mkd)$/i,'')||'document';els.filenameInput.value=state.outputFilename;}els.editor.value=String(reader.result||'');els.editor.setSelectionRange(0,0);if(els.expandedEditorDialog.open){els.expandedEditor.value=els.editor.value;els.expandedEditor.setSelectionRange(0,0);}pushHistory(true);render();deliveryStatus.file='opened';finish();showToast(t('opened'));};try{reader.readAsText(file);}catch{if(sequence===fileSequence)deliveryStatus.file='fileReadFailed';finish();}}
 
     document.getElementById('openButton').addEventListener('click',()=>els.fileInput.click());
     document.getElementById('downloadButton').addEventListener('click',downloadMarkdown);
-    els.filenameInput.addEventListener('input',()=>{ state.outputFilename=els.filenameInput.value; scheduleSave(); });
+    els.filenameInput.addEventListener('input',()=>{ filenameRevision++;state.outputFilename=els.filenameInput.value; scheduleSave(); });
     els.filenameInput.addEventListener('blur',()=>{ normalizedFilename(); saveState(); });
     els.expandEditorButton.addEventListener('click',openExpandedEditor);
     els.expandedEditor.addEventListener('input',syncExpandedEditor);
@@ -935,12 +1134,17 @@ $$
     els.syncScroll.addEventListener('change',()=>{ state.syncScroll=els.syncScroll.checked; saveState(); });
     els.compareStyleA.addEventListener('change',()=>{ state.compareA=els.compareStyleA.value; render(); }); els.compareStyleB.addEventListener('change',()=>{ state.compareB=els.compareStyleB.value; render(); });
     els.issues.addEventListener('click',e=>{ const row=e.target.closest('[data-line]'); if(row)selectLine(Number(row.dataset.line)); });
-    document.getElementById('applyCssButton').addEventListener('click',()=>{ state.customCss=els.customCssEditor.value; els.customCssStyle.textContent=state.customCss; els.customCssDialog.close(); setStyle('custom'); showToast(t('cssApplied')); });
-    document.getElementById('resetCssButton').addEventListener('click',()=>{ state.customCss=''; els.customCssEditor.value=''; els.customCssStyle.textContent=''; saveState(); showToast(t('cssReset')); });
+    document.getElementById('applyCssButton').addEventListener('click',()=>{ if(persistenceLock)return;state.customCss=els.customCssEditor.value; els.customCssStyle.textContent=state.customCss; els.customCssDialog.close(); setStyle('custom'); showToast(t('cssApplied')); });
+    document.getElementById('resetCssButton').addEventListener('click',resetCss);
+    document.getElementById('retryDraftButton').addEventListener('click',retryStorage);
+    els.customCssEditor.addEventListener('input',()=>{cssDraftInitialized=true;cssRevision++;workspaceRevision++;});
+    document.getElementById('cssConfirmCancel').addEventListener('click',()=>finishCssConfirm(false));
+    document.getElementById('cssConfirmOk').addEventListener('click',()=>finishCssConfirm(true));
+    document.getElementById('cssConfirmDialog').addEventListener('close',()=>finishCssConfirm(false));
     document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='hidden')saveState(); }); window.addEventListener('beforeunload',saveState);
 
-    const hadSavedState=loadState(); els.editor.value=hadSavedState && typeof state.markdown==='string' ? state.markdown : defaultMarkdown; if(!hadSavedState) state.samplePristine=true; state.outputFilename=String(state.outputFilename||'document').replace(/\.(?:md|markdown|mdown|mkd)$/i,'')||'document'; els.filenameInput.value=state.outputFilename; els.compareStyleA.value=state.compareA; els.compareStyleB.value=state.compareB; els.syncScroll.checked=state.syncScroll!==false; els.customCssStyle.textContent=state.customCss||''; els.customCssEditor.value=state.customCss||'';
-    setMode(state.mode); setMobileView(state.mobileView); setLanguage(state.lang); setStyle(state.style); history=[els.editor.value]; historyIndex=0; render();
+    function initializeEditors(hadSavedState,language=resolveAppLanguage()){legacyLanguage=hadSavedState&&['ja','en'].includes(state.lang)?state.lang:language;els.editor.value=hadSavedState&&typeof state.markdown==='string'?state.markdown:defaultMarkdown;if(!hadSavedState)state.samplePristine=true;state.outputFilename=String(state.outputFilename||'document').replace(/\.(?:md|markdown|mdown|mkd)$/i,'')||'document';els.filenameInput.value=state.outputFilename;els.compareStyleA.value=state.compareA;els.compareStyleB.value=state.compareB;els.syncScroll.checked=state.syncScroll!==false;els.customCssStyle.textContent=state.customCss||'';els.customCssEditor.value=state.customCss||'';cssDraftInitialized=true;setMode(state.mode);setMobileView(state.mobileView);setLanguage(language,{explicit:false});setStyle(state.style);history=[els.editor.value];historyIndex=0;render();}
+    const hadSavedState=loadState();initializeEditors(hadSavedState);initializing=false;renderUiConventions();
   })();
   </script>
 </body>

@@ -15,15 +15,15 @@ function harness(source) {
   const nodes = [...source.matchAll(/<[^/!][^>]*>/g)].map(([tag]) => {
     const attrs = Object.fromEntries([...tag.matchAll(/([\w-]+)="([^"]*)"/g)].map(m => [m[1], m[2]]));
     const dataset = Object.fromEntries(Object.entries(attrs).filter(([key]) => key.startsWith('data-')).map(([key, value]) => [key.slice(5).replace(/-([a-z])/g, (_, letter) => letter.toUpperCase()), value]));
-    return { attrs, dataset, style: {}, textContent: '', innerHTML: '', title: attrs.title, setAttribute(key, value) { this.attrs[key] = value; } };
+    return { attrs, dataset, style: {}, textContent: '', innerHTML: '', title: attrs.title, getAttribute(key){return this.attrs[key]??null;},setAttribute(key, value) { this.attrs[key] = value; } };
   });
   const byId = id => nodes.find(node => node.attrs.id === id);
   const context = vm.createContext({
     document: { documentElement: {}, getElementById: byId, querySelectorAll: selector => nodes.filter(node => Object.hasOwn(node.attrs, selector.slice(1, -1))) },
-    els: { issues: byId('issues') }, render() {}, saveState() {},
+    els: { issues: byId('issues'), editor:{value:''}, editorStats:byId('editorStats'),singlePreviewTitle:byId('singlePreviewTitle') },BrowserKittyUI:require('../components/ui-conventions.js'),renderUiConventions() {}, render() {}, saveState() {},
   });
   vm.runInContext(section(source, '    const I18N =', '    const els =')
-    + "let state={lang:'ja'};\n" + section(source, '    function t(', '    function showToast(')
+    + "let languageFailure=false;let state={lang:'ja',style:'github'};\n" + section(source, '    function t(', '    function showToast(')
     + section(source, '    function escapeHtml(', '    function render(')
     + section(source, '    function capitalize(', '    function scheduleSave(')
     + section(source, '    function setLanguage(', '    function selectLine('), context);

@@ -26,3 +26,12 @@ Write-Host "[OK] Repository check passed." -ForegroundColor Green
 # Header icons and version visibility across source and generated releases.
 & node (Join-Path $Root "scripts/test-header-ui.cjs")
 if ($LASTEXITCODE -ne 0) { throw "Header UI regression failed." }
+# Execute the complete application with strict source-derived IDs in every shipped entry point.
+$previousUiTarget = $env:MD_UI_HTML
+try {
+  foreach ($target in @('src/index.template.html','dist/index.html','dist/index.self-extract.html','markdown-preview-lab.html')) {
+    $env:MD_UI_HTML = Join-Path $Root $target
+    & node --test (Join-Path $Root 'tests/ui-conventions.test.cjs')
+    if ($LASTEXITCODE -ne 0) { throw "Common UI actual-app regressions failed: $target" }
+  }
+} finally { $env:MD_UI_HTML = $previousUiTarget }

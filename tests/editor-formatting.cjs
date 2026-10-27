@@ -53,11 +53,12 @@ function harness(source) {
     requestAnimationFrame(callback) { callback(); },
     localStorage: { setItem(key, value) { storage.set(key, value); } },
     t(key) { return key; },
-    updateSampleStateUI() {},
+    updateHistoryButtons() {}, renderUiConventions() {}, updateSampleStateUI() {},
     render() { renders.push(editor.value); context.scheduleSave(); },
     downloadMarkdown() { downloads.push(editor.value); },
   });
-  const functions = section(source, '    function scheduleSave(', '    function loadState(')
+  const functions = section(source,'    function commitState(','    function retryStorage(')
+    + section(source, '    function scheduleSave(', '    function loadState(')
     + section(source, '    function leaveSampleMode(', '    function newDocument(')
     + section(source, '    function pushHistory(', '    function setStyle(')
     + section(source, '    function formatSelection(', '    function scrollRatio(')
@@ -66,7 +67,7 @@ function harness(source) {
     /els\.(?:editor|expandedEditor)\.addEventListener\('(input|keydown)'/.test(line)
     || line.includes("document.querySelectorAll('[data-format]')"));
   assert.equal(listeners.length, 5, 'Both editor input/key handlers and toolbar listener are wired');
-  vm.runInContext("const STORAGE_KEY='test'; let state={samplePristine:true}; let saveTimer=null; let history=['base'], historyIndex=0, historyTimer=null;\n" + functions + listeners.join('\n'), context);
+  vm.runInContext("const STORAGE_KEY='test'; let state={samplePristine:true}; let legacyLanguage='ja';let initializing=false,workspaceRevision=0,persistenceLock=false,saveAfterLock=false;const draftStorage={state:'dirty',blocked:false,errorKey:'',at:null};let saveTimer=null; let history=['base'], historyIndex=0, historyTimer=null;\n" + functions + listeners.join('\n'), context);
   return {
     context, editor, expandedEditor, downloads, renders,
     type(value, start = 0, end = value.length, expanded = false) {

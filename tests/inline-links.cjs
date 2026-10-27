@@ -52,8 +52,9 @@ for (const variant of variants) {
       assert.equal(context.markdownToHtml(markdown, style), expected, style);
     }
   });
-  test(`${variant}: source and shipped HTML stay byte-identical`, () => {
-    const hash = file => createHash('sha256').update(fs.readFileSync(path.join(root, file))).digest('hex');
+  test(`${variant}: source and shipped HTML stay byte-identical after fixed canonical embedding`, () => {
+    const expected=fs.readFileSync(path.join(root,variants[0]),'utf8').replace('__BK_UI_JS__',()=>fs.readFileSync(path.join(root,'components/ui-conventions.js'),'utf8')).replace('__BK_UI_CSS__',()=>fs.readFileSync(path.join(root,'components/ui-conventions.css'),'utf8'));
+    const hash = file => createHash('sha256').update(file===variants[0]?Buffer.from(expected):fs.readFileSync(path.join(root,file))).digest('hex');
     assert.equal(hash(variant), hash(variants[0]));
   });
 }

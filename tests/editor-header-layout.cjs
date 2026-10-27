@@ -41,7 +41,7 @@ test(`${variant}: existing New document action still clears sample, resets filen
   assert.ok(start >= 0 && end > start);
   const events = [], els = { filenameInput: { value: 'synthetic-name' }, editor: { value: 'synthetic sample', focus() { events.push('focus'); } } };
   const context = vm.createContext({ els, pushHistory(value) { events.push(['history', value]); }, render() { events.push('render'); }, showToast(value) { events.push(['toast', value]); }, t: x => x });
-  vm.runInContext("const state={samplePristine:true,outputFilename:'synthetic-name'};" + source.slice(start, end), context);
+  vm.runInContext("let persistenceLock=false;const state={samplePristine:true,outputFilename:'synthetic-name'};" + source.slice(start, end), context);
   context.newDocument();
   assert.equal(els.editor.value, '');
   assert.equal(els.filenameInput.value, 'document');

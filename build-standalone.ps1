@@ -10,8 +10,11 @@ $app = Get-Content -Raw -Encoding UTF8 (Join-Path $Root "app.config.json") | Con
 $deps = Get-Content -Raw -Encoding UTF8 (Join-Path $Root "dependencies.json") | ConvertFrom-Json
 if ($deps.dependencies.Count -ne 0) { throw "This repository currently expects zero runtime dependencies." }
 $output = Join-Path $Root $app.build.output
-Copy-Item -Force $Source $output
-Copy-Item -Force $Source (Join-Path $Root "markdown-preview-lab.html")
+$SourceText = [IO.File]::ReadAllText($Source, [Text.Encoding]::UTF8)
+. (Join-Path $Root "scripts/embed-ui-conventions.ps1")
+$SourceText = Expand-BrowserKittyUI -Template $SourceText -ComponentsPath (Join-Path $Root "components")
+[IO.File]::WriteAllText($output, $SourceText, (New-Object System.Text.UTF8Encoding($false)))
+[IO.File]::WriteAllText((Join-Path $Root "markdown-preview-lab.html"), $SourceText, (New-Object System.Text.UTF8Encoding($false)))
 @{ generatedAt = (Get-Date).ToUniversalTime().ToString("o"); dependencies = @(); runtimeNetworkBlocked = [bool]$app.build.blockRuntimeNetwork } | ConvertTo-Json -Depth 6 | Set-Content -Encoding UTF8 (Join-Path $Dist "dependency-manifest.json")
 New-Item -ItemType File -Force -Path (Join-Path $Dist ".nojekyll") | Out-Null
 & (Join-Path $Root "scripts\build-self-extract.ps1") -InputPath $output -OutputPath (Join-Path $Root $app.build.selfExtract.output)

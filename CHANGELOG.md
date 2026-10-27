@@ -6,6 +6,11 @@
 
 ## Unreleased
 
+- Integrate fixed common UI v1 with read-only startup, scoped autosave/error/retry and explicit common-language persistence.
+- Preserve work across language changes, corrupt reads, failed native delivery and asynchronous file selection; import retains immediate typing as a real Undo step.
+- Add Cancel-first Custom CSS reset with full persistence transaction ownership and failure retention.
+- Keep independent translated output/recovery, complete strict-ID initialization regressions and unchanged Markdown parsing/rendering.
+
 - Hide only the informational footer at the existing smartphone layout query `(max-width: 720px)`; preserve desktop visibility and functional controls. Both equivalent Japanese local-processing labels use Fully local processing in English.
 
 
