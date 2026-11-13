@@ -28,9 +28,9 @@ async function main(){
  if([1360,320].includes(width))await page.screenshot({path:path.join(evidence,label+'.png')});
  await page.locator('#helpButton').click();
  const syntaxText=await page.locator('#helpDialog .dialog-body > ul:last-child').innerText();
- if(language==='en')assert.doesNotMatch(syntaxText,/[\\u3040-\\u30ff\\u3400-\\u9fff]/,label+': Help syntax list is English');
- else assert.match(syntaxText,/[\\u3040-\\u30ff\\u3400-\\u9fff]/,label+': Help syntax list is Japanese');
- assert.doesNotMatch(await page.locator('#helpDialog').innerText(),/v1\\.0\\.4/,label+': Help has no version label');
+ if(language==='en')assert.doesNotMatch(syntaxText,/[\u3040-\u30ff\u3400-\u9fff]/,label+': Help syntax list is English');
+ else assert.match(syntaxText,/[\u3040-\u30ff\u3400-\u9fff]/,label+': Help syntax list is Japanese');
+ assert.doesNotMatch(await page.locator('#helpDialog').innerText(),/v1\.0\.4/,label+': Help has no version label');
  await page.locator('#helpDialog .dialog-body').evaluate(el=>{el.scrollTop=el.scrollHeight;});
  const bounds=await page.locator(cfg.end).evaluate(el=>{const range=document.createRange(),t=el.firstChild;range.setStart(t,t.textContent.length-1);range.setEnd(t,t.textContent.length);const r=range.getBoundingClientRect();let top=0,bottom=innerHeight;for(let p=el.parentElement;p;p=p.parentElement){const s=getComputedStyle(p);if(/auto|scroll|hidden|clip/.test(s.overflowY)){const b=p.getBoundingClientRect();top=Math.max(top,b.top);bottom=Math.min(bottom,b.bottom);}}return{top:r.top,bottom:r.bottom,clipTop:top,clipBottom:bottom};});
  assert.ok(bounds.top>=bounds.clipTop-1&&bounds.bottom<=bounds.clipBottom+1,label+': Help end reachable '+JSON.stringify(bounds));
