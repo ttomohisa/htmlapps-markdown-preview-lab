@@ -20,5 +20,17 @@ for (const target of targets) {
   assert.ok(help, target + ': Help control exists');
   assert.match(help, /M12 17h\.01/, target + ': question-mark dot geometry');
   assert.match(help, /<svg\b[^>]*stroke-linecap="round"/, target + ': Help dot has round caps');
+  assert.doesNotMatch(html, /v1\.0\.4|version-badge/, target + ': no version number in the UI');
+  const dialog = html.match(/<dialog id="helpDialog">([\s\S]*?)<\/dialog>/)?.[1];
+  assert.ok(dialog, target + ': Help dialog exists');
+  const ja = html.split('      ja: {')[1]?.split('      en: {')[0];
+  const en = html.split('      en: {')[1]?.split('\n      }\n    };')[0];
+  assert.ok(ja && en, target + ': both locales exist');
+  for (let i = 1; i <= 4; i++) {
+    const key = 'helpSyntaxItem' + i;
+    assert.match(dialog, new RegExp('<li data-i18n="' + key + '">'), target + ': syntax item is translated');
+    assert.ok(ja.includes(key + ":'"), target + ': Japanese syntax item exists');
+    assert.ok(en.includes(key + ":'"), target + ': English syntax item exists');
+  }
   console.log('PASS header UI: ' + target);
 }
