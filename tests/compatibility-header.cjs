@@ -148,17 +148,17 @@ for (const variant of variants) {
       assert.equal(h.byId('helpButton').title, help);
     }
   });
-  test(`${variant}: the version stays outside the shrinkable title text`, () => {
-    assert.match(source, /<span class="brand-title">Markdown Preview Lab<\/span>\s*<span class="version-badge">/);
+  test(`${variant}: the title truncates cleanly without a version badge`, () => {
+    assert.match(source, /<span class="brand-title">Markdown Preview Lab<\/span>/);
     assert.match(source, /\.brand-title\s*\{[^}]*overflow:hidden;[^}]*text-overflow:ellipsis;/);
-    assert.match(source, /\.version-badge\s*\{[^}]*flex:0 0 auto;/);
+    assert.doesNotMatch(source, /version-badge/);
   });
-  test(`${variant}: release version is consistently patch-incremented`, () => {
+  test(`${variant}: release metadata stays at 1.0.4 without showing a version in the UI`, () => {
     const app = JSON.parse(fs.readFileSync(path.join(root, 'app.config.json'), 'utf8'));
     assert.equal(app.version, '1.0.4');
-    assert.ok(source.includes(`<span class="version-badge">v${app.version}</span>`));
-    assert.ok(source.includes(`helpSyntaxTitle:'Main syntax in v${app.version}'`));
-    assert.ok(source.includes(`helpSyntaxTitle:'v${app.version}で対応する主な記法'`));
+    assert.doesNotMatch(source, /v1\.0\.4|version-badge/);
+    assert.ok(source.includes("helpSyntaxTitle:'Supported syntax'"));
+    assert.ok(source.includes("helpSyntaxTitle:'主な対応記法'"));
     assert.match(fs.readFileSync(path.join(root, 'CHANGELOG.md'), 'utf8'), /^## 1\.0\.2\b/m);
   });
 }
