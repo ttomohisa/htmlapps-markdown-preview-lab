@@ -15,10 +15,8 @@ async function main(){
  await page.locator('#helpButton').waitFor();
  if(await page.locator('html').getAttribute('lang')!==language)await page.locator('#languageButton').click();
  assert.equal(await page.locator('#helpButton svg path').last().evaluate(el=>getComputedStyle(el).strokeLinecap),'round',label+': Help dot has round caps');
- const headerVersion=page.locator('.brand-name .version-badge');
- assert.equal((await headerVersion.textContent()).trim(),'v'+require('../app.config.json').version,label+': current header version');
- assert.equal(await headerVersion.isVisible(),true,label+': header version visible');
- assert.ok(await headerVersion.evaluate(el=>{const r=el.getBoundingClientRect();if(r.left<0||r.right>innerWidth||r.top<0||r.bottom>innerHeight||el.scrollWidth>el.clientWidth+1)return false;for(let p=el.parentElement;p;p=p.parentElement){const s=getComputedStyle(p),b=p.getBoundingClientRect();if(/hidden|clip/.test(s.overflowX)&&(r.left<b.left-1||r.right>b.right+1))return false;if(/hidden|clip/.test(s.overflowY)&&(r.top<b.top-1||r.bottom>b.bottom+1))return false;}return true;}),label+': version is not clipped');
+ assert.equal(await page.locator('.brand-name .version-badge').count(),0,label+': version badge is absent');
+ assert.ok(await page.locator('.brand-title').evaluate(el=>{const r=el.getBoundingClientRect(),p=el.parentElement.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth&&r.left>=p.left-1&&r.top>=0&&r.bottom<=innerHeight;}),label+': header title fits');
  const badge=page.locator('[data-i18n="'+cfg.badge+'"]');
  assert.equal((await badge.textContent()).trim(),cfg.slug==='presentation-remote'?(language==='ja'?'資料はアップロードしません':'The deck is not uploaded'):(language==='ja'?'完全ローカル処理':'Fully local processing'));
  for(const key of ['localOnly','mobileLocal']){const labelNode=page.locator('[data-i18n="'+key+'"]');assert.equal(await labelNode.textContent(),language==='ja'?'完全ローカル処理':'Fully local processing');if(await labelNode.isVisible())assert.ok(await labelNode.evaluate(el=>{const r=el.getBoundingClientRect(),p=el.parentElement.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth&&r.left>=p.left-1&&r.right<=p.right+1&&r.top>=p.top-1&&r.bottom<=p.bottom+1;}),label+': visible '+key+' fits');}
@@ -29,6 +27,10 @@ async function main(){
  if(cfg.slug==='smart-image-sorter')assert.equal(await page.locator('.mobile-bottom-bar').isVisible(),width<=600,label+': existing navigation breakpoint');
  if([1360,320].includes(width))await page.screenshot({path:path.join(evidence,label+'.png')});
  await page.locator('#helpButton').click();
+ const syntaxText=await page.locator('#helpDialog .dialog-body > ul:last-child').innerText();
+ if(language==='en')assert.doesNotMatch(syntaxText,/[\u3040-\u30ff\u3400-\u9fff]/,label+': Help syntax list is English');
+ else assert.match(syntaxText,/[\u3040-\u30ff\u3400-\u9fff]/,label+': Help syntax list is Japanese');
+ assert.doesNotMatch(await page.locator('#helpDialog').innerText(),/v1\.0\.4/,label+': Help has no version label');
  await page.locator('#helpDialog .dialog-body').evaluate(el=>{el.scrollTop=el.scrollHeight;});
  const bounds=await page.locator(cfg.end).evaluate(el=>{const range=document.createRange(),t=el.firstChild;range.setStart(t,t.textContent.length-1);range.setEnd(t,t.textContent.length);const r=range.getBoundingClientRect();let top=0,bottom=innerHeight;for(let p=el.parentElement;p;p=p.parentElement){const s=getComputedStyle(p);if(/auto|scroll|hidden|clip/.test(s.overflowY)){const b=p.getBoundingClientRect();top=Math.max(top,b.top);bottom=Math.min(bottom,b.bottom);}}return{top:r.top,bottom:r.bottom,clipTop:top,clipBottom:bottom};});
  assert.ok(bounds.top>=bounds.clipTop-1&&bounds.bottom<=bounds.clipBottom+1,label+': Help end reachable '+JSON.stringify(bounds));
