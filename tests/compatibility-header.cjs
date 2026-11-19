@@ -23,7 +23,7 @@ function harness(source) {
     els: { issues: byId('issues') }, render() {}, saveState() {},
   });
   vm.runInContext(section(source, '    const I18N =', '    const els =')
-    + "let state={lang:'ja'};\n" + section(source, '    function t(', '    function showToast(')
+    + "let state={lang:'ja',samplePristine:false}; let initializing=false,editRevision=0,fileRequestId=0,historyTimer=null; const history=[]; function updateStorageNotice(){}\n" + section(source, '    function t(', '    function showToast(')
     + section(source, '    function escapeHtml(', '    function render(')
     + section(source, '    function capitalize(', '    function scheduleSave(')
     + section(source, '    function setLanguage(', '    function selectLine('), context);

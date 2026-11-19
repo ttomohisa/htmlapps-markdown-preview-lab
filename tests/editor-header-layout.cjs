@@ -41,12 +41,12 @@ test(`${variant}: existing New document action still clears sample, resets filen
   assert.ok(start >= 0 && end > start);
   const events = [], els = { filenameInput: { value: 'synthetic-name' }, editor: { value: 'synthetic sample', focus() { events.push('focus'); } } };
   const context = vm.createContext({ els, pushHistory(value) { events.push(['history', value]); }, render() { events.push('render'); }, showToast(value) { events.push(['toast', value]); }, t: x => x });
-  vm.runInContext("const state={samplePristine:true,outputFilename:'synthetic-name'};" + source.slice(start, end), context);
+  vm.runInContext("const state={samplePristine:true,outputFilename:'synthetic-name'};let editRevision=0,fileRequestId=0;" + source.slice(start, end), context);
   context.newDocument();
   assert.equal(els.editor.value, '');
   assert.equal(els.filenameInput.value, 'document');
   assert.equal(vm.runInContext('state.samplePristine', context), false);
-  assert.deepEqual(events, [['history', true], 'render', 'focus', ['toast', 'newDocumentReady']]);
+  assert.deepEqual(events, [['history', true], ['history', true], 'render', 'focus', ['toast', 'newDocumentReady']]);
   assert.match(source, /els\.newDocumentButton\.addEventListener\('click',newDocument\)/);
 });
 
