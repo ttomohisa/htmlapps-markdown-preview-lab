@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.0.5 - Unreleased
+
+- Protect unreadable and corrupt local drafts from silent startup overwrites, and show recoverable autosave errors on mobile and desktop.
+- Prevent asynchronous imports from replacing newly edited text; preserve immediate typing for Undo and keep filename edits made during import.
+- Confirm Custom CSS reset, retain unapplied draft text, and restore applied CSS if persistence fails.
+- Report clipboard and download handoff failures accurately; translate import errors.
+- Fix narrow-screen compare preview geometry, enlarge formatting controls and name icon-only buttons for assistive technology.
+- Improve nested lists, escaped Markdown characters, parenthesized links and table code spans while keeping service preview styles approximate.
+- Localize the untouched first-run sample in English without translating user documents.
+- Add source-level recovery and renderer regressions to the canonical repository check.
+
+
 ## 1.0.4 - 2026-10-27
 
 - Restore the round bottom dot in the Help question-mark icon without changing layout or controls.

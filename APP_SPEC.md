@@ -1,7 +1,7 @@
 # Application Specification
 
 ## Product
-**Markdown Preview Lab v1.0.4**
+**Markdown Preview Lab v1.0.5**
 
 A browser-only Markdown editor that compares GitHub, Qiita, and Zenn-inspired rendering and highlights portability concerns.
 
@@ -38,3 +38,20 @@ Hide only the informational footer at the existing smartphone layout query `(max
 ## Header visibility
 
 Restore the round bottom dot in the Help question-mark icon without changing layout or controls. Verify Japanese and English at 320px, 360px, 390px and desktop widths.
+
+## Data safety and recovery (v1.0.5)
+
+- Read autosaved JSON without writing during initial setup. Corrupt or unreadable saved data is never silently overwritten.
+- Show a persistent autosave warning on desktop and smartphones. Users can retry storage, or explicitly confirm overwriting unreadable stored data after downloading current Markdown.
+- Do not apply file reads that complete after newer edits or file selections. Successful file import records the immediately preceding text for Undo and keeps filenames edited during loading.
+- Markdown download and clipboard copy use the complete current editor text. They do not include Custom CSS, history, or preview HTML.
+- Custom CSS reset requires confirmation, defaults to Cancel, and does not drop applied or draft CSS when storage fails.
+- Existing unmodified sample text changes with the app language; edited user documents are never translated.
+
+## Approximate renderer
+
+The built-in renderer handles nested basic lists, escaped inline Markdown markers, URLs containing one level of balanced parentheses, and pipe characters within inline code in tables. It is still not a CommonMark/GFM-complete implementation.
+
+## Mobile layout
+
+In compare mode, two preview cells fill the available vertical space without double-halving their scroll regions. Visible tool controls have accessible names and larger touch targets.

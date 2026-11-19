@@ -232,3 +232,13 @@ Licensed under the [MIT License](LICENSE).
 `scripts/check-repository.ps1` runs `node tests/editor-formatting.cjs` with no additional dependencies. It checks the application functions and editor event wiring in all four HTML variants, including formatting shortcuts, undo/redo boundaries, expanded-editor synchronization, LocalStorage save data, repeat/modifier/composition guards, and existing Tab/save handling. These Node checks do not simulate real-browser focus, layout, IME input, or native keyboard behavior.
 
 Plain Tab inserts two spaces; Shift+Tab moves focus out of the editor. After `scripts/check-repository.ps1`, run `node tests/editor-tab.cjs` using an existing Node.js Playwright runtime. Set `NODE_PATH` to its node_modules directory; `PLAYWRIGHT_BROWSER_CHANNEL` defaults to `msedge`. The test opens both generated files locally and checks editing, undo/redo, autosave, download, and keyboard navigation.
+
+### Save and recovery behavior (v1.0.5)
+
+The current Markdown, applied Custom CSS, view settings, and filename are autosaved to this browser's LocalStorage. **Autosave failures are visible on both phones and desktops.** Invalid or unreadable stored drafts are not silently overwritten. Download your Markdown as a .md file before retrying storage or explicitly confirming an overwrite.
+
+**Download and Copy include only the Markdown source text**, not generated preview HTML, custom CSS, view preferences, or Undo history. Keep a separate copy of CSS you need. You can open Markdown or text files up to 5 MB. If you edit while a file is being read, the older import will not replace your new text. Undo can restore text typed immediately before an import.
+
+Resetting Custom CSS requires confirmation and clears both the applied CSS and unapplied draft; it does not remove your Markdown. Changing languages translates only an untouched first-run sample, not a user-edited document.
+
+Run `node tests/audit-regressions.cjs` for focused source regressions (also included in `scripts/check-repository.ps1`). This does not replace real-browser keyboard, phone, or download tests.

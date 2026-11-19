@@ -152,9 +152,9 @@ for (const variant of variants) {
     assert.match(source, /\.brand-title\s*\{[^}]*overflow:hidden;[^}]*text-overflow:ellipsis;/);
     assert.doesNotMatch(source, /version-badge/);
   });
-  test(`${variant}: release metadata stays at 1.0.4 without showing a version in the UI`, () => {
+  test(`${variant}: release metadata stays at 1.0.5 without showing a version in the UI`, () => {
     const app = JSON.parse(fs.readFileSync(path.join(root, 'app.config.json'), 'utf8'));
-    assert.equal(app.version, '1.0.4');
+    assert.equal(app.version, '1.0.5');
     assert.doesNotMatch(source, /v1\.0\.4|version-badge/);
     assert.ok(source.includes("helpSyntaxTitle:'Supported syntax'"));
     assert.ok(source.includes("helpSyntaxTitle:'主な対応記法'"));
