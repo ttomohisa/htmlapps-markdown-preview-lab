@@ -105,10 +105,10 @@
     .sample-new-button:hover { background:var(--accent-soft); }
     .sample-state.visible + .pane-meta { margin-left:0; }
     .format-bar { display:flex; max-width:100%; min-width:0; overflow-x:auto; align-items:center; gap:2px; padding-right:5px; border-right:1px solid var(--line); margin-right:3px; }
-    .format-button { width:29px; height:29px; display:grid; place-items:center; border:0; border-radius:7px; background:transparent; color:var(--muted); font-size:12px; font-weight:800; cursor:pointer; }
+    .format-button { min-width:36px; width:36px; height:36px; display:grid; place-items:center; border:0; border-radius:7px; background:transparent; color:var(--muted); font-size:12px; font-weight:800; cursor:pointer; }
     .format-button:hover { background:var(--surface-muted); color:var(--text); }
     .format-button svg { width:15px; height:15px; display:block; }
-    .pane-action-button { width:28px; height:28px; display:grid; place-items:center; flex:0 0 auto; border:0; border-radius:7px; background:transparent; color:var(--muted); cursor:pointer; }
+    .pane-action-button { width:36px; height:36px; display:grid; place-items:center; flex:0 0 auto; border:0; border-radius:7px; background:transparent; color:var(--muted); cursor:pointer; }
     .pane-action-button:hover { background:var(--surface-muted); color:var(--text); }
     .pane-action-button svg { width:15px; height:15px; display:block; }
     #editor { grid-area:2 / 1; width:100%; height:100%; min-height:0; resize:none; border:0; outline:0; padding:18px 20px 36px; background:#fff; color:#252724; font:14px/1.72 ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace; tab-size:2; caret-color:var(--accent); }
@@ -224,6 +224,11 @@
     .heuristic-note { margin:10px 0 0; color:var(--muted); font-size:10px; }
     footer { width:min(1500px,100%); margin:0 auto; padding:16px clamp(14px,2.8vw,30px) 32px; color:var(--muted); font-size:12px; }
 
+    .save-notice { display:flex; align-items:center; flex-wrap:wrap; gap:10px; padding:10px 12px; background:#fff8e6; border-bottom:1px solid #e8c879; color:#61450b; font-size:12px; line-height:1.55; }
+    .save-notice[hidden] { display:none; }
+    .save-notice p { margin:0; flex:1 1 230px; }
+    .save-notice button { min-height:40px; padding:7px 12px; border:1px solid #a57e26; border-radius:8px; background:#fff; color:#563a05; font-weight:700; cursor:pointer; }
+    .save-notice button:focus-visible { outline:3px solid var(--focus); outline-offset:2px; }
     .toast { position:fixed; right:18px; bottom:18px; z-index:60; max-width:min(360px,calc(100vw - 36px)); padding:11px 14px; border:1px solid var(--line); border-radius:11px; background:var(--surface); box-shadow:var(--shadow-md); opacity:0; transform:translateY(12px); pointer-events:none; transition:opacity .18s ease,transform .18s ease; }
     .toast.show { opacity:1; transform:translateY(0); }
     dialog { width:min(720px,calc(100% - 28px)); max-height:min(800px,calc(100dvh - 28px)); padding:0; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:var(--surface); color:var(--text); box-shadow:var(--shadow-md); }
@@ -260,7 +265,7 @@
       .editor-shell,.workspace.compare .editor-shell { grid-template-columns:42% 58%; }
       .compare-pane { grid-template-columns:1fr; }
       .compare-cell:first-child { border-right:0; border-bottom:1px solid var(--line); }
-      .compare-cell .preview-scroll { height:calc((100% - 84px)/2); }
+      .compare-cell .preview-scroll { height:calc(100% - 42px); }
       .score-grid { min-width:54%; }
     }
     @media (max-width: 720px) {
@@ -292,10 +297,10 @@
       .editor-pane,.single-preview,.compare-pane { display:none !important; height:100%; border:0; }
       .workspace.mobile-editor .editor-pane { display:grid !important; }
       .workspace.mobile-preview .single-preview { display:block !important; }
-      .workspace.mobile-compare .compare-pane { display:grid !important; grid-template-columns:1fr; height:100%; }
+      .workspace.mobile-compare .compare-pane { display:grid !important; grid-template-columns:1fr; grid-template-rows:minmax(0,1fr) minmax(0,1fr); height:100%; }
       .workspace.mobile-compare .editor-pane { display:none !important; }
       .workspace.mobile-compare .compare-cell { min-height:0; }
-      .workspace.mobile-compare .compare-cell .preview-scroll { height:calc((100% - 84px)/2); }
+      .workspace.mobile-compare .compare-cell .preview-scroll { height:calc(100% - 42px); }
       #editor { padding:16px 14px 32px; font-size:13px; }
       .sample-label { display:none; }
       .sample-new-button { padding:4px 5px; }
@@ -318,7 +323,7 @@
       .local-badge .short { display:inline; }
       .main { padding-left:8px; padding-right:8px; }
       .button .label-mobile-hide { display:none; }
-      .format-bar { max-width:150px; overflow:auto; scrollbar-width:none; }
+      .format-bar { max-width:172px; overflow:auto; scrollbar-width:none; }
       .format-bar::-webkit-scrollbar { display:none; }
       .control-label { display:none; }
       .style-chip { padding:5px 8px; }
@@ -372,19 +377,20 @@
     <section class="workspace mobile-editor" id="workspace" aria-label="Markdown editor workspace">
       <div class="workspace-toolbar">
         <div class="button-row">
-          <button class="button" id="openButton" type="button"><span class="icon-text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h6l2 2h10v10H3z"/><path d="M3 7v12"/></svg><span class="label-mobile-hide" data-i18n="open">開く</span></span></button>
+          <button class="button" id="openButton" type="button" data-i18n-title="open" data-i18n-aria="open" title="open" aria-label="open"><span class="icon-text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h6l2 2h10v10H3z"/><path d="M3 7v12"/></svg><span class="label-mobile-hide" data-i18n="open">開く</span></span></button>
           <label class="filename-control"><span data-i18n="filename">ファイル名</span><span class="filename-box"><input class="filename-input" id="filenameInput" type="text" value="document" maxlength="120" autocomplete="off" spellcheck="false" aria-label="Output file name"><span class="filename-suffix">.md</span></span></label>
-          <button class="button" id="downloadButton" type="button"><span class="icon-text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg><span class="label-mobile-hide" data-i18n="download">保存</span></span></button>
-          <button class="button" id="copyButton" type="button"><span class="icon-text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span class="label-optional" data-i18n="copy">コピー</span></span></button>
+          <button class="button" id="downloadButton" type="button" data-i18n-title="download" data-i18n-aria="download" title="download" aria-label="download"><span class="icon-text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg><span class="label-mobile-hide" data-i18n="download">保存</span></span></button>
+          <button class="button" id="copyButton" type="button" data-i18n-title="copy" data-i18n-aria="copy" title="copy" aria-label="copy"><span class="icon-text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span class="label-optional" data-i18n="copy">コピー</span></span></button>
         </div>
         <div class="toolbar-divider"></div>
         <div class="button-row">
-          <button class="button" id="undoButton" type="button" aria-label="Undo" title="Undo">↶</button>
-          <button class="button" id="redoButton" type="button" aria-label="Redo" title="Redo">↷</button>
+          <button class="button" id="undoButton" type="button" aria-label="Undo" title="Undo"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-2"/></svg></button>
+          <button class="button" id="redoButton" type="button" aria-label="Redo" title="Redo"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="m15 14 5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h2"/></svg></button>
         </div>
         <div class="toolbar-spacer"></div>
         <div class="save-status"><span class="save-dot"></span><span id="saveStatus" data-i18n="saved">自動保存済み</span></div>
       </div>
+      <div id="saveNotice" class="save-notice" role="alert" hidden><p id="saveNoticeMessage"></p><button id="retrySaveButton" type="button"></button></div>
 
       <div class="workspace-controls">
         <div class="control-group mode-group">
@@ -421,15 +427,15 @@
         <div class="editor-pane" id="editorPane">
           <div class="pane-head">
             <div class="format-bar" aria-label="Formatting toolbar">
-              <button class="format-button" type="button" data-format="bold" data-i18n-title="boldShortcut" title="太字 (Ctrl/⌘+B)" aria-keyshortcuts="Control+b Meta+b">B</button>
-              <button class="format-button" type="button" data-format="italic" data-i18n-title="italicShortcut" title="斜体 (Ctrl/⌘+I)" aria-keyshortcuts="Control+i Meta+i"><i>I</i></button>
-              <button class="format-button" type="button" data-format="heading" title="Heading">H</button>
-              <button class="format-button" type="button" data-format="link" title="Link" aria-label="Link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-              <button class="format-button" type="button" data-format="code" title="Code">&lt;/&gt;</button>
-              <button class="format-button" type="button" data-format="list" title="List">•</button>
+              <button class="format-button" type="button" data-format="bold" data-i18n-title="boldShortcut" title="太字 (Ctrl/⌘+B)" aria-keyshortcuts="Control+b Meta+b" data-i18n-aria="boldShortcut" aria-label="太字 (Ctrl/⌘+B)">B</button>
+              <button class="format-button" type="button" data-format="italic" data-i18n-title="italicShortcut" title="斜体 (Ctrl/⌘+I)" aria-keyshortcuts="Control+i Meta+i" data-i18n-aria="italicShortcut" aria-label="斜体 (Ctrl/⌘+I)"><i>I</i></button>
+              <button class="format-button" type="button" data-format="heading" data-i18n-title="formatHeading" data-i18n-aria="formatHeading" title="見出し" aria-label="見出し">H</button>
+              <button class="format-button" type="button" data-format="link" data-i18n-title="formatLink" data-i18n-aria="formatLink" title="リンク" aria-label="リンク"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
+              <button class="format-button" type="button" data-format="code" data-i18n-title="formatCode" data-i18n-aria="formatCode" title="コード" aria-label="コード">&lt;/&gt;</button>
+              <button class="format-button" type="button" data-format="list" data-i18n-title="formatList" data-i18n-aria="formatList" title="箇条書き" aria-label="箇条書き"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M10 6h11M10 12h11M10 18h11"/><circle cx="4" cy="6" r="1" fill="currentColor" stroke="none"/><circle cx="4" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="4" cy="18" r="1" fill="currentColor" stroke="none"/></svg></button>
             </div>
             <span class="pane-title">Markdown</span>
-            <button class="pane-action-button" id="expandEditorButton" type="button" data-i18n-title="expandEditor" title="入力欄を拡大" aria-label="Expand editor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H3v5"/><path d="M16 3h5v5"/><path d="M8 21H3v-5"/><path d="M16 21h5v-5"/></svg></button>
+            <button class="pane-action-button" id="expandEditorButton" type="button" data-i18n-title="expandEditor" data-i18n-aria="expandEditor" title="入力欄を拡大" aria-label="入力欄を拡大"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H3v5"/><path d="M16 3h5v5"/><path d="M8 21H3v-5"/><path d="M16 21h5v-5"/></svg></button>
             <div class="sample-state" id="sampleState"><span class="sample-label" data-i18n="sampleViewing">サンプル表示中</span><button class="sample-new-button" id="newDocumentButton" type="button" data-i18n="newDocument">新規作成</button></div>
             <span class="pane-meta" id="editorStats">0 chars · 0 lines</span>
           </div>
@@ -509,6 +515,12 @@
     </div>
   </dialog>
 
+  <dialog id="cssResetDialog">
+    <div class="dialog-header"><h2 data-i18n="cssResetTitle">CSSをリセットしますか？</h2><button class="dialog-close" type="button" data-close-dialog="cssResetDialog" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12"/><path d="M18 6 6 18"/></svg></button></div>
+    <div class="dialog-body"><p data-i18n="cssResetMessage">適用済みのCSSと入力途中のCSSが消えます。Markdown本文はそのまま残ります。</p>
+      <div class="dialog-actions"><button class="button" id="cancelResetCss" type="button" data-i18n="cancel">キャンセル</button><button class="button primary" id="confirmResetCss" type="button" data-i18n="reset">リセット</button></div>
+    </div>
+  </dialog>
   <style id="customCssStyle"></style>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -553,6 +565,45 @@ E = mc^2
 $$
 `;
 
+    const defaultMarkdownEn = [
+      '# Markdown Preview Lab',
+      '',
+      'Compare the same Markdown in **GitHub / Qiita / Zenn**-inspired styles.',
+      '',
+      '## What you can do',
+      '',
+      '- Live Markdown preview',
+      '- [x] Autosave in this browser',
+      '- [x] Side-by-side style comparison',
+      '- [x] Portability checks',
+      '',
+      '> This HTML works on its own and does not upload your draft.',
+      '',
+      '### Code',
+      '',
+      '```javascript',
+      'const message = "Hello, Markdown!";',
+      'console.log(message);',
+      '```',
+      '',
+      '### Table',
+      '',
+      '| Platform | Preview | Compatibility |',
+      '| --- | --- | --- |',
+      '| GitHub | ✓ | ✓ |',
+      '| Qiita | ✓ | ✓ |',
+      '| Zenn | ✓ | ✓ |',
+      '',
+      ':::message',
+      'Zenn-style message blocks may not work on other platforms.',
+      ':::',
+      '',
+      '$$',
+      'E = mc^2',
+      '$$',
+      ''
+    ].join('\n');
+
     const I18N = {
       ja: {
         compatMessageGithub:":::message はGitHub Markdownでは専用ブロックとして解釈されません。",
@@ -569,8 +620,8 @@ $$
         compatFenceOther:"コードブロックの言語指定は投稿先ごとに解釈差があります。",
         compatFrontMatterGithub:"先頭のFront MatterはREADME表示では本文扱いになる場合があります。",
         compatFrontMatterQiita:"Front Matterは投稿方法によって扱いが異なります。",
-        boldShortcut:'太字 (Ctrl/⌘+B)', italicShortcut:'斜体 (Ctrl/⌘+I)', helpShortcutsTitle:'編集ショートカット', helpShortcuts:'通常・拡大どちらの編集欄でも、Ctrl/⌘+Bで太字、Ctrl/⌘+Iで斜体の記法を挿入します。未選択時は編集用の文字を挿入して選択します。書式操作はUndoで直前の文章へ戻せます。',
-        brandMeta:'GitHub / Qiita / Zenn の見え方を比較', pageTitle:'Markdown エディタ', pageDesc:'同じMarkdownを GitHub / Qiita / Zenn 風に切り替え、投稿先ごとの互換性も確認できます。', localOnly:'完全ローカル処理', mobileLocal:'完全ローカル処理', open:'開く', filename:'ファイル名', download:'保存', copy:'コピー', saved:'自動保存済み', saving:'保存中…', view:'表示', single:'通常', compare:'比較', style:'スタイル', sync:'スクロール同期', edit:'編集', preview:'プレビュー', approx:'近似プレビュー', drop:'Markdownファイルをドロップ', compatTitle:'投稿先の互換性チェック', compatDesc:'記法を簡易解析して、移植時に確認したい箇所を表示します。', heuristic:'※ スコアは独自ルールによる目安です。各サービスの公式レンダラーと完全一致するものではありません。', footer:'Markdownの編集はブラウザー内で完結', helpTitle:'使い方と注意事項', helpBasicTitle:'基本操作', helpBasic:'左側にMarkdownを書くと右側へ即時反映します。スタイルを切り替えると、GitHub / Qiita / Zenn 風の見え方を比較できます。内容はLocalStorageへ自動保存されます。', helpCompareTitle:'比較モード', helpCompare:'「比較」を選ぶと、右側に2種類のプレビューを同時表示します。スマホでは下の「比較」タブから2プレビューを上下に確認できます。', helpCompatTitle:'互換性チェック', helpCompat:'GFM固有記法、Zennメッセージ、数式、HTMLなどを検出して注意点を表示します。判定は補助機能であり、各サービスの公式仕様を完全再現するものではありません。', helpPrivacyTitle:'プライバシー / オフライン', helpPrivacy:'外部ライブラリやCDNを使わず、このHTMLだけで動作します。CSPで外部通信を禁止しているため、Markdown内の外部画像は実画像を読み込まずプレースホルダーとして表示します。', helpSyntaxTitle:'主な対応記法', helpSyntaxItem1:'見出し、太字、斜体、取り消し線、リンク、引用', helpSyntaxItem2:'順序付き/なしリスト、タスクリスト、テーブル', helpSyntaxItem3:'インラインコード、コードフェンス', helpSyntaxItem4:'簡易数式ブロック、Zenn風 message ブロック', customCssHelp:'プレビュー用の .md を対象にCSSを書いてください。例: .md h2 { color: #16624f; }', reset:'リセット', apply:'適用', noIssues:'目立った互換性上の注意点はありません。', copied:'Markdownをコピーしました', copyFailed:'コピーできませんでした', downloaded:'Markdownファイルを保存しました', opened:'ファイルを読み込みました', invalidFile:'Markdown / テキストファイルを選んでください', cssApplied:'Custom CSSを適用しました', cssReset:'Custom CSSをリセットしました', line:'行', chars:'文字', lines:'行', warning:'注意', info:'情報', sampleViewing:'サンプル表示中', newDocument:'新規作成', newDocumentReady:'空のドキュメントを作成しました', expandEditor:'入力欄を拡大', expandedEditorTitle:'Markdownを大きく編集'
+        formatHeading:'見出し', formatLink:'リンク', formatCode:'コード', formatList:'箇条書き', boldShortcut:'太字 (Ctrl/⌘+B)', italicShortcut:'斜体 (Ctrl/⌘+I)', helpShortcutsTitle:'編集ショートカット', helpShortcuts:'通常・拡大どちらの編集欄でも、Ctrl/⌘+Bで太字、Ctrl/⌘+Iで斜体の記法を挿入します。未選択時は編集用の文字を挿入して選択します。書式操作はUndoで直前の文章へ戻せます。',
+        brandMeta:'GitHub / Qiita / Zenn の見え方を比較', pageTitle:'Markdown エディタ', pageDesc:'同じMarkdownを GitHub / Qiita / Zenn 風に切り替え、投稿先ごとの互換性も確認できます。', localOnly:'完全ローカル処理', mobileLocal:'完全ローカル処理', open:'開く', filename:'ファイル名', download:'保存', copy:'コピー', saved:'自動保存済み', saving:'保存中…', view:'表示', single:'通常', compare:'比較', style:'スタイル', sync:'スクロール同期', edit:'編集', preview:'プレビュー', approx:'近似プレビュー', drop:'Markdownファイルをドロップ', compatTitle:'投稿先の互換性チェック', compatDesc:'記法を簡易解析して、移植時に確認したい箇所を表示します。', heuristic:'※ スコアは独自ルールによる目安です。各サービスの公式レンダラーと完全一致するものではありません。', footer:'Markdownの編集はブラウザー内で完結', helpTitle:'使い方と注意事項', helpBasicTitle:'基本操作', helpBasic:'左側にMarkdownを書くと右側へ即時反映します。スタイルを切り替えると、GitHub / Qiita / Zenn 風の見え方を比較できます。内容はLocalStorageへ自動保存されます。', helpCompareTitle:'比較モード', helpCompare:'「比較」を選ぶと、右側に2種類のプレビューを同時表示します。スマホでは下の「比較」タブから2プレビューを上下に確認できます。', helpCompatTitle:'互換性チェック', helpCompat:'GFM固有記法、Zennメッセージ、数式、HTMLなどを検出して注意点を表示します。判定は補助機能であり、各サービスの公式仕様を完全再現するものではありません。', helpPrivacyTitle:'プライバシー / オフライン', helpPrivacy:'外部ライブラリやCDNを使わず、このHTMLだけで動作します。CSPで外部通信を禁止しているため、Markdown内の外部画像は実画像を読み込まずプレースホルダーとして表示します。', helpSyntaxTitle:'主な対応記法', helpSyntaxItem1:'見出し、太字、斜体、取り消し線、リンク、引用', helpSyntaxItem2:'順序付き/なしリスト、タスクリスト、テーブル', helpSyntaxItem3:'インラインコード、コードフェンス', helpSyntaxItem4:'簡易数式ブロック、Zenn風 message ブロック', customCssHelp:'プレビュー用の .md を対象にCSSを書いてください。例: .md h2 { color: #16624f; }', reset:'リセット', apply:'適用', noIssues:'目立った互換性上の注意点はありません。', copied:'Markdownをコピーしました', copyFailed:'コピーできませんでした', downloaded:'Markdownファイルを保存しました', opened:'ファイルを読み込みました', invalidFile:'Markdown / テキストファイルを選んでください', cssApplied:'Custom CSSを適用しました', cssReset:'Custom CSSをリセットしました', cssResetFailed:'保存できなかったためCSSは変更していません', cssResetTitle:'CSSをリセットしますか？', cssResetMessage:'適用済みのCSSと入力途中のCSSが消えます。Markdown本文はそのまま残ります。', cancel:'キャンセル', fileTooLarge:'ファイルは5 MB以下にしてください', fileReadFailed:'ファイルを読み込めませんでした', fileReadCancelled:'読み込み中に編集されたため、ファイルの反映を取りやめました', downloadStarted:'Markdownのダウンロードを開始しました', downloadFailed:'ダウンロードを開始できませんでした', line:'行', chars:'文字', lines:'行', warning:'注意', info:'情報', sampleViewing:'サンプル表示中', newDocument:'新規作成', newDocumentReady:'空のドキュメントを作成しました', notSaved:'未保存', storageReadError:'自動保存のデータを読み込めません。Markdownをファイルとして保存してください。', storageCorrupt:'以前の自動保存データを読み込めないため、上書きを防いでいます。現在のMarkdownをファイル保存してから再開してください。', storageWriteError:'自動保存に失敗しました。Markdownをファイルとして保存してください。', retrySave:'再試行', overwriteSavedData:'保存データを上書き', confirmOverwriteSavedData:'以前の保存データを上書きします。必要なMarkdownを先にファイルへ保存しましたか？', expandEditor:'入力欄を拡大', expandedEditorTitle:'Markdownを大きく編集'
       },
       en: {
         compatMessageGithub:"GitHub Markdown does not interpret :::message as a dedicated block.",
@@ -587,12 +638,13 @@ $$
         compatFenceOther:"Code block language metadata is interpreted differently by each platform.",
         compatFrontMatterGithub:"Leading Front Matter may appear as body text in a README.",
         compatFrontMatterQiita:"Front Matter handling depends on the publishing method.",
-        boldShortcut:'Bold (Ctrl/⌘+B)', italicShortcut:'Italic (Ctrl/⌘+I)', helpShortcutsTitle:'Editing shortcuts', helpShortcuts:'In either the main or expanded editor, Ctrl/⌘+B inserts bold markup and Ctrl/⌘+I inserts italic markup. With no selection, placeholder text is inserted and selected for editing. Undo restores the text immediately before formatting.',
-        brandMeta:'Compare GitHub / Qiita / Zenn appearances', pageTitle:'Markdown Editor', pageDesc:'Switch the same Markdown between GitHub, Qiita and Zenn-inspired previews and check portability.', localOnly:'Fully local processing', mobileLocal:'Fully local processing', open:'Open', filename:'File name', download:'Save', copy:'Copy', saved:'Autosaved', saving:'Saving…', view:'View', single:'Single', compare:'Compare', style:'Style', sync:'Sync scroll', edit:'Edit', preview:'Preview', approx:'Approx. preview', drop:'Drop a Markdown file', compatTitle:'Platform compatibility check', compatDesc:'A lightweight syntax scan highlights areas worth checking before publishing elsewhere.', heuristic:'Scores are heuristic estimates and do not guarantee identical output to each platform’s official renderer.', footer:'Markdown editing stays in the browser', helpTitle:'Help & notes', helpBasicTitle:'Basics', helpBasic:'Write Markdown on the left and the preview updates immediately. Switch styles to compare GitHub, Qiita and Zenn-inspired appearances. Your draft is autosaved to LocalStorage.', helpCompareTitle:'Compare mode', helpCompare:'Compare mode shows two preview styles at once. On phones, use the Compare tab to view both previews vertically.', helpCompatTitle:'Compatibility check', helpCompat:'The checker detects GFM-specific syntax, Zenn message blocks, math, HTML and more. It is an assistive heuristic, not an exact implementation of each official parser.', helpPrivacyTitle:'Privacy / offline', helpPrivacy:'No CDN or external library is required. CSP blocks external network requests, so remote images in Markdown are shown as placeholders rather than fetched.', helpSyntaxTitle:'Supported syntax', helpSyntaxItem1:'Headings, bold, italics, strikethrough, links, and blockquotes', helpSyntaxItem2:'Ordered and unordered lists, task lists, and tables', helpSyntaxItem3:'Inline code and fenced code blocks', helpSyntaxItem4:'Basic math blocks and Zenn-style message blocks', customCssHelp:'Target the .md preview in your CSS. Example: .md h2 { color: #16624f; }', reset:'Reset', apply:'Apply', noIssues:'No notable portability issues detected.', copied:'Markdown copied', copyFailed:'Could not copy', downloaded:'Markdown file saved', opened:'File loaded', invalidFile:'Choose a Markdown or text file', cssApplied:'Custom CSS applied', cssReset:'Custom CSS reset', line:'Line', chars:'chars', lines:'lines', warning:'Warning', info:'Info', sampleViewing:'Sample', newDocument:'New document', newDocumentReady:'Started a blank document', expandEditor:'Expand editor', expandedEditorTitle:'Edit Markdown in a larger window'
+        formatHeading:'Heading', formatLink:'Link', formatCode:'Code', formatList:'List', boldShortcut:'Bold (Ctrl/⌘+B)', italicShortcut:'Italic (Ctrl/⌘+I)', helpShortcutsTitle:'Editing shortcuts', helpShortcuts:'In either the main or expanded editor, Ctrl/⌘+B inserts bold markup and Ctrl/⌘+I inserts italic markup. With no selection, placeholder text is inserted and selected for editing. Undo restores the text immediately before formatting.',
+        brandMeta:'Compare GitHub / Qiita / Zenn appearances', pageTitle:'Markdown Editor', pageDesc:'Switch the same Markdown between GitHub, Qiita and Zenn-inspired previews and check portability.', localOnly:'Fully local processing', mobileLocal:'Fully local processing', open:'Open', filename:'File name', download:'Save', copy:'Copy', saved:'Autosaved', saving:'Saving…', view:'View', single:'Single', compare:'Compare', style:'Style', sync:'Sync scroll', edit:'Edit', preview:'Preview', approx:'Approx. preview', drop:'Drop a Markdown file', compatTitle:'Platform compatibility check', compatDesc:'A lightweight syntax scan highlights areas worth checking before publishing elsewhere.', heuristic:'Scores are heuristic estimates and do not guarantee identical output to each platform’s official renderer.', footer:'Markdown editing stays in the browser', helpTitle:'Help & notes', helpBasicTitle:'Basics', helpBasic:'Write Markdown on the left and the preview updates immediately. Switch styles to compare GitHub, Qiita and Zenn-inspired appearances. Your draft is autosaved to LocalStorage.', helpCompareTitle:'Compare mode', helpCompare:'Compare mode shows two preview styles at once. On phones, use the Compare tab to view both previews vertically.', helpCompatTitle:'Compatibility check', helpCompat:'The checker detects GFM-specific syntax, Zenn message blocks, math, HTML and more. It is an assistive heuristic, not an exact implementation of each official parser.', helpPrivacyTitle:'Privacy / offline', helpPrivacy:'No CDN or external library is required. CSP blocks external network requests, so remote images in Markdown are shown as placeholders rather than fetched.', helpSyntaxTitle:'Supported syntax', helpSyntaxItem1:'Headings, bold, italics, strikethrough, links, and blockquotes', helpSyntaxItem2:'Ordered and unordered lists, task lists, and tables', helpSyntaxItem3:'Inline code and fenced code blocks', helpSyntaxItem4:'Basic math blocks and Zenn-style message blocks', customCssHelp:'Target the .md preview in your CSS. Example: .md h2 { color: #16624f; }', reset:'Reset', apply:'Apply', noIssues:'No notable portability issues detected.', copied:'Markdown copied', copyFailed:'Could not copy', downloaded:'Markdown file saved', opened:'File loaded', invalidFile:'Choose a Markdown or text file', cssApplied:'Custom CSS applied', cssReset:'Custom CSS reset', cssResetFailed:'CSS was not changed because saving failed', cssResetTitle:'Reset custom CSS?', cssResetMessage:'This will remove the applied CSS and your un-applied CSS draft. Your Markdown is kept.', cancel:'Cancel', fileTooLarge:'Choose a file no larger than 5 MB', fileReadFailed:'Could not read the file', fileReadCancelled:'A new edit was made while opening the file; the import was cancelled', downloadStarted:'Markdown download started', downloadFailed:'Could not start the download', line:'Line', chars:'chars', lines:'lines', warning:'Warning', info:'Info', sampleViewing:'Sample', newDocument:'New document', newDocumentReady:'Started a blank document', notSaved:'Not saved', storageReadError:'Stored drafts could not be read. Download your Markdown to keep a copy.', storageCorrupt:'The previous stored draft cannot be read. Autosave is paused to protect it. Download your current Markdown before continuing.', storageWriteError:'Autosave failed. Download your Markdown to avoid losing it.', retrySave:'Retry', overwriteSavedData:'Overwrite stored draft', confirmOverwriteSavedData:'This will overwrite the previous stored draft. Have you downloaded any Markdown you need?', expandEditor:'Expand editor', expandedEditorTitle:'Edit Markdown in a larger window'
       }
     };
 
     const els = {
+      saveNotice: document.getElementById('saveNotice'), saveNoticeMessage: document.getElementById('saveNoticeMessage'), retrySaveButton: document.getElementById('retrySaveButton'),
       workspace: document.getElementById('workspace'), editor: document.getElementById('editor'), fileInput: document.getElementById('fileInput'), editorPane: document.getElementById('editorPane'),
       singlePreview: document.getElementById('singlePreview'), singlePreviewScroll: document.getElementById('singlePreviewScroll'), singlePreviewTitle: document.getElementById('singlePreviewTitle'),
       compareA: document.getElementById('comparePreviewA'), compareB: document.getElementById('comparePreviewB'), compareScrollA: document.getElementById('compareScrollA'), compareScrollB: document.getElementById('compareScrollB'),
@@ -600,11 +652,13 @@ $$
       issues: document.getElementById('issues'), editorStats: document.getElementById('editorStats'), saveStatus: document.getElementById('saveStatus'), toast: document.getElementById('toast'),
       sampleState: document.getElementById('sampleState'), newDocumentButton: document.getElementById('newDocumentButton'), filenameInput: document.getElementById('filenameInput'),
       expandEditorButton: document.getElementById('expandEditorButton'), expandedEditorDialog: document.getElementById('expandedEditorDialog'), expandedEditor: document.getElementById('expandedEditor'),
-      helpDialog: document.getElementById('helpDialog'), customCssDialog: document.getElementById('customCssDialog'), customCssEditor: document.getElementById('customCssEditor'), customCssStyle: document.getElementById('customCssStyle')
+      helpDialog: document.getElementById('helpDialog'), customCssDialog: document.getElementById('customCssDialog'), customCssEditor: document.getElementById('customCssEditor'), customCssStyle: document.getElementById('customCssStyle'), cssResetDialog: document.getElementById('cssResetDialog'), cancelResetCss: document.getElementById('cancelResetCss')
     };
 
     let state = { lang:'ja', style:'github', mode:'single', mobileView:'editor', compareA:'github', compareB:'qiita', customCss:'', syncScroll:true, samplePristine:true, outputFilename:'document' };
     let history = [], historyIndex = -1, historyTimer = null, saveTimer = null, toastTimer = null, syncing = false;
+    let initializing = true, storageBlocked = '', saveError = false;
+    let editRevision = 0, fileRequestId = 0, filenameRevision = 0, customCssDraft = "";
 
     function t(key) { return (I18N[state.lang] && I18N[state.lang][key]) || I18N.ja[key] || key; }
     function showToast(message) { clearTimeout(toastTimer); els.toast.textContent = message; els.toast.classList.add('show'); toastTimer = setTimeout(() => els.toast.classList.remove('show'), 1800); }
@@ -647,7 +701,7 @@ $$
     }
 
     function inlineMarkdown(text) {
-      const code = [], markup = [];
+      const code = [], markup = [], escaped = [];
       const restoreMarkup = value => value.replace(/\u0000MARKUP(\d+)\u0000/g, (_, i) => markup[Number(i)] || '');
       // Resolve earlier fragments (such as an image inside a link label) before storing an outer one.
       const protect = html => { markup.push(restoreMarkup(html)); return `\u0000MARKUP${markup.length-1}\u0000`; };
@@ -657,23 +711,42 @@ $$
         s = s.replace(/~~([^~]+)~~/g, '<del>$1</del>');
         return s.replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>').replace(/(^|[^_])_([^_\n]+)_/g, '$1<em>$2</em>');
       };
-      let s = String(text);
+      let s = String(text).replace(/\\([\\\x60*_{}\[\]()#+\-.!|>])/g, (_, ch) => {
+        escaped.push(escapeHtml(ch));
+        return '\u0000ESC'+(escaped.length-1)+'\u0000';
+      });
       s = replaceInlineCode(s, c => { code.push(`<code>${escapeHtml(c.replace(/\n/g,' '))}</code>`); return `\u0000CODE${code.length-1}\u0000`; });
       // Parse raw destinations, escape them once, and keep generated HTML out of text formatting.
-      s = s.replace(/!\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g, (_, alt, url) => protect(`<span class="image-placeholder" title="${escapeHtml(url)}">▧ <span>${formatText(alt || 'image')} · ${escapeHtml(url)}</span></span>`));
-      s = s.replace(/\[([^\]]+)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g, (_, label, url) => protect(`<a href="${escapeHtml(safeUrl(url))}" target="_blank" rel="noopener noreferrer">${formatText(label)}</a>`));
+      s = s.replace(/!\[([^\]]*)\]\(((?:[^()\s]|\([^()]*\))+)(?:\s+"[^"]*")?\)/g, (_, alt, url) => protect(`<span class="image-placeholder" title="${escapeHtml(url)}">▧ <span>${formatText(alt || 'image')} · ${escapeHtml(url)}</span></span>`));
+      s = s.replace(/\[([^\]]+)\]\(((?:[^()\s]|\([^()]*\))+)(?:\s+"[^"]*")?\)/g, (_, label, url) => protect(`<a href="${escapeHtml(safeUrl(url))}" target="_blank" rel="noopener noreferrer">${formatText(label)}</a>`));
       s = s.replace(/<(https?:\/\/[^&<>\s]+)>/g, (_, url) => protect(`<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(url)}</a>`));
       s = formatText(s);
       s = restoreMarkup(s);
       s = s.replace(/\u0000CODE(\d+)\u0000/g, (_, i) => code[Number(i)] || '');
-      return s;
+      return s.replace(/\u0000ESC(\d+)\u0000/g, (_, i) => escaped[Number(i)] || '');
     }
 
     function splitTableRow(line) {
-      let s=line.trim(); if (s.startsWith('|')) s=s.slice(1); if (s.endsWith('|')) s=s.slice(0,-1);
-      return s.split(/(?<!\\)\|/).map(x => x.trim().replace(/\\\|/g,'|'));
+      let value=line.trim();
+      if(value.startsWith('|'))value=value.slice(1);
+      if(value.endsWith('|'))value=value.slice(0,-1);
+      const cells=[]; let cell='', ticks=0;
+      for(let i=0;i<value.length;i++) {
+        const ch=value[i];
+        if(ch==='\\'&&value[i+1]==='|'){cell+='\\|';i++;continue;}
+        if(ch===String.fromCharCode(96)) {
+          let end=i+1;
+          while(end<value.length&&value[end]===String.fromCharCode(96))end++;
+          const size=end-i;
+          if(!ticks)ticks=size;else if(ticks===size)ticks=0;
+          cell+=value.slice(i,end);i=end-1;continue;
+        }
+        if(ch==='|'&&!ticks){cells.push(cell.trim());cell='';}
+        else cell+=ch;
+      }
+      cells.push(cell.trim());
+      return cells;
     }
-
     function frontMatterEnd(lines) {
       return /^---\s*$/.test(lines[0]||'') ? lines.findIndex((line,i)=>i>0 && /^---\s*$/.test(line)) : -1;
     }
@@ -726,17 +799,36 @@ $$
           const rows=[]; while(i<lines.length && /\|/.test(lines[i]) && !isBlank(lines[i])) { inspectTable(lines[i],i); rows.push(splitTableRow(lines[i])); i++; }
           out.push('<table><thead><tr>'+head.map((c,k)=>`<th${aligns[k]?` style="text-align:${aligns[k]}"`:''}>${inlineMarkdown(c)}</th>`).join('')+'</tr></thead><tbody>'+rows.map(r=>'<tr>'+head.map((_,k)=>`<td${aligns[k]?` style="text-align:${aligns[k]}"`:''}>${inlineMarkdown(r[k]||'')}</td>`).join('')+'</tr>').join('')+'</tbody></table>'); continue;
         }
-        let listMatch=line.match(/^\s*([-+*]|\d+[.)])\s+(.+)$/);
+        let listMatch=line.match(/^(\s*)([-+*]|\d+[.)])\s+(.+)$/);
         if (listMatch) {
-          const ordered=/^\d/.test(listMatch[1]), items=[];
+          const tokens=[];
           while(i<lines.length) {
-            const m=lines[i].match(/^\s*([-+*]|\d+[.)])\s+(.+)$/); if(!m || /^\d/.test(m[1])!==ordered) break;
+            const m=lines[i].match(/^(\s*)([-+*]|\d+[.)])\s+(.+)$/);
+            if(!m)break;
             inspect(lines[i],i);
-            let body=m[2], task=body.match(/^\[([ xX])\]\s+(.*)$/);
-            if(task) items.push(`<li class="task"><input type="checkbox" disabled ${task[1].toLowerCase()==='x'?'checked':''}>${inlineMarkdown(task[2])}</li>`); else items.push(`<li>${inlineMarkdown(body)}</li>`);
+            tokens.push({indent:m[1].length,ordered:/^\d/.test(m[2]),body:m[3]});
             i++;
           }
-          out.push(`<${ordered?'ol':'ul'}>${items.join('')}</${ordered?'ol':'ul'}>`); continue;
+          let index=0;
+          const listAt=(indent,ordered)=>{
+            const tag=ordered?'ol':'ul', children=[];
+            while(index<tokens.length) {
+              const tok=tokens[index];
+              if(tok.indent<indent||(tok.indent===indent&&tok.ordered!==ordered))break;
+              if(tok.indent>indent) {
+                const nested=listAt(tok.indent,tok.ordered);
+                if(children.length)children[children.length-1]=children[children.length-1].replace(/<\/li>$/,nested+'</li>');
+                else children.push('<li>'+nested+'</li>');
+                continue;
+              }
+              const task=tok.body.match(/^\[([ xX])\]\s+(.*)$/);
+              children.push(task?'<li class="task"><input type="checkbox" disabled '+(task[1].toLowerCase()==='x'?'checked':'')+'>'+inlineMarkdown(task[2])+'</li>':'<li>'+inlineMarkdown(tok.body)+'</li>');
+              index++;
+            }
+            return '<'+tag+'>'+children.join('')+'</'+tag+'>';
+          };
+          while(index<tokens.length)out.push(listAt(tokens[index].indent,tokens[index].ordered));
+          continue;
         }
         if (/^\s*</.test(line)) { inspect(line,i,false); out.push(`<p class="raw-html">${escapeHtml(line)}</p>`); i++; continue; }
         const paragraphStart=i, para=[line]; i++;
@@ -794,41 +886,117 @@ $$
       els.issues.innerHTML=issues.slice(0,24).map((x,i)=>`<button class="issue-row" type="button" data-issue-index="${i}" data-line="${x.line}"><span class="issue-icon ${x.severity}">${x.severity==='warn'?'!':'i'}</span><span class="issue-platform">${x.platform==='local'?'Local':capitalize(x.platform)}</span><span class="issue-message">${escapeHtml(x.message)}</span><span class="issue-line">${t('line')} ${x.line}</span></button>`).join('');
     }
 
-    function scheduleSave() { els.saveStatus.textContent=t('saving'); clearTimeout(saveTimer); saveTimer=setTimeout(saveState,350); }
-    function saveState() { try { localStorage.setItem(STORAGE_KEY,JSON.stringify({...state,markdown:els.editor.value})); els.saveStatus.textContent=t('saved'); } catch { els.saveStatus.textContent='LocalStorage error'; } }
-    function loadState() {
-      try {
-        const raw=localStorage.getItem(STORAGE_KEY);
-        if(!raw) return false;
-        const saved=JSON.parse(raw);
-        if(typeof saved.samplePristine!=='boolean') saved.samplePristine=saved.markdown===defaultMarkdown;
-        state={...state,...saved};
-        return true;
-      } catch { return false; }
+    function updateStorageNotice() {
+      const blocked=!!storageBlocked;
+      const visible=blocked||saveError;
+      els.saveNotice.hidden=!visible;
+      els.saveNoticeMessage.textContent=blocked ? t(storageBlocked==='read'?'storageReadError':'storageCorrupt') : t('storageWriteError');
+      els.retrySaveButton.textContent=blocked&&storageBlocked!=='read' ? t('overwriteSavedData') : t('retrySave');
+      els.saveStatus.textContent=visible?t('notSaved'):t('saved');
     }
-    function updateSampleStateUI() { els.sampleState.classList.toggle('visible',state.samplePristine && els.editor.value===defaultMarkdown); }
+    function scheduleSave() {
+      if(initializing||storageBlocked)return;
+      clearTimeout(saveTimer);
+      els.saveStatus.textContent=t('saving');
+      saveTimer=setTimeout(saveState,350);
+    }
+    function saveState() {
+      if(initializing||storageBlocked)return false;
+      try {
+        localStorage.setItem(STORAGE_KEY,JSON.stringify({...state,markdown:els.editor.value}));
+        saveError=false;
+        updateStorageNotice();
+        return true;
+      } catch {
+        saveError=true;
+        updateStorageNotice();
+        return false;
+      }
+    }
+    function loadState() {
+      let raw;
+      try { raw=localStorage.getItem(STORAGE_KEY); }
+      catch { storageBlocked='read'; return false; }
+      if(raw===null)return false;
+      try {
+        const saved=JSON.parse(raw);
+        if(!saved||typeof saved!=='object'||Array.isArray(saved)||typeof saved.markdown!=='string') throw Error('Invalid saved draft');
+        if(typeof saved.samplePristine!=='boolean') saved.samplePristine=saved.markdown===defaultMarkdown||saved.markdown===defaultMarkdownEn;
+        const styles=['github','qiita','zenn','standard','minimal','print','custom'];
+        const safe={markdown:saved.markdown};
+        if(saved.lang==='ja'||saved.lang==='en')safe.lang=saved.lang;
+        if(styles.includes(saved.style))safe.style=saved.style;
+        if(styles.includes(saved.compareA))safe.compareA=saved.compareA;
+        if(styles.includes(saved.compareB))safe.compareB=saved.compareB;
+        if(saved.mode==='single'||saved.mode==='compare')safe.mode=saved.mode;
+        if(['editor','preview','compare'].includes(saved.mobileView))safe.mobileView=saved.mobileView;
+        if(typeof saved.customCss==='string')safe.customCss=saved.customCss;
+        if(typeof saved.outputFilename==='string')safe.outputFilename=saved.outputFilename;
+        if(typeof saved.syncScroll==='boolean')safe.syncScroll=saved.syncScroll;
+        safe.samplePristine=saved.samplePristine;
+        state={...state,...safe};
+        return true;
+      } catch { storageBlocked='corrupt'; return false; }
+    }
+    function retryStorage() {
+      if(storageBlocked==='read') {
+        try {
+          const raw=localStorage.getItem(STORAGE_KEY);
+          storageBlocked=raw===null?'':'corrupt';
+        } catch { updateStorageNotice(); return; }
+        if(storageBlocked) { updateStorageNotice(); return; }
+      } else if(storageBlocked) {
+        if(!window.confirm(t('confirmOverwriteSavedData')))return;
+        storageBlocked='';
+      }
+      saveState();
+    }
+    function updateSampleStateUI() { els.sampleState.classList.toggle('visible',state.samplePristine && (els.editor.value===defaultMarkdown||els.editor.value===defaultMarkdownEn)); }
     function leaveSampleMode() { if(state.samplePristine){ state.samplePristine=false; updateSampleStateUI(); } }
     function newDocument() {
       state.samplePristine=false;
       state.outputFilename='document'; els.filenameInput.value=state.outputFilename;
-      els.editor.value='';
+      pushHistory(true);
+      els.editor.value=''; editRevision++; fileRequestId++;
       pushHistory(true);
       render();
       els.editor.focus();
       showToast(t('newDocumentReady'));
     }
     function pushHistory(immediate=false) { clearTimeout(historyTimer); const run=()=>{ const value=els.editor.value; if(history[historyIndex]===value)return; history=history.slice(0,historyIndex+1); history.push(value); if(history.length>100) history.shift(); historyIndex=history.length-1; }; if(immediate)run(); else historyTimer=setTimeout(run,350); }
-    function undo() { if(historyIndex>0){ historyIndex--; els.editor.value=history[historyIndex]; render(); } }
-    function redo() { if(historyIndex<history.length-1){ historyIndex++; els.editor.value=history[historyIndex]; render(); } }
+    function undo() {
+      pushHistory(true);
+      if(historyIndex>0){ historyIndex--; els.editor.value=history[historyIndex]; editRevision++; render(); }
+    }
+    function redo() {
+      clearTimeout(historyTimer);
+      if(els.editor.value!==history[historyIndex]) { pushHistory(true); return; }
+      if(historyIndex<history.length-1){ historyIndex++; els.editor.value=history[historyIndex]; editRevision++; render(); }
+    }
 
     function setStyle(style, editCustom=false) {
       state.style=style; document.querySelectorAll('[data-style]').forEach(b=>b.classList.toggle('active',b.dataset.style===style));
-      if(style==='custom') { els.customCssEditor.value=state.customCss; if((editCustom||!state.customCss)&&!els.customCssDialog.open) els.customCssDialog.showModal(); }
+      if(style==='custom') { els.customCssEditor.value=customCssDraft; if(editCustom&&!els.customCssDialog.open) els.customCssDialog.showModal(); }
       render();
     }
-    function setMode(mode) { state.mode=mode; els.workspace.classList.toggle('compare',mode==='compare'); document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode)); requestAnimationFrame(()=>syncScrollGroup(els.editor)); saveState(); }
-    function setMobileView(view) { state.mobileView=view; els.workspace.classList.remove('mobile-editor','mobile-preview','mobile-compare'); els.workspace.classList.add('mobile-'+view); document.querySelectorAll('[data-mobile-view]').forEach(b=>b.classList.toggle('active',b.dataset.mobileView===view)); if(view==='compare') setMode('compare'); saveState(); }
-    function setLanguage(lang) { state.lang=lang; document.documentElement.lang=lang; document.querySelectorAll('[data-i18n]').forEach(el=>{ const key=el.dataset.i18n; if(t(key)) el.textContent=t(key); }); document.querySelectorAll('[data-i18n-title]').forEach(el=>{ const key=el.dataset.i18nTitle; if(t(key)) el.title=t(key); }); document.querySelectorAll('[data-i18n-aria]').forEach(el=>el.setAttribute('aria-label',t(el.dataset.i18nAria))); document.getElementById('languageButton').textContent=lang==='ja'?'EN':'JA'; document.getElementById('languageButton').setAttribute('aria-label',lang==='ja'?'英語に切り替え':'Switch to Japanese'); render(); saveState(); }
+    function setMode(mode) { state.mode=mode; els.workspace.classList.toggle('compare',mode==='compare'); document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode)); requestAnimationFrame(()=>syncScrollGroup(els.editor)); if(!initializing)saveState(); }
+    function setMobileView(view) { state.mobileView=view; els.workspace.classList.remove('mobile-editor','mobile-preview','mobile-compare'); els.workspace.classList.add('mobile-'+view); document.querySelectorAll('[data-mobile-view]').forEach(b=>b.classList.toggle('active',b.dataset.mobileView===view)); if(view==='compare') setMode('compare'); if(!initializing)saveState(); }
+    function setLanguage(lang) {
+      if(!initializing&&state.samplePristine&&(els.editor.value===defaultMarkdown||els.editor.value===defaultMarkdownEn)) {
+        const translated=lang==='en'?defaultMarkdownEn:defaultMarkdown;
+        if(els.editor.value!==translated) {
+          els.editor.value=translated; editRevision++; fileRequestId++;
+          clearTimeout(historyTimer); history=[translated]; historyIndex=0;
+        }
+      }
+      state.lang=lang; document.documentElement.lang=lang;
+      document.querySelectorAll('[data-i18n]').forEach(el=>{ const key=el.dataset.i18n; if(t(key)) el.textContent=t(key); });
+      document.querySelectorAll('[data-i18n-title]').forEach(el=>{ const key=el.dataset.i18nTitle; if(t(key)) el.title=t(key); });
+      document.querySelectorAll('[data-i18n-aria]').forEach(el=>el.setAttribute('aria-label',t(el.dataset.i18nAria)));
+      document.getElementById('languageButton').textContent=lang==='ja'?'EN':'JA';
+      document.getElementById('languageButton').setAttribute('aria-label',lang==='ja'?'英語に切り替え':'Switch to Japanese');
+      render(); updateStorageNotice(); if(!initializing)saveState();
+    }
 
     function selectLine(line) { const lines=els.editor.value.split('\n'); let start=0; for(let i=0;i<line-1;i++)start+=lines[i].length+1; const end=start+(lines[line-1]||'').length; els.editor.focus(); els.editor.setSelectionRange(start,end); if(window.innerWidth<=720)setMobileView('editor'); const ratio=start/Math.max(1,els.editor.value.length); els.editor.scrollTop=(els.editor.scrollHeight-els.editor.clientHeight)*ratio; }
     function formatSelection(type,e=els.editor) {
@@ -842,7 +1010,7 @@ $$
       // Commit pending typing before the formatting change becomes its own undo step.
       if(e===els.expandedEditor)els.editor.value=e.value;
       pushHistory(true);
-      leaveSampleMode(); e.value=before+replacement+after; e.focus(); const targetText=selected||({bold:'bold',italic:'italic',heading:'Heading',link:'link text',code:'code',list:'item'}[type]); const pos=start+Math.max(0,selectOffset); e.setSelectionRange(pos,pos+targetText.length);
+      leaveSampleMode(); e.value=before+replacement+after; editRevision++; e.focus(); const targetText=selected||({bold:'bold',italic:'italic',heading:'Heading',link:'link text',code:'code',list:'item'}[type]); const pos=start+Math.max(0,selectOffset); e.setSelectionRange(pos,pos+targetText.length);
       if(e===els.expandedEditor) { els.editor.value=e.value; els.editor.setSelectionRange(e.selectionStart,e.selectionEnd); }
       pushHistory(true); render();
     }
@@ -869,7 +1037,7 @@ $$
       });
     }
     function syncExpandedEditor() {
-      leaveSampleMode();
+      leaveSampleMode(); editRevision++;
       els.editor.value=els.expandedEditor.value;
       els.editor.setSelectionRange(els.expandedEditor.selectionStart,els.expandedEditor.selectionEnd);
       pushHistory();
@@ -899,20 +1067,74 @@ $$
       event.preventDefault();
       pushHistory(true);
       const editor=event.currentTarget;
-      editor.setRangeText('  ',editor.selectionStart,editor.selectionEnd,'end');
+      editor.setRangeText('  ',editor.selectionStart,editor.selectionEnd,'end'); editRevision++;
       if(editor===els.expandedEditor)syncExpandedEditor();
       else { leaveSampleMode(); render(); }
       pushHistory(true);
     }
 
-    async function copyMarkdown() { try { await navigator.clipboard.writeText(els.editor.value); showToast(t('copied')); } catch { try { els.editor.select(); document.execCommand('copy'); showToast(t('copied')); } catch { showToast(t('copyFailed')); } } }
+    async function copyMarkdown() {
+      const text=els.editor.value;
+      try { if(!navigator.clipboard?.writeText)throw Error('Clipboard API unavailable'); await navigator.clipboard.writeText(text); showToast(t('copied')); return; }
+      catch { /* Try the native legacy copy operation. */ }
+      const previousFocus=document.activeElement;
+      const selection=previousFocus===els.editor?[els.editor.selectionStart,els.editor.selectionEnd]:null;
+      const temporary=document.createElement('textarea');
+      temporary.value=text; temporary.setAttribute('readonly',''); temporary.style.cssText='position:fixed;left:-9999px;top:0;opacity:0';
+      let success=false;
+      try { document.body.appendChild(temporary); temporary.select(); success=document.execCommand('copy')===true; }
+      catch { success=false; }
+      finally {
+        temporary.remove();
+        try { previousFocus?.focus({preventScroll:true}); if(selection)els.editor.setSelectionRange(...selection); } catch {}
+      }
+      showToast(t(success?'copied':'copyFailed'));
+    }
     function normalizedFilename() { let name=(els.filenameInput.value||state.outputFilename||'document').trim().replace(/\.(?:md|markdown|mdown|mkd)$/i,'').replace(/[<>:"/\\|?*\u0000-\u001F]/g,'-').replace(/[. ]+$/g,'').trim(); if(!name) name='document'; state.outputFilename=name; els.filenameInput.value=name; return name+'.md'; }
-    function downloadMarkdown() { const blob=new Blob([els.editor.value],{type:'text/markdown;charset=utf-8'}), a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=normalizedFilename(); document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); saveState(); showToast(t('downloaded')); }
-    function readFile(file) { if(!file)return; if(file.size>5*1024*1024){ showToast('File is too large (max 5 MB)'); return; } const name=file.name.toLowerCase(); if(!(name.endsWith('.md')||name.endsWith('.markdown')||name.endsWith('.mdown')||name.endsWith('.mkd')||file.type.startsWith('text/'))){ showToast(t('invalidFile')); return; } const reader=new FileReader(); reader.onload=()=>{ state.samplePristine=false; state.outputFilename=file.name.replace(/\.(?:md|markdown|mdown|mkd)$/i,'')||'document'; els.filenameInput.value=state.outputFilename; els.editor.value=String(reader.result||''); pushHistory(true); render(); showToast(t('opened')); }; reader.readAsText(file); }
+    function downloadMarkdown() {
+      const markdown=els.editor.value, filename=normalizedFilename();
+      let href='', anchor=null;
+      try {
+        href=URL.createObjectURL(new Blob([markdown],{type:'text/markdown;charset=utf-8'}));
+        anchor=document.createElement('a'); anchor.href=href; anchor.download=filename;
+        document.body.appendChild(anchor); anchor.click();
+        saveState();
+        showToast(t('downloadStarted'));
+      } catch { showToast(t('downloadFailed')); }
+      finally {
+        anchor?.remove();
+        if(href)setTimeout(()=>URL.revokeObjectURL(href),1000);
+      }
+    }
+    function readFile(file) {
+      if(!file)return;
+      const id=++fileRequestId;
+      if(file.size>5*1024*1024) { showToast(t('fileTooLarge')); return; }
+      const name=file.name.toLowerCase();
+      if(!(name.endsWith('.md')||name.endsWith('.markdown')||name.endsWith('.mdown')||name.endsWith('.mkd')||file.type.startsWith('text/'))) { showToast(t('invalidFile')); return; }
+      const currentEditRevision=editRevision, currentFilenameRevision=filenameRevision;
+      const reader=new FileReader();
+      reader.onload=()=>{
+        if(id!==fileRequestId)return;
+        if(currentEditRevision!==editRevision){ showToast(t('fileReadCancelled')); return; }
+        pushHistory(true); // Preserve typing still waiting for its history timer.
+        state.samplePristine=false;
+        if(currentFilenameRevision===filenameRevision) {
+          state.outputFilename=file.name.replace(/\.(?:md|markdown|mdown|mkd)$/i,'')||'document';
+          els.filenameInput.value=state.outputFilename;
+        }
+        els.editor.value=String(reader.result??''); editRevision++;
+        pushHistory(true); render(); showToast(t('opened'));
+      };
+      reader.onerror=()=>{ if(id===fileRequestId)showToast(t('fileReadFailed')); };
+      reader.onabort=()=>{ if(id===fileRequestId)showToast(t('fileReadFailed')); };
+      try { reader.readAsText(file); } catch { if(id===fileRequestId)showToast(t('fileReadFailed')); }
+    }
 
+    els.retrySaveButton.addEventListener('click',retryStorage);
     document.getElementById('openButton').addEventListener('click',()=>els.fileInput.click());
     document.getElementById('downloadButton').addEventListener('click',downloadMarkdown);
-    els.filenameInput.addEventListener('input',()=>{ state.outputFilename=els.filenameInput.value; scheduleSave(); });
+    els.filenameInput.addEventListener('input',()=>{ filenameRevision++; state.outputFilename=els.filenameInput.value; scheduleSave(); });
     els.filenameInput.addEventListener('blur',()=>{ normalizedFilename(); saveState(); });
     els.expandEditorButton.addEventListener('click',openExpandedEditor);
     els.expandedEditor.addEventListener('input',syncExpandedEditor);
@@ -930,7 +1152,7 @@ $$
     document.querySelectorAll('[data-format]').forEach(b=>b.addEventListener('click',()=>formatSelection(b.dataset.format)));
     els.fileInput.addEventListener('change',()=>{ readFile(els.fileInput.files[0]); els.fileInput.value=''; });
     els.newDocumentButton.addEventListener('click',newDocument);
-    els.editor.addEventListener('input',()=>{ leaveSampleMode(); pushHistory(); render(); });
+    els.editor.addEventListener('input',()=>{ editRevision++; leaveSampleMode(); pushHistory(); render(); });
     els.editor.addEventListener('scroll',()=>syncScrollGroup(els.editor));
     els.singlePreviewScroll.addEventListener('scroll',()=>syncScrollGroup(els.singlePreviewScroll));
     els.compareScrollA.addEventListener('scroll',()=>syncScrollGroup(els.compareScrollA));
@@ -941,12 +1163,43 @@ $$
     els.syncScroll.addEventListener('change',()=>{ state.syncScroll=els.syncScroll.checked; saveState(); });
     els.compareStyleA.addEventListener('change',()=>{ state.compareA=els.compareStyleA.value; render(); }); els.compareStyleB.addEventListener('change',()=>{ state.compareB=els.compareStyleB.value; render(); });
     els.issues.addEventListener('click',e=>{ const row=e.target.closest('[data-line]'); if(row)selectLine(Number(row.dataset.line)); });
-    document.getElementById('applyCssButton').addEventListener('click',()=>{ state.customCss=els.customCssEditor.value; els.customCssStyle.textContent=state.customCss; els.customCssDialog.close(); setStyle('custom'); showToast(t('cssApplied')); });
-    document.getElementById('resetCssButton').addEventListener('click',()=>{ state.customCss=''; els.customCssEditor.value=''; els.customCssStyle.textContent=''; saveState(); showToast(t('cssReset')); });
+    els.customCssEditor.addEventListener('input',()=>{ customCssDraft=els.customCssEditor.value; });
+    document.getElementById('applyCssButton').addEventListener('click',()=>{
+      customCssDraft=els.customCssEditor.value;
+      state.customCss=customCssDraft; els.customCssStyle.textContent=state.customCss;
+      els.customCssDialog.close(); setStyle('custom'); showToast(t('cssApplied'));
+    });
+    document.getElementById('resetCssButton').addEventListener('click',()=>{
+      customCssDraft=els.customCssEditor.value;
+      if(!customCssDraft&&!state.customCss) { showToast(t('cssReset')); return; }
+      els.cssResetDialog.showModal(); els.cancelResetCss.focus();
+    });
+    els.cancelResetCss.addEventListener('click',()=>els.cssResetDialog.close());
+    document.getElementById('confirmResetCss').addEventListener('click',()=>{
+      const previous=state.customCss;
+      state.customCss='';
+      if(!saveState()) {
+        state.customCss=previous; els.customCssStyle.textContent=previous;
+        els.cssResetDialog.close(); showToast(t('cssResetFailed')); return;
+      }
+      customCssDraft=''; els.customCssEditor.value=''; els.customCssStyle.textContent='';
+      els.cssResetDialog.close(); render(); showToast(t('cssReset'));
+    });
     document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='hidden')saveState(); }); window.addEventListener('beforeunload',saveState);
 
-    const hadSavedState=loadState(); els.editor.value=hadSavedState && typeof state.markdown==='string' ? state.markdown : defaultMarkdown; if(!hadSavedState) state.samplePristine=true; state.outputFilename=String(state.outputFilename||'document').replace(/\.(?:md|markdown|mdown|mkd)$/i,'')||'document'; els.filenameInput.value=state.outputFilename; els.compareStyleA.value=state.compareA; els.compareStyleB.value=state.compareB; els.syncScroll.checked=state.syncScroll!==false; els.customCssStyle.textContent=state.customCss||''; els.customCssEditor.value=state.customCss||'';
-    setMode(state.mode); setMobileView(state.mobileView); setLanguage(state.lang); setStyle(state.style); history=[els.editor.value]; historyIndex=0; render();
+    const hadSavedState=loadState();
+    els.editor.value=hadSavedState ? state.markdown : defaultMarkdown;
+    if(!hadSavedState)state.samplePristine=true;
+    if(state.samplePristine&&state.lang==='en'&&els.editor.value===defaultMarkdown)els.editor.value=defaultMarkdownEn;
+    state.outputFilename=String(state.outputFilename||'document').replace(/\.(?:md|markdown|mdown|mkd)$/i,'')||'document';
+    els.filenameInput.value=state.outputFilename;
+    els.compareStyleA.value=state.compareA; els.compareStyleB.value=state.compareB;
+    els.syncScroll.checked=state.syncScroll!==false;
+    els.customCssStyle.textContent=state.customCss||''; customCssDraft=state.customCss||''; els.customCssEditor.value=customCssDraft;
+    setMode(state.mode); setMobileView(state.mobileView); setLanguage(state.lang); setStyle(state.style);
+    history=[els.editor.value]; historyIndex=0; render();
+    initializing=false; updateStorageNotice();
+    if(!hadSavedState&&!storageBlocked)els.saveStatus.textContent=t('notSaved');
   })();
   </script>
 </body>
