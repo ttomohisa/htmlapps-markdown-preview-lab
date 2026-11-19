@@ -565,6 +565,45 @@ E = mc^2
 $$
 `;
 
+    const defaultMarkdownEn = [
+      '# Markdown Preview Lab',
+      '',
+      'Compare the same Markdown in **GitHub / Qiita / Zenn**-inspired styles.',
+      '',
+      '## What you can do',
+      '',
+      '- Live Markdown preview',
+      '- [x] Autosave in this browser',
+      '- [x] Side-by-side style comparison',
+      '- [x] Portability checks',
+      '',
+      '> This HTML works on its own and does not upload your draft.',
+      '',
+      '### Code',
+      '',
+      '```javascript',
+      'const message = "Hello, Markdown!";',
+      'console.log(message);',
+      '```',
+      '',
+      '### Table',
+      '',
+      '| Platform | Preview | Compatibility |',
+      '| --- | --- | --- |',
+      '| GitHub | ✓ | ✓ |',
+      '| Qiita | ✓ | ✓ |',
+      '| Zenn | ✓ | ✓ |',
+      '',
+      ':::message',
+      'Zenn-style message blocks may not work on other platforms.',
+      ':::',
+      '',
+      '$',
+      'E = mc^2',
+      '$',
+      ''
+    ].join('\n');
+
     const I18N = {
       ja: {
         compatMessageGithub:":::message はGitHub Markdownでは専用ブロックとして解釈されません。",
@@ -882,7 +921,7 @@ $$
       try {
         const saved=JSON.parse(raw);
         if(!saved||typeof saved!=='object'||Array.isArray(saved)||typeof saved.markdown!=='string') throw Error('Invalid saved draft');
-        if(typeof saved.samplePristine!=='boolean') saved.samplePristine=saved.markdown===defaultMarkdown;
+        if(typeof saved.samplePristine!=='boolean') saved.samplePristine=saved.markdown===defaultMarkdown||saved.markdown===defaultMarkdownEn;
         const styles=['github','qiita','zenn','standard','minimal','print','custom'];
         const safe={markdown:saved.markdown};
         if(saved.lang==='ja'||saved.lang==='en')safe.lang=saved.lang;
@@ -912,7 +951,7 @@ $$
       }
       saveState();
     }
-    function updateSampleStateUI() { els.sampleState.classList.toggle('visible',state.samplePristine && els.editor.value===defaultMarkdown); }
+    function updateSampleStateUI() { els.sampleState.classList.toggle('visible',state.samplePristine && (els.editor.value===defaultMarkdown||els.editor.value===defaultMarkdownEn)); }
     function leaveSampleMode() { if(state.samplePristine){ state.samplePristine=false; updateSampleStateUI(); } }
     function newDocument() {
       state.samplePristine=false;
@@ -943,6 +982,13 @@ $$
     function setMode(mode) { state.mode=mode; els.workspace.classList.toggle('compare',mode==='compare'); document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode)); requestAnimationFrame(()=>syncScrollGroup(els.editor)); if(!initializing)saveState(); }
     function setMobileView(view) { state.mobileView=view; els.workspace.classList.remove('mobile-editor','mobile-preview','mobile-compare'); els.workspace.classList.add('mobile-'+view); document.querySelectorAll('[data-mobile-view]').forEach(b=>b.classList.toggle('active',b.dataset.mobileView===view)); if(view==='compare') setMode('compare'); if(!initializing)saveState(); }
     function setLanguage(lang) {
+      if(!initializing&&state.samplePristine&&(els.editor.value===defaultMarkdown||els.editor.value===defaultMarkdownEn)) {
+        const translated=lang==='en'?defaultMarkdownEn:defaultMarkdown;
+        if(els.editor.value!==translated) {
+          els.editor.value=translated; editRevision++; fileRequestId++;
+          clearTimeout(historyTimer); history=[translated]; historyIndex=0;
+        }
+      }
       state.lang=lang; document.documentElement.lang=lang;
       document.querySelectorAll('[data-i18n]').forEach(el=>{ const key=el.dataset.i18n; if(t(key)) el.textContent=t(key); });
       document.querySelectorAll('[data-i18n-title]').forEach(el=>{ const key=el.dataset.i18nTitle; if(t(key)) el.title=t(key); });
@@ -1144,6 +1190,7 @@ $$
     const hadSavedState=loadState();
     els.editor.value=hadSavedState ? state.markdown : defaultMarkdown;
     if(!hadSavedState)state.samplePristine=true;
+    if(state.samplePristine&&state.lang==='en'&&els.editor.value===defaultMarkdown)els.editor.value=defaultMarkdownEn;
     state.outputFilename=String(state.outputFilename||'document').replace(/\.(?:md|markdown|mdown|mkd)$/i,'')||'document';
     els.filenameInput.value=state.outputFilename;
     els.compareStyleA.value=state.compareA; els.compareStyleB.value=state.compareB;
