@@ -62,8 +62,8 @@ async function main() {
         await page.locator('#compatDetails summary').click();
         assert.equal(await page.locator('#compatDetails').evaluate(el=>el.open),false,'compatibility findings collapse');
         // Force scroll to verify the mobile header leaves the viewport rather than sticking.
-        await page.evaluate(()=>{ const probe=document.createElement('div');probe.id='audit-scroll-probe';probe.style.height='500px';document.body.appendChild(probe);window.scrollTo(0,200); });
-        await page.waitForFunction(()=>window.scrollY>50);
+        await page.evaluate(()=>{ const probe=document.createElement('div');probe.id='audit-scroll-probe';probe.style.height='500px';document.body.appendChild(probe);window.scrollTo({top:200,behavior:'instant'}); });
+        await page.waitForFunction(()=>window.scrollY>=150);
         assert.ok(await page.locator('.app-header').evaluate(el=>el.getBoundingClientRect().bottom<0),'mobile header leaves viewport when scrolling');
         await page.evaluate(()=>{document.querySelector('#audit-scroll-probe').remove();window.scrollTo(0,0);});
 
