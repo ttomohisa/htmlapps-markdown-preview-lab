@@ -50,7 +50,8 @@ async function main() {
         await page.locator('#confirmResetCss').click();
         assert.equal((await page.locator('#customCssStyle').textContent()).trim(),'','confirmed reset clears CSS');
         await page.locator('[data-close-dialog="customCssDialog"]').click();
-        await page.evaluate(()=>localStorage.setItem('markdown-preview-lab:v1','{broken'));
+        // Seed the broken draft *before* app startup; the open tab's beforeunload saves normally.
+        await context.addInitScript(() => localStorage.setItem('markdown-preview-lab:v1','{broken'));
         await page.reload();
         assert.equal(await page.locator('#saveNotice').isVisible(),true,'corrupt local draft shows persistent warning');
         await page.locator('#editor').fill('Safety first');
