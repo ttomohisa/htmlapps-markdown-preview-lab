@@ -18,6 +18,55 @@ async function main() {
       try {
         await page.goto(pathToFileURL(path.resolve(__dirname,'../dist',file)).href);
         assert.equal(await page.locator('#editor').count(),1,'editor exists');
+        // The phone header is not sticky; the hero heading and local badge are hidden.
+        // Scores remain visible while compatibility findings start collapsed.
+        for (const width of [320,390,720]) {
+          await page.setViewportSize({width,height:844});
+          const layout=await page.evaluate(()=>{
+            const $=selector=>document.querySelector(selector);
+            const rect=el=>el.getBoundingClientRect();
+            const centered=id=>{
+              const button=$('#'+id), svg=button.querySelector('svg');
+              const outer=rect(button), inner=rect(svg);
+              return Math.abs((outer.left+outer.right-inner.left-inner.right)/2)<1.6
+                  && Math.abs((outer.top+outer.bottom-inner.top-inner.bottom)/2)<1.6;
+            };
+            return {
+              headerPosition:getComputedStyle($('.app-header')).position,
+              heroVisible:getComputedStyle($('.page-intro h2')).display!=='none',
+              badgeVisible:getComputedStyle($('.local-badge')).display!=='none',
+              syncDirection:getComputedStyle($('.sync-toggle span')).writingMode,
+              syncWhiteSpace:getComputedStyle($('.sync-toggle span')).whiteSpace,
+              syncHeight:rect($('.workspace-controls')).height,
+              scoreVisible:rect($('#scoreGithub')).width>0,
+              collapsed:!$('#compatDetails').open,
+              centered:['copyButton','undoButton','redoButton'].every(centered),
+              overflow:document.documentElement.scrollWidth>innerWidth
+            };
+          });
+          assert.equal(layout.headerPosition,'relative',width+': header scrolls with page');
+          assert.equal(layout.heroVisible,false,width+': hero heading is hidden');
+          assert.equal(layout.badgeVisible,false,width+': local badge is hidden');
+          assert.equal(layout.syncDirection,'horizontal-tb',width+': sync label stays horizontal');
+          assert.equal(layout.syncWhiteSpace,'nowrap',width+': sync label does not wrap');
+          assert.ok(layout.syncHeight<72,width+': controls height '+layout.syncHeight);
+          assert.equal(layout.centered,true,width+': toolbar icons centered');
+          assert.equal(layout.scoreVisible,true,width+': scores visible');
+          assert.equal(layout.collapsed,true,width+': findings initially closed');
+          assert.equal(layout.overflow,false,width+': no page horizontal overflow');
+        }
+        await page.setViewportSize({width:390,height:844});
+        await page.locator('#compatDetails summary').click();
+        assert.equal(await page.locator('#compatDetails').evaluate(el=>el.open),true,'compatibility findings expand');
+        assert.equal(await page.locator('#issues').isVisible(),true,'expanded findings accessible');
+        await page.locator('#compatDetails summary').click();
+        assert.equal(await page.locator('#compatDetails').evaluate(el=>el.open),false,'compatibility findings collapse');
+        // Force scroll to verify the mobile header leaves the viewport rather than sticking.
+        await page.evaluate(()=>{ const probe=document.createElement('div');probe.id='audit-scroll-probe';probe.style.height='500px';document.body.appendChild(probe);window.scrollTo(0,200); });
+        await page.waitForFunction(()=>window.scrollY>50);
+        assert.ok(await page.locator('.app-header').evaluate(el=>el.getBoundingClientRect().bottom<0),'mobile header leaves viewport when scrolling');
+        await page.evaluate(()=>{document.querySelector('#audit-scroll-probe').remove();window.scrollTo(0,0);});
+
         await page.locator('#languageButton').click();
         assert.equal(await page.locator('html').getAttribute('lang'),'en');
         assert.match(await page.locator('#editor').inputValue(),/What you can do/,'untouched sample is English');
