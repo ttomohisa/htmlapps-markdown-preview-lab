@@ -1,0 +1,64 @@
+name: Tag and publish GitHub Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: markdown-preview-lab-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    # Manual runs from PR branches must not publish.
+    if: github.ref == 'refs/heads/main'
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Build and verify standalone HTML
+        shell: pwsh
+        run: ./scripts/check-repository.ps1
+      - name: Create version tag and GitHub Release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $ErrorActionPreference = "Stop"
+          $app = Get-Content -Raw -Encoding UTF8 app.config.json | ConvertFrom-Json
+          $version = [string]$app.version
+          if ($version -notmatch '^(0|[1-9][0-9]*)[.](0|[1-9][0-9]*)[.](0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?(?:[+][0-9A-Za-z.-]+)?$') {
+            throw "Expected a SemVer version in app.config.json: $version"
+          }
+          $tag = "v$version"
+          $existing = gh release view $tag --json tagName --jq .tagName 2>$null
+          if ($LASTEXITCODE -eq 0) {
+            Write-Host "Release $tag already exists; no changes."
+            exit 0
+          }
+          # Recover a tag left by a previous failed release job only if it still
+          # points to the validated main commit.
+          $tagRef = git ls-remote --tags origin "refs/tags/$tag"
+          if ($LASTEXITCODE -ne 0) { throw "Could not inspect remote tag $tag" }
+          if ($tagRef) {
+            git fetch origin "refs/tags/$tag:refs/tags/$tag"
+            if ($LASTEXITCODE -ne 0) { throw "Could not fetch existing tag $tag" }
+            $tagCommit = (git rev-list -n 1 $tag).Trim()
+            if ($tagCommit -ne $env:GITHUB_SHA) { throw "$tag already exists on a different commit: $tagCommit" }
+          } else {
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git tag -a $tag -m "Markdown Preview Lab $tag"
+            if ($LASTEXITCODE -ne 0) { throw "Could not create $tag" }
+            git push origin "refs/tags/$tag"
+            if ($LASTEXITCODE -ne 0) { throw "Could not push $tag" }
+          }
+          gh release create $tag "dist/index.html#markdown-preview-lab.html" "dist/index.self-extract.html#markdown-preview-lab.self-extract.html" --verify-tag --target $env:GITHUB_SHA --title "Markdown Preview Lab $tag" --generate-notes
+          if ($LASTEXITCODE -ne 0) { throw "Could not publish GitHub Release $tag" }
+          Write-Host "Published GitHub Release $tag."
