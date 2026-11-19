@@ -23,6 +23,8 @@ if ($LASTEXITCODE -ne 0) { throw "Dialog layout and focus regression tests faile
 if ($LASTEXITCODE -ne 0) { throw "Editor header layout regression tests failed." }
 & node (Join-Path $Root "tests/audit-regressions.cjs")
 if ($LASTEXITCODE -ne 0) { throw "Audit regression tests failed." }
+& node (Join-Path $Root "tests/mobile-ui-release.cjs")
+if ($LASTEXITCODE -ne 0) { throw "Mobile UI and release workflow regressions failed." }
 Write-Host "[OK] Repository check passed." -ForegroundColor Green
 
 # Header icons and version visibility across source and generated releases.

@@ -55,3 +55,13 @@ The built-in renderer handles nested basic lists, escaped inline Markdown marker
 ## Mobile layout
 
 In compare mode, two preview cells fill the available vertical space without double-halving their scroll regions. Visible tool controls have accessible names and larger touch targets.
+
+## Mobile presentation and compatibility panel (v1.0.5)
+
+At viewport widths up to 720px, the top site header scrolls normally instead of sticking. The hero heading and informational local-processing badge are hidden; at the existing narrow-phone breakpoint, the unused intro space is removed. The Sync scroll label must stay on one horizontal line even when the style selector overflows horizontally. Copy, Undo and Redo controls have centered SVG icons and usable tap targets. Desktop layout and actual scroll synchronization remain unchanged.
+
+The compatibility section's title and the three percentage scores remain visible at all times. The diagnostic list and explanatory note are inside an initially collapsed, keyboard-operable details section. Expanding it shows the current live check results; closing and reopening does not reset the Markdown or scores.
+
+## Release (v1.0.5 onward)
+
+Merging a PR into main triggers the repository release workflow. The job runs the complete standalone build/check before creating an annotated `v<version>` tag and publishing a GitHub Release with both standalone HTML files. It skips versions already released. A manual workflow dispatch from a non-main branch cannot create a tag or release. The user still performs PR merges.

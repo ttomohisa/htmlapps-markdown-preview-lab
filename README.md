@@ -242,3 +242,13 @@ The current Markdown, applied Custom CSS, view settings, and filename are autosa
 Resetting Custom CSS requires confirmation and clears both the applied CSS and unapplied draft; it does not remove your Markdown. Changing languages translates only an untouched first-run sample, not a user-edited document.
 
 Run `node tests/audit-regressions.cjs` for focused source regressions (also included in `scripts/check-repository.ps1`). This does not replace real-browser keyboard, phone, or download tests.
+
+### Mobile presentation (v1.0.5)
+
+On phones, the site header scrolls normally; the redundant hero title and local-processing badge are hidden. The Sync scroll toggle remains horizontally legible even when style selectors scroll sideways. Copy, Undo and Redo have centered SVG icons with larger touch targets.
+
+Compatibility scores remain visible while the detailed findings start collapsed. Use Show details to expand or hide the live scan results.
+
+### Automatic releases after merging
+
+After a PR is manually merged into main, `.github/workflows/release-on-main.yml` verifies the standalone build and tests, then creates the `v<version>` tag from `app.config.json` and publishes a GitHub Release with both HTML variants. Existing releases are not duplicated. Running the workflow manually on a PR branch cannot publish a release.
