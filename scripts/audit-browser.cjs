@@ -46,6 +46,7 @@ async function main() {
           });
           assert.equal(layout.headerPosition,'relative',width+': header scrolls with page');
           assert.equal(layout.heroVisible,false,width+': hero heading is hidden');
+          assert.equal(await page.locator('.editor-pane > .pane-head > .pane-title').isVisible(),false,width+': editor Markdown label is hidden');
           assert.equal(layout.badgeVisible,false,width+': local badge is hidden');
           assert.equal(layout.syncDirection,'horizontal-tb',width+': sync label stays horizontal');
           assert.equal(layout.syncWhiteSpace,'nowrap',width+': sync label does not wrap');
