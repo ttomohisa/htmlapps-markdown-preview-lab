@@ -33,7 +33,7 @@ function storageHarness(source, stored) {
     setTimeout: () => 1,
     clearTimeout() {},
   });
-  const code = "const STORAGE_KEY='test';let state={lang:'ja'};let initializing=true,storageBlocked='',saveError=false;let saveTimer=null;\n"
+  const code = "const STORAGE_KEY='test',defaultMarkdown='',defaultMarkdownEn='';let state={lang:'ja'};let initializing=true,storageBlocked='',saveError=false;let saveTimer=null;\n"
     + section(source, '    function updateStorageNotice()', '    function updateSampleStateUI()');
   vm.runInContext(code, context);
   return {
@@ -79,6 +79,7 @@ for (const variant of variants) {
     assert.equal(h.context.saveState(), false);
     assert.equal(h.raw(), '{invalid JSON');
     assert.equal(h.writes(), 0);
+    h.context.updateStorageNotice();
     assert.equal(h.els.saveNotice.hidden, false);
     h.context.retryStorage(); // Cancel is the default.
     assert.equal(h.writes(), 0);
