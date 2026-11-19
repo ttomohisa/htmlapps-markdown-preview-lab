@@ -662,7 +662,7 @@ $$
     }
 
     function inlineMarkdown(text) {
-      const code = [], markup = [];
+      const code = [], markup = [], escaped = [];
       const restoreMarkup = value => value.replace(/\u0000MARKUP(\d+)\u0000/g, (_, i) => markup[Number(i)] || '');
       // Resolve earlier fragments (such as an image inside a link label) before storing an outer one.
       const protect = html => { markup.push(restoreMarkup(html)); return `\u0000MARKUP${markup.length-1}\u0000`; };
@@ -672,23 +672,42 @@ $$
         s = s.replace(/~~([^~]+)~~/g, '<del>$1</del>');
         return s.replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>').replace(/(^|[^_])_([^_\n]+)_/g, '$1<em>$2</em>');
       };
-      let s = String(text);
+      let s = String(text).replace(/\\([\\\x60*_{}\[\]()#+\-.!|>])/g, (_, ch) => {
+        escaped.push(escapeHtml(ch));
+        return '\u0000ESC'+(escaped.length-1)+'\u0000';
+      });
       s = replaceInlineCode(s, c => { code.push(`<code>${escapeHtml(c.replace(/\n/g,' '))}</code>`); return `\u0000CODE${code.length-1}\u0000`; });
       // Parse raw destinations, escape them once, and keep generated HTML out of text formatting.
-      s = s.replace(/!\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g, (_, alt, url) => protect(`<span class="image-placeholder" title="${escapeHtml(url)}">▧ <span>${formatText(alt || 'image')} · ${escapeHtml(url)}</span></span>`));
-      s = s.replace(/\[([^\]]+)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g, (_, label, url) => protect(`<a href="${escapeHtml(safeUrl(url))}" target="_blank" rel="noopener noreferrer">${formatText(label)}</a>`));
+      s = s.replace(/!\[([^\]]*)\]\(((?:[^()\s]|\([^()]*\))+)(?:\s+"[^"]*")?\)/g, (_, alt, url) => protect(`<span class="image-placeholder" title="${escapeHtml(url)}">▧ <span>${formatText(alt || 'image')} · ${escapeHtml(url)}</span></span>`));
+      s = s.replace(/\[([^\]]+)\]\(((?:[^()\s]|\([^()]*\))+)(?:\s+"[^"]*")?\)/g, (_, label, url) => protect(`<a href="${escapeHtml(safeUrl(url))}" target="_blank" rel="noopener noreferrer">${formatText(label)}</a>`));
       s = s.replace(/<(https?:\/\/[^&<>\s]+)>/g, (_, url) => protect(`<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(url)}</a>`));
       s = formatText(s);
       s = restoreMarkup(s);
       s = s.replace(/\u0000CODE(\d+)\u0000/g, (_, i) => code[Number(i)] || '');
-      return s;
+      return s.replace(/\u0000ESC(\d+)\u0000/g, (_, i) => escaped[Number(i)] || '');
     }
 
     function splitTableRow(line) {
-      let s=line.trim(); if (s.startsWith('|')) s=s.slice(1); if (s.endsWith('|')) s=s.slice(0,-1);
-      return s.split(/(?<!\\)\|/).map(x => x.trim().replace(/\\\|/g,'|'));
+      let value=line.trim();
+      if(value.startsWith('|'))value=value.slice(1);
+      if(value.endsWith('|'))value=value.slice(0,-1);
+      const cells=[]; let cell='', ticks=0;
+      for(let i=0;i<value.length;i++) {
+        const ch=value[i];
+        if(ch==='\\'&&value[i+1]==='|'){cell+='\\|';i++;continue;}
+        if(ch===String.fromCharCode(96)) {
+          let end=i+1;
+          while(end<value.length&&value[end]===String.fromCharCode(96))end++;
+          const size=end-i;
+          if(!ticks)ticks=size;else if(ticks===size)ticks=0;
+          cell+=value.slice(i,end);i=end-1;continue;
+        }
+        if(ch==='|'&&!ticks){cells.push(cell.trim());cell='';}
+        else cell+=ch;
+      }
+      cells.push(cell.trim());
+      return cells;
     }
-
     function frontMatterEnd(lines) {
       return /^---\s*$/.test(lines[0]||'') ? lines.findIndex((line,i)=>i>0 && /^---\s*$/.test(line)) : -1;
     }
@@ -741,17 +760,36 @@ $$
           const rows=[]; while(i<lines.length && /\|/.test(lines[i]) && !isBlank(lines[i])) { inspectTable(lines[i],i); rows.push(splitTableRow(lines[i])); i++; }
           out.push('<table><thead><tr>'+head.map((c,k)=>`<th${aligns[k]?` style="text-align:${aligns[k]}"`:''}>${inlineMarkdown(c)}</th>`).join('')+'</tr></thead><tbody>'+rows.map(r=>'<tr>'+head.map((_,k)=>`<td${aligns[k]?` style="text-align:${aligns[k]}"`:''}>${inlineMarkdown(r[k]||'')}</td>`).join('')+'</tr>').join('')+'</tbody></table>'); continue;
         }
-        let listMatch=line.match(/^\s*([-+*]|\d+[.)])\s+(.+)$/);
+        let listMatch=line.match(/^(\s*)([-+*]|\d+[.)])\s+(.+)$/);
         if (listMatch) {
-          const ordered=/^\d/.test(listMatch[1]), items=[];
+          const tokens=[];
           while(i<lines.length) {
-            const m=lines[i].match(/^\s*([-+*]|\d+[.)])\s+(.+)$/); if(!m || /^\d/.test(m[1])!==ordered) break;
+            const m=lines[i].match(/^(\s*)([-+*]|\d+[.)])\s+(.+)$/);
+            if(!m)break;
             inspect(lines[i],i);
-            let body=m[2], task=body.match(/^\[([ xX])\]\s+(.*)$/);
-            if(task) items.push(`<li class="task"><input type="checkbox" disabled ${task[1].toLowerCase()==='x'?'checked':''}>${inlineMarkdown(task[2])}</li>`); else items.push(`<li>${inlineMarkdown(body)}</li>`);
+            tokens.push({indent:m[1].length,ordered:/^\d/.test(m[2]),body:m[3]});
             i++;
           }
-          out.push(`<${ordered?'ol':'ul'}>${items.join('')}</${ordered?'ol':'ul'}>`); continue;
+          let index=0;
+          const listAt=(indent,ordered)=>{
+            const tag=ordered?'ol':'ul', children=[];
+            while(index<tokens.length) {
+              const tok=tokens[index];
+              if(tok.indent<indent||(tok.indent===indent&&tok.ordered!==ordered))break;
+              if(tok.indent>indent) {
+                const nested=listAt(tok.indent,tok.ordered);
+                if(children.length)children[children.length-1]=children[children.length-1].replace(/<\/li>$/,nested+'</li>');
+                else children.push('<li>'+nested+'</li>');
+                continue;
+              }
+              const task=tok.body.match(/^\[([ xX])\]\s+(.*)$/);
+              children.push(task?'<li class="task"><input type="checkbox" disabled '+(task[1].toLowerCase()==='x'?'checked':'')+'>'+inlineMarkdown(task[2])+'</li>':'<li>'+inlineMarkdown(tok.body)+'</li>');
+              index++;
+            }
+            return '<'+tag+'>'+children.join('')+'</'+tag+'>';
+          };
+          while(index<tokens.length)out.push(listAt(tokens[index].indent,tokens[index].ordered));
+          continue;
         }
         if (/^\s*</.test(line)) { inspect(line,i,false); out.push(`<p class="raw-html">${escapeHtml(line)}</p>`); i++; continue; }
         const paragraphStart=i, para=[line]; i++;
