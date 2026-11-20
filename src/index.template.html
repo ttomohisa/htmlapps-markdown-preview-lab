@@ -138,14 +138,21 @@
     .outline-item .outline-text { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     .document-empty { margin:0; padding:16px 8px; color:var(--muted); font-size:12px; }
     .document-find { display:grid; gap:8px; padding-top:8px; }
-    .document-find-row { display:flex; align-items:center; flex-wrap:wrap; gap:8px; min-width:0; }
-    .document-field { flex:1 1 140px; width:100%; min-width:0; min-height:40px; padding:8px; border:1px solid var(--line); border-radius:8px; background:var(--surface); }
+    .document-find-row { display:flex; align-items:center; gap:8px; min-width:0; }
+    .document-search-row, .document-replace-row { display:grid; align-items:center; grid-template-columns:minmax(0,1fr) auto auto; gap:8px; }
+    .document-field { width:100%; min-width:0; min-height:40px; padding:8px; border:1px solid var(--line); border-radius:8px; background:var(--surface); }
     .document-field:focus-visible { border-color:var(--accent); }
-    .document-find-row .button { min-height:40px; }
-    .document-find-count { color:var(--muted); font-size:12px; white-space:nowrap; }
-    .document-case { display:inline-flex; align-items:center; gap:8px; color:var(--muted); font-size:12px; cursor:pointer; }
+    .document-find-count { min-width:32px; color:var(--muted); font-size:12px; text-align:center; font-variant-numeric:tabular-nums; white-space:nowrap; }
+    .document-find-nav { display:flex; align-items:center; gap:0; }
+    .document-step { display:grid; place-items:center; flex:0 0 40px; width:40px; height:40px; padding:0; border:0; border-radius:8px; background:transparent; color:var(--muted); cursor:pointer; }
+    .document-step svg { display:block; width:18px; height:18px; }
+    .document-action { min-height:40px; padding:0 8px; border:0; border-radius:8px; background:transparent; color:var(--muted); font-size:12px; font-weight:700; white-space:nowrap; cursor:pointer; }
+    .document-action-all { color:var(--accent); }
+    .document-step:not(:disabled):hover, .document-action:not(:disabled):hover { background:var(--surface-muted); color:var(--text); }
+    .document-action-all:not(:disabled):hover { color:var(--accent); background:var(--accent-soft); }
+    .document-step:disabled, .document-action:disabled { opacity:.38; cursor:default; }
+    .document-case { display:inline-flex; align-items:center; gap:8px; min-height:40px; color:var(--muted); font-size:12px; cursor:pointer; }
     .document-case input { accent-color:var(--accent); }
-    .document-find-nav { display:flex; align-items:center; gap:8px; margin-left:auto; }
     .preview-scroll { height:calc(100% - 42px); overflow:auto; overscroll-behavior:contain; background:#fff; }
     .preview-wrap { min-height:100%; padding:32px 32px 64px; }
     .compare-pane { display:none; grid-template-columns:1fr 1fr; min-width:0; min-height:0; }
@@ -365,8 +372,7 @@
       .editor-pane > .pane-head { flex-wrap:nowrap; gap:8px; padding:8px; }
       .document-panel { padding:8px; }
       .document-find-row { flex-wrap:nowrap; }
-      .document-find-row .button { padding:8px; font-size:12px; }
-      .document-field { flex-basis:96px; }
+      .document-search-row, .document-replace-row { grid-template-columns:minmax(0,1fr) auto auto; }
       .outline-list { max-height:160px; }
       .editor-pane > .pane-head > .format-bar { flex:1 1 auto; min-width:0; max-width:none; overflow-x:auto; scrollbar-width:none; }
       .editor-pane > .pane-head > .format-bar::-webkit-scrollbar { display:none; }
@@ -523,21 +529,21 @@
               <div class="outline-list" id="outlineList"></div>
             </div>
             <div id="findPanel" class="document-tab-panel document-find" role="tabpanel" aria-labelledby="findTab" hidden>
-              <div class="document-find-row">
+              <div class="document-find-row document-search-row">
                 <input class="document-field" id="findInput" type="search" autocomplete="off" spellcheck="false" data-i18n-aria="findLabel" data-i18n-placeholder="findLabel" data-i18n-title="findLabel" aria-label="検索する文字" placeholder="検索する文字">
                 <span class="document-find-count" id="findCount" role="status" aria-live="polite">0 / 0</span>
+                <div class="document-find-nav">
+                  <button class="document-step" id="findPrevious" type="button" data-i18n-aria="findPrevious" data-i18n-title="findPrevious" aria-label="前へ" title="前へ" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 14 6-6 6 6"/></svg></button>
+                  <button class="document-step" id="findNext" type="button" data-i18n-aria="findNext" data-i18n-title="findNext" aria-label="次へ" title="次へ" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 10 6 6 6-6"/></svg></button>
+                </div>
               </div>
-              <div class="document-find-row">
+              <div class="document-find-row document-replace-row">
                 <input class="document-field" id="replaceInput" type="text" autocomplete="off" spellcheck="false" data-i18n-aria="replaceLabel" data-i18n-placeholder="replaceLabel" aria-label="置換する文字" placeholder="置換する文字">
-                <button class="button" id="replaceOneButton" type="button" data-i18n="replaceOne" disabled>置換</button>
-                <button class="button" id="replaceAllButton" type="button" data-i18n="replaceAll" disabled>すべて置換</button>
+                <button class="document-action" id="replaceOneButton" type="button" data-i18n="replaceOne" disabled>置換</button>
+                <button class="document-action document-action-all" id="replaceAllButton" type="button" data-i18n="replaceAll" disabled>すべて置換</button>
               </div>
               <div class="document-find-row">
                 <label class="document-case"><input type="checkbox" id="findMatchCase"><span data-i18n="matchCase">大文字・小文字を区別</span></label>
-                <div class="document-find-nav">
-                  <button class="button" id="findPrevious" type="button" data-i18n="findPrevious" disabled>前へ</button>
-                  <button class="button" id="findNext" type="button" data-i18n="findNext" disabled>次へ</button>
-                </div>
               </div>
             </div>
           </div>
