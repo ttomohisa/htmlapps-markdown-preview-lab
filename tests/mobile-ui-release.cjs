@@ -25,7 +25,9 @@ for(const file of versions) {
     assert.match(html,/@media \(max-width: 374px\)\s*\{\s*\.workspace-toolbar\s*\{[^}]*display:grid;/);
     assert.match(html,/<div class="button-row file-actions">/);
     assert.match(html,/<div class="button-row edit-actions">\s*<button[^>]*id="copyButton"/);
-    assert.match(mobile,/\.editor-pane > \.pane-head > \.pane-title\s*\{\s*display:none;/);
+    assert.match(mobile,/\.editor-pane > \.pane-head > \.pane-title, \.editor-pane #documentToolsButton\s*\{\s*display:none;/);
+    assert.match(mobile,/\.mobile-view-switch \.mobile-document-trigger\s*\{\s*display:grid;\s*flex:0 0 40px;/);
+    assert.match(html,/id="mobileDocumentToolsButton"[^>]*aria-expanded="false"/);
     assert.match(mobile,/\.editor-pane > \.pane-head\s*\{\s*flex-wrap:nowrap;/);
     assert.match(mobile,/\.editor-pane > \.pane-head > \.format-bar\s*\{\s*flex:1 1 auto;\s*min-width:0;\s*max-width:none;/);
     assert.match(html,/\.format-bar\s*\{\s*max-width:none;\s*overflow-x:auto;/);
