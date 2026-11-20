@@ -327,6 +327,10 @@
       .workspace.mobile-compare .compare-cell { min-height:0; }
       .workspace.mobile-compare .compare-cell .preview-scroll { height:calc(100% - 42px); }
       #editor { padding:16px 14px 32px; font-size:13px; }
+      .editor-pane > .pane-head { flex-wrap:nowrap; gap:6px; padding:6px 8px; }
+      .editor-pane > .pane-head > .format-bar { flex:1 1 auto; min-width:0; max-width:none; overflow-x:auto; scrollbar-width:none; }
+      .editor-pane > .pane-head > .format-bar::-webkit-scrollbar { display:none; }
+      .editor-pane > .pane-head > #editorStats { flex:0 0 auto; margin-left:0; }
       .editor-pane > .pane-head > .pane-title { display:none; }
       .sample-label { display:none; }
       .sample-new-button { padding:4px 5px; }
@@ -349,7 +353,7 @@
       .local-badge .short { display:inline; }
       .main { padding-left:8px; padding-right:8px; }
       .button .label-mobile-hide { display:none; }
-      .format-bar { max-width:172px; overflow:auto; scrollbar-width:none; }
+      .format-bar { max-width:none; overflow-x:auto; scrollbar-width:none; }
       .format-bar::-webkit-scrollbar { display:none; }
       .control-label { display:none; }
       .style-chip { padding:5px 8px; }
