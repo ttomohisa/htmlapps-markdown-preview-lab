@@ -513,9 +513,9 @@
             <span class="pane-meta" id="editorStats">0 chars · 0 lines</span>
           </div>
           <div class="document-panel" id="documentPanel" hidden>
-            <div class="document-tabs" role="tablist" aria-label="Document tools">
+            <div class="document-tabs" role="tablist" data-i18n-aria="documentTools" aria-label="文書ツール">
               <button class="document-tab" id="outlineTab" type="button" role="tab" aria-selected="true" aria-controls="outlinePanel" data-i18n="outlineTab">見出し一覧</button>
-              <button class="document-tab" id="findTab" type="button" role="tab" aria-selected="false" aria-controls="findPanel" data-i18n="findTab">検索・置換</button>
+              <button class="document-tab" id="findTab" type="button" role="tab" aria-selected="false" tabindex="-1" aria-controls="findPanel" data-i18n="findTab">検索・置換</button>
               <button class="document-close" id="documentClose" type="button" data-i18n-aria="closePanel" aria-label="閉じる"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
             </div>
             <div id="outlinePanel" class="document-tab-panel" role="tabpanel" aria-labelledby="outlineTab">
@@ -1179,6 +1179,8 @@ $$
       const outline=name==='outline';
       els.outlineTab.setAttribute('aria-selected',String(outline));
       els.findTab.setAttribute('aria-selected',String(!outline));
+      els.outlineTab.tabIndex=outline?0:-1;
+      els.findTab.tabIndex=outline?-1:0;
       els.outlinePanel.hidden=!outline;
       els.findPanel.hidden=outline;
       if(focus) {
@@ -1419,6 +1421,14 @@ $$
     });
     els.outlineTab.addEventListener('click',()=>setDocumentTab('outline',true));
     els.findTab.addEventListener('click',()=>setDocumentTab('find',true));
+    const tabKeys=event=>{
+      if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
+      event.preventDefault();
+      setDocumentTab(event.key==='Home'?'outline':event.key==='End'?'find':
+        event.currentTarget===els.outlineTab?'find':'outline',true);
+    };
+    els.outlineTab.addEventListener('keydown',tabKeys);
+    els.findTab.addEventListener('keydown',tabKeys);
     document.getElementById('documentClose').addEventListener('click',()=>closeDocumentPanel());
     els.outlineList.addEventListener('click',event=>{
       const button=event.target.closest('[data-outline-line]');
