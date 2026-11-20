@@ -34,7 +34,7 @@ async function main() {
             return {
               headerPosition:getComputedStyle($('.app-header')).position,
               introVisible:getComputedStyle($('.page-intro')).display!=='none',
-              badgeVisible:getComputedStyle($('.local-badge')).display!=='none',
+              badgeVisible:rect($('.local-badge')).height>0,
               syncDirection:getComputedStyle($('.sync-toggle span')).writingMode,
               syncWhiteSpace:getComputedStyle($('.sync-toggle span')).whiteSpace,
               syncHeight:rect($('.workspace-controls')).height,
