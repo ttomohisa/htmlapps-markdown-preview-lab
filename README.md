@@ -48,7 +48,7 @@ Just [open the demo](https://ttomohisa.github.io/htmlapps-markdown-preview-lab/)
 
 ### Use the downloaded HTML
 
-1. Download [`index.html`](https://github.com/ttomohisa/htmlapps-markdown-preview-lab/blob/main/index.html) from this repository.
+1. Open [`dist/index.html`](https://github.com/ttomohisa/htmlapps-markdown-preview-lab/blob/main/dist/index.html) in this repository and choose **Download raw file**.
 2. Open it in a current Chromium-based browser, Firefox, or Safari.
 3. Start writing. Drafts are autosaved in that browser's LocalStorage.
 
@@ -111,7 +111,7 @@ Use the expand icon in the Markdown pane header to open a large focused editing 
 
 Formatting shortcuts work while either the main or expanded editor is focused. They insert the same markup as the toolbar helpers; they do not toggle existing markup. Alt/Shift combinations and text composition are left alone, and holding a formatting shortcut does not repeatedly wrap the selection. Undo restores the text immediately before any toolbar formatting action or formatting shortcut, including text typed just before it.
 
-## Supported Markdown in v1.0.4
+## Supported Markdown
 
 The built-in renderer covers commonly used Markdown syntax including:
 

@@ -2,6 +2,8 @@
 
 ## 1.1.0 - Unreleased
 
+- Correct the Japanese and English README download links to the actual `dist/index.html` release file, and keep supported Markdown headings independent of old release numbers.
+
 - Refine Find & Replace UI: flat text actions for Replace / Replace all and borderless chevrons beside the match count for Previous / Next, with unchanged keyboard and Undo behavior.
 
 - Add a compact heading outline and literal Find & Replace panel with keyboard support, case matching, source navigation, wraparound, safe all-replace, and undoable edits.

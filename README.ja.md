@@ -49,7 +49,7 @@ GitHub Pagesから最初のHTMLを読み込んだ後、Markdownの編集・プ�
 
 ### HTMLをダウンロードして使う
 
-1. リポジトリの [`index.html`](https://github.com/ttomohisa/htmlapps-markdown-preview-lab/blob/main/index.html) をダウンロードします。
+1. リポジトリの [`dist/index.html`](https://github.com/ttomohisa/htmlapps-markdown-preview-lab/blob/main/dist/index.html) を開き、**Download raw file** から保存します。
 2. 最新のChromiumベースのブラウザー、Firefox、Safariなどで開きます。
 3. そのままMarkdownを書き始めます。下書きはブラウザーのLocalStorageへ自動保存されます。
 
@@ -112,7 +112,7 @@ Markdown欄の見出しにある拡大アイコンを押すと、長文を編集
 
 書式ショートカットは、通常・拡大どちらの編集欄でもフォーカス中に使えます。ツールバーと同じ記法を挿入し、既存記法の解除は行いません。Alt/Shiftとの組み合わせや文字変換中の入力は処理せず、押し続けても記法を重ねて挿入しません。ツールバーのすべての書式操作と書式ショートカットは、直前に入力した文章も含めて、Undoで書式適用前の内容へ戻せます。
 
-## v1.0.5で対応する主なMarkdown
+## 対応する主なMarkdown
 
 組み込みレンダラーでは、よく使うMarkdownを中心に以下へ対応しています。
 
@@ -256,7 +256,7 @@ Custom CSSのリセットは確認画面を表示します。適用済みCSSと�
 
 ### マージ後のリリース
 
-PRがmainへマージされると、`.github/workflows/release-on-main.yml` がテストと単一HTMLビルドを確認したうえで、`app.config.json` のバージョン（例: `1.0.5`）に対応するタグ（`v1.0.5`）とGitHub Releaseを作成します。すでに公開済みのバージョンは重複作成しません。GitHub Releaseには通常版とself-extract版のHTMLを添付します。マージ操作はリポジトリ管理者が行います。
+PRがmainへマージされると、`.github/workflows/release-on-main.yml` がテストと単一HTMLビルドを確認したうえで、`app.config.json` のバージョン（今回は `1.1.0`）に対応するタグ（`v1.1.0`）とGitHub Releaseを作成します。すでに公開済みのバージョンは重複作成しません。GitHub Releaseには通常版とself-extract版のHTMLを添付します。マージ操作はリポジトリ管理者が行います。
 
 ### 余白とカードの見直し（v1.0.5）
 

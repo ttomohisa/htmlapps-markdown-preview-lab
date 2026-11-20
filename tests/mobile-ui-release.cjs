@@ -80,6 +80,21 @@ for(const file of versions) {
   });
 }
 
+
+test('README download links resolve to tracked standalone artifacts',()=>{
+  const ja=fs.readFileSync(path.join(root,'README.ja.md'),'utf8');
+  const en=fs.readFileSync(path.join(root,'README.md'),'utf8');
+  const url='https://github.com/ttomohisa/htmlapps-markdown-preview-lab/blob/main/dist/index.html';
+  for(const [name,doc] of [['ja',ja],['en',en]]) {
+    assert.ok(doc.includes(url),name+': README points to actual standalone output');
+    assert.ok(doc.includes('Download raw file'),name+': README explains how to save raw HTML');
+    assert.doesNotMatch(doc,/blob\/main\/index\.html/,name+': must not link to nonexistent root index.html');
+  }
+  for(const file of ['dist/index.html','dist/index.self-extract.html']) {
+    assert.ok(fs.existsSync(path.join(root,file)),file+': output exists');
+  }
+});
+
 test('release workflow publishes a single validated SemVer after a main push',()=>{
   const yaml=fs.readFileSync(path.join(root,'.github/workflows/release-on-main.yml'),'utf8');
   assert.match(yaml,/push:\s*\n\s*branches: \[main\]/);
