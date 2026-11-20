@@ -22,23 +22,23 @@ for(const file of versions) {
     assert.match(html,/\.format-bar\s*\{\s*max-width:none;\s*overflow-x:auto;/);
   });
   test(file+': application UI uses 8px spacing increments outside platform previews',()=>{
-    const css=html.match(/<style>([\\s\\S]*?)<\\/style>/)?.[1]||'';
+    const css=html.match(/<style>([\s\S]*?)<\/style>/)?.[1]||'';
     const start=css.indexOf('/* Rendered Markdown: shared */');
     const end=css.indexOf('.compat-section {',start);
     assert.ok(start>=0&&end>start);
     // Keep platform-inspired Markdown typography separate from app-shell spacing.
     const uiCss=css.slice(0,start)+css.slice(end);
     const invalid=[];
-    const properties=/\\b(?:padding(?:-(?:left|right|top|bottom))?|margin(?:-(?:left|right|top|bottom))?|gap|row-gap|column-gap)\\s*:\\s*([^;]+);/g;
+    const properties=/\b(?:padding(?:-(?:left|right|top|bottom))?|margin(?:-(?:left|right|top|bottom))?|gap|row-gap|column-gap)\s*:\s*([^;]+);/g;
     for(const declaration of uiCss.matchAll(properties)){
-      for(const match of declaration[1].matchAll(/(-?\\d+(?:\\.\\d+)?)px/g)){
+      for(const match of declaration[1].matchAll(/(-?\d+(?:\.\d+)?)px/g)){
         if(Number(match[1])%8!==0)invalid.push(declaration[0]);
       }
     }
     assert.deepEqual(invalid,[],'UI spacing must follow the 8px grid');
   });
   test(file+': framed sections have quiet nested surfaces',()=>{
-    const rules=html.match(/<style>([\\s\\S]*?)<\\/style>/)?.[1]||'';
+    const rules=html.match(/<style>([\s\S]*?)<\/style>/)?.[1]||'';
     const uiRule=selector=>rules.split('    '+selector+' {')[1]?.split('}')[0]||'';
     assert.match(uiRule('.compat-section'),/box-shadow:none/);
     assert.match(uiRule('.score-card'),/border:0/);
