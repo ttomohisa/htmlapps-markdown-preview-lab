@@ -754,6 +754,7 @@ $$
       issues: document.getElementById('issues'), editorStats: document.getElementById('editorStats'), saveStatus: document.getElementById('saveStatus'), toast: document.getElementById('toast'),
       sampleState: document.getElementById('sampleState'), newDocumentButton: document.getElementById('newDocumentButton'), filenameInput: document.getElementById('filenameInput'),
       expandEditorButton: document.getElementById('expandEditorButton'), expandedEditorDialog: document.getElementById('expandedEditorDialog'), expandedEditor: document.getElementById('expandedEditor'),
+      documentToolsButton:document.getElementById('documentToolsButton'), documentPanel:document.getElementById('documentPanel'), outlineTab:document.getElementById('outlineTab'), findTab:document.getElementById('findTab'), outlinePanel:document.getElementById('outlinePanel'), findPanel:document.getElementById('findPanel'), outlineList:document.getElementById('outlineList'), outlineEmpty:document.getElementById('outlineEmpty'), findInput:document.getElementById('findInput'), replaceInput:document.getElementById('replaceInput'), findMatchCase:document.getElementById('findMatchCase'), findCount:document.getElementById('findCount'), findPrevious:document.getElementById('findPrevious'), findNext:document.getElementById('findNext'), replaceOneButton:document.getElementById('replaceOneButton'), replaceAllButton:document.getElementById('replaceAllButton'),
       helpDialog: document.getElementById('helpDialog'), customCssDialog: document.getElementById('customCssDialog'), customCssEditor: document.getElementById('customCssEditor'), customCssStyle: document.getElementById('customCssStyle'), cssResetDialog: document.getElementById('cssResetDialog'), cancelResetCss: document.getElementById('cancelResetCss')
     };
 
@@ -761,6 +762,7 @@ $$
     let history = [], historyIndex = -1, historyTimer = null, saveTimer = null, toastTimer = null, syncing = false;
     let initializing = true, storageBlocked = '', saveError = false;
     let editRevision = 0, fileRequestId = 0, filenameRevision = 0, customCssDraft = "";
+    let findMatches=[], findCursor=-1, findOverflow=false;
 
     function t(key) { return (I18N[state.lang] && I18N[state.lang][key]) || I18N.ja[key] || key; }
     function showToast(message) { clearTimeout(toastTimer); els.toast.textContent = message; els.toast.classList.add('show'); toastTimer = setTimeout(() => els.toast.classList.remove('show'), 1800); }
@@ -852,6 +854,39 @@ $$
     function frontMatterEnd(lines) {
       return /^---\s*$/.test(lines[0]||'') ? lines.findIndex((line,i)=>i>0 && /^---\s*$/.test(line)) : -1;
     }
+    function extractHeadings(markdown) {
+      const lines=String(markdown).split('\n');
+      const normalized=lines.map(line=>line.replace(/\r$/,''));
+      const frontEnd=frontMatterEnd(normalized);
+      const headings=[];
+      let fence=null, inMath=false, inMessage=false, offset=0;
+      for(let i=0;i<lines.length;i++) {
+        const line=normalized[i];
+        const nextOffset=offset+lines[i].length+1;
+        if(i<=frontEnd) { offset=nextOffset; continue; }
+        if(fence) {
+          if(codeFenceEnd(line,fence))fence=null;
+          offset=nextOffset; continue;
+        }
+        const opening=codeFenceStart(line);
+        if(opening) { fence=opening; offset=nextOffset; continue; }
+        if(/^\s*\$\$\s*$/.test(line)) { inMath=!inMath; offset=nextOffset; continue; }
+        if(inMath) { offset=nextOffset; continue; }
+        if(/^\s*:::message(?:\s+alert)?\s*$/.test(line)) { inMessage=true; offset=nextOffset; continue; }
+        if(inMessage) {
+          if(/^\s*:::\s*$/.test(line))inMessage=false;
+          offset=nextOffset; continue;
+        }
+        const match=line.match(/^(#{1,6})[ \t]+(.+?)\s*$/);
+        if(match && headings.length<500) {
+          const label=match[2].replace(/[ \t]+#+[ \t]*$/,'').trim();
+          if(label)headings.push({level:match[1].length,text:label,line:i+1,start:offset});
+        }
+        offset=nextOffset;
+      }
+      return headings;
+    }
+
     function continuesParagraph(lines, i) {
       const line=lines[i];
       return !/^\s*$/.test(line) && !/^(#{1,6})\s+/.test(line) && !codeFenceStart(line) && !/^\s*>/.test(line) && !/^\s*([-+*]|\d+[.)])\s+/.test(line) && !/^\s*\$\$\s*$/.test(line) && !/^\s*:::message/.test(line) && !(i+1<lines.length && /\|/.test(line) && /^\s*\|?\s*:?-{3,}:?/.test(lines[i+1]));
@@ -950,7 +985,7 @@ $$
       els.compareA.innerHTML=htmlA; els.compareB.innerHTML=htmlB; applyTheme(els.compareA,state.compareA); applyTheme(els.compareB,state.compareB);
       const lines=md ? md.split(/\r?\n/).length : 0; els.editorStats.textContent=`${md.length} ${t('chars')} · ${lines} ${t('lines')}`;
       updateSampleStateUI();
-      runCompatibility(md); scheduleSave();
+      runCompatibility(md); updateOutline(md); updateFindMatches(); scheduleSave();
     }
     function capitalize(s) { return s.charAt(0).toUpperCase()+s.slice(1); }
 
