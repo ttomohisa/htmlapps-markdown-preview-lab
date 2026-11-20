@@ -2,6 +2,8 @@
 
 ## 1.0.5 - Unreleased
 
+- Align the app shell's spacing to 8px increments and reduce nested cards, outlines and shadows while preserving preview-theme typography.
+
 - On phones, let the header scroll with the page, hide the redundant privacy badge and hero heading, keep Sync scroll horizontal, and center Copy / Undo / Redo controls with improved curved-arrow icons.
 - Keep compatibility scores visible while collapsing the detailed findings by default; allow expanding and closing without losing the scan results.
 - Publish a versioned tag and GitHub Release automatically on validated main updates after a manual PR merge, with duplicate-release protection.

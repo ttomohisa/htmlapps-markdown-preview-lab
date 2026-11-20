@@ -252,3 +252,7 @@ Compatibility scores remain visible while the detailed findings start collapsed.
 ### Automatic releases after merging
 
 After a PR is manually merged into main, `.github/workflows/release-on-main.yml` verifies the standalone build and tests, then creates the `v<version>` tag from `app.config.json` and publishes a GitHub Release with both HTML variants. Existing releases are not duplicated. Running the workflow manually on a PR branch cannot publish a release.
+
+### Spacing and card styling (v1.0.5)
+
+Application-shell padding, margins, and gaps use an 8px spacing scale. The editor and compatibility checker retain their outer section boundaries, while controls and score displays use fewer inner borders and shadows. Spacing within the GitHub-, Qiita-, and Zenn-inspired Markdown previews is unchanged so their visual character remains distinct.

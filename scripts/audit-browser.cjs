@@ -39,6 +39,9 @@ async function main() {
               syncWhiteSpace:getComputedStyle($('.sync-toggle span')).whiteSpace,
               syncHeight:rect($('.workspace-controls')).height,
               scoreVisible:rect($('#scoreGithub')).width>0,
+              innerScoreBorder:getComputedStyle($('.score-card')).borderTopWidth,
+              segmentedBorder:getComputedStyle($('.mobile-view-switch .segmented')).borderTopWidth,
+              compatibilityShadow:getComputedStyle($('.compat-section')).boxShadow,
               collapsed:!$('#compatDetails').open,
               centered:['copyButton','undoButton','redoButton'].every(centered),
               overflow:document.documentElement.scrollWidth>innerWidth
@@ -53,6 +56,9 @@ async function main() {
           assert.ok(layout.syncHeight<72,width+': controls height '+layout.syncHeight);
           assert.equal(layout.centered,true,width+': toolbar icons centered');
           assert.equal(layout.scoreVisible,true,width+': scores visible');
+          assert.equal(layout.innerScoreBorder,'0px',width+': no nested score-card border');
+          assert.equal(layout.segmentedBorder,'0px',width+': no nested segmented-control border');
+          assert.equal(layout.compatibilityShadow,'none',width+': no extra compatibility card shadow');
           assert.equal(layout.collapsed,true,width+': findings initially closed');
           assert.equal(layout.overflow,false,width+': no page horizontal overflow');
         }

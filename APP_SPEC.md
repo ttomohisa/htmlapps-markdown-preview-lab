@@ -65,3 +65,7 @@ The compatibility section's title and the three percentage scores remain visible
 ## Release (v1.0.5 onward)
 
 Merging a PR into main triggers the repository release workflow. The job runs the complete standalone build/check before creating an annotated `v<version>` tag and publishing a GitHub Release with both standalone HTML files. It skips versions already released. A manual workflow dispatch from a non-main branch cannot create a tag or release. The user still performs PR merges.
+
+## Layout spacing and restrained surfaces (v1.0.5)
+
+Use 8px increments for the application chrome's fixed padding, margin, and gaps, including desktop and mobile controls, dialogs, and compatibility area. Preserve the theme-specific rendered Markdown spacing, which deliberately approximates distinct publishing platforms. Keep only a restrained outer boundary for the main workspace and compatibility section. Score summaries share a muted strip with lightweight dividers instead of three outlined cards; segmented navigation and toolbar controls avoid redundant nested outlines. The percentages, actions, focus states, keyboard access, and editing behavior must stay available.
