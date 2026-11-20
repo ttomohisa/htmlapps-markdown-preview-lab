@@ -236,6 +236,7 @@ async function main() {
         assert.equal(await page.locator('#findPanel').isVisible(),true,'desktop document tabs support arrow keys');
         await page.locator('#documentClose').click();
         await page.locator('#expandEditorButton').click();
+        await page.waitForFunction(()=>document.activeElement===document.querySelector('#expandedEditor'));
         await page.locator('#expandedEditor').fill('# Expanded\nkept across search');
         await page.locator('#expandedEditor').press('Control+f');
         assert.equal(await page.locator('#expandedEditorDialog').isVisible(),false,'Ctrl+F closes expanded editor safely');
