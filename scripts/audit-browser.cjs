@@ -74,6 +74,21 @@ async function main() {
         await page.locator('#languageButton').click();
         assert.match(await page.locator('#editor').inputValue(),/できること/,'untouched sample is Japanese');
         await page.locator('#editor').fill('My personal draft');
+        // After leaving the sample, the toolbar should use the space freed by the hidden title.
+        const formatLayout=await page.evaluate(()=>{
+          const head=document.querySelector('.editor-pane > .pane-head').getBoundingClientRect();
+          const bar=document.querySelector('.editor-pane .format-bar').getBoundingClientRect();
+          const expand=document.querySelector('#expandEditorButton').getBoundingClientRect();
+          const stats=document.querySelector('#editorStats').getBoundingClientRect();
+          return {width:bar.width,barRight:bar.right,expandLeft:expand.left,
+            headHeight:head.height,expandTop:expand.top,statsTop:stats.top,
+            overflow:document.documentElement.scrollWidth>innerWidth};
+        });
+        assert.ok(formatLayout.width>190,'format toolbar expands beyond the previous 172px cap: '+JSON.stringify(formatLayout));
+        assert.ok(formatLayout.barRight<=formatLayout.expandLeft+2,'format toolbar stays before Expand button');
+        assert.ok(Math.abs(formatLayout.expandTop-formatLayout.statsTop)<12,'editor controls remain in a single row');
+        assert.ok(formatLayout.headHeight<60,'editor toolbar does not wrap to a second row');
+        assert.equal(formatLayout.overflow,false,'expanded format toolbar does not overflow the page');
         await page.locator('#languageButton').click();
         assert.equal(await page.locator('#editor').inputValue(),'My personal draft','language change leaves user input untouched');
         await page.locator('[data-mobile-view="compare"]').click();

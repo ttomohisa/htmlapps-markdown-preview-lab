@@ -17,6 +17,9 @@ for(const file of versions) {
     assert.match(mobile,/\.sync-toggle span\s*\{\s*white-space:nowrap;\s*writing-mode:horizontal-tb;/);
     assert.match(mobile,/#copyButton, #undoButton, #redoButton\s*\{\s*display:inline-grid;/);
     assert.match(mobile,/\.editor-pane > \.pane-head > \.pane-title\s*\{\s*display:none;/);
+    assert.match(mobile,/\.editor-pane > \.pane-head\s*\{\s*flex-wrap:nowrap;/);
+    assert.match(mobile,/\.editor-pane > \.pane-head > \.format-bar\s*\{\s*flex:1 1 auto;\s*min-width:0;\s*max-width:none;/);
+    assert.match(html,/\.format-bar\s*\{\s*max-width:none;\s*overflow-x:auto;/);
   });
   test(file+': compatibility scores remain outside the initially closed details',()=>{
     const title=html.indexOf('<section class="compat-section"');
