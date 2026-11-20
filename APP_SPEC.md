@@ -76,7 +76,7 @@ At smartphone widths of 375–720px, arrange Open, filename, Save, Copy, Undo an
 
 ## Document outline and find / replace (v1.1.0)
 
-- A single icon in the editor formatting header toggles an optional, inline document panel. It has Outline and Find & Replace tabs; the editor panel uses a separate flexible grid row. The document and its panel do not become separate nested cards.
+- The Document tools icon in the desktop editor formatting header, or beside the Edit / Preview / Compare switch on phones, toggles an optional, inline document panel. It has Outline and Find & Replace tabs; the editor panel uses a separate flexible grid row. The document and its panel do not become separate nested cards.
 - Outline lists up to 500 non-empty ATX Markdown headings (`#` through `######`) with levels and clickable source-line navigation. Ignore fenced code blocks, leading front matter, math blocks, Zenn message blocks, and escaped hash markers. Do not claim Setext headings are supported when the preview renderer does not parse them.
 - Find uses literal text (no regular expressions), supports case-sensitive matching, next/previous wraparound, an accessible result count, and a 5,000-match cap. If the result count exceeds the cap, disable Replace all rather than silently changing only part of the document.
 - Replace current and Replace all are undoable, capture pending edits before modifying source, and update preview and compatibility checks. Empty replacement deletes matches. Literal replacement text including `$&` is inserted unchanged.

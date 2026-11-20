@@ -263,7 +263,7 @@ At widths from 375px through 720px, Open, filename, Save, Copy, Undo, and Redo f
 
 ### Document outline and Find & Replace (v1.1.0)
 
-Use the Document tools icon in the editor header to open a compact panel with Outline and Find & Replace tabs, including on phones. Closing the panel returns the space to the editor.
+On desktop, use the Document tools icon in the editor header. On phones, use the matching icon beside the Edit / Preview / Compare tabs. Both open a compact panel with Outline and Find & Replace tabs. Closing the panel returns the space to the editor.
 
 - **Outline** lists up to 500 ATX headings (`#`–`######`) and jumps to the selected source line. Headings inside fenced code, opening Front Matter, math or Zenn message blocks are excluded. Setext headings are not included because the built-in renderer does not support them.
 - **Find & Replace** searches literal text, not regex, with optional case matching and wraparound Previous/Next navigation. You can replace one or all matches. Replace all is disabled if the document has more than 5,000 matches.

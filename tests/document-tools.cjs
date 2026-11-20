@@ -93,6 +93,9 @@ for(const variant of versions) {
   });
   test(variant+': UI is localized, initially hidden and editor data stays local',()=>{
     assert.match(source,/id="documentPanel" hidden/);
+    assert.match(source,/id="mobileDocumentToolsButton"[^>]*aria-expanded="false"/);
+    assert.match(source,/class="document-tabs"[^>]*data-i18n-aria="documentTools"/);
+    assert.match(source,/els\.mobileDocumentToolsButton\.addEventListener/);
     assert.match(source,/id="outlineTab"[^>]*role="tab"/);
     assert.match(source,/id="findCount"[^>]*aria-live="polite"/);
     assert.match(source,/data-i18n-placeholder="findLabel"/);
