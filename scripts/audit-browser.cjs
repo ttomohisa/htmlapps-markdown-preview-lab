@@ -108,7 +108,7 @@ async function main() {
           assert.equal(controls.overflow,false,width+': open search panel never causes horizontal scrolling');
           assert.ok(controls.first.width>=100,width+': search input stays usable');
           assert.ok(controls.buttons.every(x=>x.height>=40 && x.border==='0px' && x.shadow==='none'),width+': four flat 40px actions');
-          assert.ok(controls.buttons.every(x=>x.left>=0&&x.right<=width+1),width+': no actions spill offscreen');
+          assert.ok(controls.buttons.every(x=>x.left>=0&&x.right<=width+1),width+': no actions spill offscreen: '+JSON.stringify(controls));
           assert.ok(controls.buttons.slice(0,2).every(x=>x.top===controls.search.top),width+': navigation sits by the search count');
           assert.ok(controls.buttons.slice(2).every(x=>x.top===controls.replace.top),width+': replace actions sit beside the replace field');
           await page.locator('#documentClose').click();
