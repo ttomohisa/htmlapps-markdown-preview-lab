@@ -521,11 +521,11 @@
             </div>
             <div id="findPanel" class="document-tab-panel document-find" role="tabpanel" aria-labelledby="findTab" hidden>
               <div class="document-find-row">
-                <input class="document-field" id="findInput" type="search" autocomplete="off" spellcheck="false" data-i18n-aria="findLabel" data-i18n-title="findLabel" aria-label="検索する文字" placeholder="検索する文字">
+                <input class="document-field" id="findInput" type="search" autocomplete="off" spellcheck="false" data-i18n-aria="findLabel" data-i18n-placeholder="findLabel" data-i18n-title="findLabel" aria-label="検索する文字" placeholder="検索する文字">
                 <span class="document-find-count" id="findCount" role="status" aria-live="polite">0 / 0</span>
               </div>
               <div class="document-find-row">
-                <input class="document-field" id="replaceInput" type="text" autocomplete="off" spellcheck="false" data-i18n-aria="replaceLabel" aria-label="置換する文字" placeholder="置換する文字">
+                <input class="document-field" id="replaceInput" type="text" autocomplete="off" spellcheck="false" data-i18n-aria="replaceLabel" data-i18n-placeholder="replaceLabel" aria-label="置換する文字" placeholder="置換する文字">
                 <button class="button" id="replaceOneButton" type="button" data-i18n="replaceOne" disabled>置換</button>
                 <button class="button" id="replaceAllButton" type="button" data-i18n="replaceAll" disabled>すべて置換</button>
               </div>
@@ -1130,6 +1130,7 @@ $$
       document.querySelectorAll('[data-i18n]').forEach(el=>{ const key=el.dataset.i18n; if(t(key)) el.textContent=t(key); });
       document.querySelectorAll('[data-i18n-title]').forEach(el=>{ const key=el.dataset.i18nTitle; if(t(key)) el.title=t(key); });
       document.querySelectorAll('[data-i18n-aria]').forEach(el=>el.setAttribute('aria-label',t(el.dataset.i18nAria)));
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>el.placeholder=t(el.dataset.i18nPlaceholder));
       document.getElementById('languageButton').textContent=lang==='ja'?'EN':'JA';
       document.getElementById('languageButton').setAttribute('aria-label',lang==='ja'?'英語に切り替え':'Switch to Japanese');
       render(); updateStorageNotice(); if(!initializing)saveState();
@@ -1403,6 +1404,39 @@ $$
       try { reader.readAsText(file); } catch { if(id===fileRequestId)showToast(t('fileReadFailed')); }
     }
 
+    els.documentToolsButton.addEventListener('click',()=>{
+      if(!els.documentPanel.hidden)closeDocumentPanel();
+      else openDocumentPanel('outline');
+    });
+    els.outlineTab.addEventListener('click',()=>setDocumentTab('outline',true));
+    els.findTab.addEventListener('click',()=>setDocumentTab('find',true));
+    document.getElementById('documentClose').addEventListener('click',()=>closeDocumentPanel());
+    els.outlineList.addEventListener('click',event=>{
+      const button=event.target.closest('[data-outline-line]');
+      if(!button)return;
+      const line=Number(button.dataset.outlineLine);
+      closeDocumentPanel(false);
+      selectLine(line);
+    });
+    els.findInput.addEventListener('input',()=>updateFindMatches(true));
+    els.findMatchCase.addEventListener('change',()=>updateFindMatches(true));
+    els.findInput.addEventListener('keydown',event=>{
+      if(event.key==='Enter') {
+        event.preventDefault();
+        navigateFind(event.shiftKey?-1:1);
+      }
+    });
+    els.findNext.addEventListener('click',()=>navigateFind(1));
+    els.findPrevious.addEventListener('click',()=>navigateFind(-1));
+    els.replaceOneButton.addEventListener('click',replaceCurrentMatch);
+    els.replaceAllButton.addEventListener('click',replaceEveryMatch);
+    document.addEventListener('keydown',event=>{
+      handleDocumentShortcut(event);
+      if(event.key==='Escape' && !els.documentPanel.hidden && !document.querySelector('dialog[open]')) {
+        event.preventDefault();
+        closeDocumentPanel();
+      }
+    });
     els.retrySaveButton.addEventListener('click',retryStorage);
     document.getElementById('openButton').addEventListener('click',()=>els.fileInput.click());
     document.getElementById('downloadButton').addEventListener('click',downloadMarkdown);
