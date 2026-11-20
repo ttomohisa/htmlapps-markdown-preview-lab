@@ -193,6 +193,20 @@ async function main() {
         await page.locator('#retrySaveButton').click();
         assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('markdown-preview-lab:v1')).markdown),'Safety first');
         assert.equal(await page.locator('#saveNotice').isVisible(),false,'warning clears on confirmed save');
+        // Desktop: the tool action belongs to the editor header, not the phone tab bar.
+        await page.setViewportSize({width:1280,height:900});
+        assert.equal(await page.locator('#documentToolsButton').isVisible(),true,'desktop tool icon available');
+        assert.equal(await page.locator('#mobileDocumentToolsButton').isVisible(),false,'phone document icon hidden on desktop');
+        await page.locator('#editor').fill('# Desktop\n## Section');
+        await page.locator('#documentToolsButton').click();
+        assert.equal(await page.locator('.outline-item').count(),2,'desktop heading outline displays');
+        await page.locator('#findTab').click();
+        await page.locator('#findInput').fill('Section');
+        assert.equal(await page.locator('#findCount').textContent(),'0 / 1','desktop find counts matches');
+        await page.locator('#findPrevious').click();
+        assert.equal(await page.locator('#editor').evaluate(el=>el.value.slice(el.selectionStart,el.selectionEnd)),'Section','desktop find goes to a match');
+        await page.locator('#documentClose').click();
+        await page.screenshot({path:path.join(evidence,file+'-desktop-outline.png')});
         assert.deepEqual(errors,[],'runtime errors');
         assert.deepEqual(requests,[],'unexpected external requests');
         console.log('PASS '+file+' language, compare, import Undo, CSS reset, corrupt storage, no requests');
