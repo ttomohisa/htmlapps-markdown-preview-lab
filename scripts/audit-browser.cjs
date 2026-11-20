@@ -206,6 +206,18 @@ async function main() {
         await page.locator('#findPrevious').click();
         assert.equal(await page.locator('#editor').evaluate(el=>el.value.slice(el.selectionStart,el.selectionEnd)),'Section','desktop find goes to a match');
         await page.locator('#documentClose').click();
+        await page.locator('#documentToolsButton').click();
+        await page.locator('#outlineTab').focus();
+        await page.keyboard.press('ArrowRight');
+        assert.equal(await page.locator('#findPanel').isVisible(),true,'desktop document tabs support arrow keys');
+        await page.locator('#documentClose').click();
+        await page.locator('#expandEditorButton').click();
+        await page.locator('#expandedEditor').fill('# Expanded\nkept across search');
+        await page.locator('#expandedEditor').press('Control+f');
+        assert.equal(await page.locator('#expandedEditorDialog').isVisible(),false,'Ctrl+F closes expanded editor safely');
+        assert.equal(await page.locator('#editor').inputValue(),'# Expanded\nkept across search','expanded typing stays intact');
+        assert.equal(await page.locator('#findPanel').isVisible(),true,'Ctrl+F opens find after expanded dialog');
+        await page.locator('#documentClose').click();
         await page.screenshot({path:path.join(evidence,file+'-desktop-outline.png')});
         assert.deepEqual(errors,[],'runtime errors');
         assert.deepEqual(requests,[],'unexpected external requests');
