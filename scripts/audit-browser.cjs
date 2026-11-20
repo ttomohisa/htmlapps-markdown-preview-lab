@@ -33,7 +33,7 @@ async function main() {
             };
             return {
               headerPosition:getComputedStyle($('.app-header')).position,
-              heroVisible:getComputedStyle($('.page-intro h2')).display!=='none',
+              introVisible:getComputedStyle($('.page-intro')).display!=='none',
               badgeVisible:getComputedStyle($('.local-badge')).display!=='none',
               syncDirection:getComputedStyle($('.sync-toggle span')).writingMode,
               syncWhiteSpace:getComputedStyle($('.sync-toggle span')).whiteSpace,
@@ -48,7 +48,7 @@ async function main() {
             };
           });
           assert.equal(layout.headerPosition,'relative',width+': header scrolls with page');
-          assert.equal(layout.heroVisible,false,width+': hero heading is hidden');
+          assert.equal(layout.introVisible,false,width+': empty mobile intro strip is hidden');
           assert.equal(await page.locator('.editor-pane > .pane-head > .pane-title').isVisible(),false,width+': editor Markdown label is hidden');
           assert.equal(layout.badgeVisible,false,width+': local badge is hidden');
           assert.equal(layout.syncDirection,'horizontal-tb',width+': sync label stays horizontal');
