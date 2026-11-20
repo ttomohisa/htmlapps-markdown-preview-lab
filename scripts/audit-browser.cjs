@@ -245,6 +245,28 @@ async function main() {
         assert.equal(await page.locator('#findPanel').isVisible(),true,'Ctrl+F opens find after expanded dialog');
         await page.locator('#documentClose').click();
         await page.screenshot({path:path.join(evidence,file+'-desktop-outline.png')});
+        // Pre-release security and data integrity: render untrusted Markdown safely.
+        const payload='# Potential <img src=x onerror="window.__bk_injected=1">\n'+
+          '[unsafe](javascript:alert(1))\n'+
+          '<script>window.__bk_injected=1</script>\n'+
+          '![remote](https://example.invalid/photo.png)\n'+
+          '<svg onload="window.__bk_injected=1"></svg>\n';
+        await page.locator('#editor').fill(payload);
+        assert.equal(await page.locator('#singlePreview script,#singlePreview img,#singlePreview svg').count(),0,'untrusted HTML and remote image are never rendered as active elements');
+        assert.equal(await page.evaluate(()=>window.__bk_injected),undefined,'unsafe markup did not execute');
+        assert.equal(await page.locator('#singlePreview a').first().getAttribute('href'),'#','javascript: URL is neutralized');
+        assert.equal(await page.locator('#singlePreview .image-placeholder').count(),1,'external image is a local placeholder');
+
+        // Download integrity and unsafe file-name characters.
+        await page.locator('#filenameInput').fill('unsafe:file?name');
+        const downloadPromise=page.waitForEvent('download');
+        await page.locator('#downloadButton').click();
+        const download=await downloadPromise;
+        assert.equal(download.suggestedFilename(),'unsafe-file-name.md','download filename is sanitized');
+        const readBack=await fs.promises.readFile(await download.path(),'utf8');
+        assert.equal(readBack,payload,'downloaded Markdown exactly matches editor source');
+        assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('markdown-preview-lab:v1')).markdown),payload,'local draft is saved without mutation');
+
         assert.deepEqual(errors,[],'runtime errors');
         assert.deepEqual(requests,[],'unexpected external requests');
         console.log('PASS '+file+' language, compare, import Undo, CSS reset, corrupt storage, no requests');
