@@ -1146,7 +1146,7 @@ $$
 
     function literalMatches(markdown,query,caseSensitive,limit=5000) {
       if(!query)return {matches:[],overflow:false};
-      const escaped=query.replace(/[.*+?^$()|[\]{}\\]/g,'\\    function formatSelection(type,e=els.editor) {');
+      const escaped=query.replace(/[.*+?^$()|[\]{}\\]/g,'\\$&');
       const re=new RegExp(escaped,'g'+(caseSensitive?'':'i'));
       const matches=[]; let match;
       while((match=re.exec(markdown))!==null) {
