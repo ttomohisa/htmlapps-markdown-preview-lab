@@ -240,6 +240,7 @@ async function main() {
         await page.locator('#expandedEditor').press('Control+f');
         assert.equal(await page.locator('#expandedEditorDialog').isVisible(),false,'Ctrl+F closes expanded editor safely');
         assert.equal(await page.locator('#editor').inputValue(),'# Expanded\nkept across search','expanded typing stays intact');
+        await page.locator('#findPanel').waitFor({state:'visible'});
         assert.equal(await page.locator('#findPanel').isVisible(),true,'Ctrl+F opens find after expanded dialog');
         await page.locator('#documentClose').click();
         await page.screenshot({path:path.join(evidence,file+'-desktop-outline.png')});
