@@ -48,7 +48,7 @@ Just [open the demo](https://ttomohisa.github.io/htmlapps-markdown-preview-lab/)
 
 ### Use the downloaded HTML
 
-1. Download [`index.html`](https://github.com/ttomohisa/htmlapps-markdown-preview-lab/blob/main/index.html) from this repository.
+1. Open [`dist/index.html`](https://github.com/ttomohisa/htmlapps-markdown-preview-lab/blob/main/dist/index.html) in this repository and choose **Download raw file**.
 2. Open it in a current Chromium-based browser, Firefox, or Safari.
 3. Start writing. Drafts are autosaved in that browser's LocalStorage.
 
@@ -111,7 +111,7 @@ Use the expand icon in the Markdown pane header to open a large focused editing 
 
 Formatting shortcuts work while either the main or expanded editor is focused. They insert the same markup as the toolbar helpers; they do not toggle existing markup. Alt/Shift combinations and text composition are left alone, and holding a formatting shortcut does not repeatedly wrap the selection. Undo restores the text immediately before any toolbar formatting action or formatting shortcut, including text typed just before it.
 
-## Supported Markdown in v1.0.4
+## Supported Markdown
 
 The built-in renderer covers commonly used Markdown syntax including:
 
@@ -232,3 +232,43 @@ Licensed under the [MIT License](LICENSE).
 `scripts/check-repository.ps1` runs `node tests/editor-formatting.cjs` with no additional dependencies. It checks the application functions and editor event wiring in all four HTML variants, including formatting shortcuts, undo/redo boundaries, expanded-editor synchronization, LocalStorage save data, repeat/modifier/composition guards, and existing Tab/save handling. These Node checks do not simulate real-browser focus, layout, IME input, or native keyboard behavior.
 
 Plain Tab inserts two spaces; Shift+Tab moves focus out of the editor. After `scripts/check-repository.ps1`, run `node tests/editor-tab.cjs` using an existing Node.js Playwright runtime. Set `NODE_PATH` to its node_modules directory; `PLAYWRIGHT_BROWSER_CHANNEL` defaults to `msedge`. The test opens both generated files locally and checks editing, undo/redo, autosave, download, and keyboard navigation.
+
+### Save and recovery behavior (v1.0.5)
+
+The current Markdown, applied Custom CSS, view settings, and filename are autosaved to this browser's LocalStorage. **Autosave failures are visible on both phones and desktops.** Invalid or unreadable stored drafts are not silently overwritten. Download your Markdown as a .md file before retrying storage or explicitly confirming an overwrite.
+
+**Download and Copy include only the Markdown source text**, not generated preview HTML, custom CSS, view preferences, or Undo history. Keep a separate copy of CSS you need. You can open Markdown or text files up to 5 MB. If you edit while a file is being read, the older import will not replace your new text. Undo can restore text typed immediately before an import.
+
+Resetting Custom CSS requires confirmation and clears both the applied CSS and unapplied draft; it does not remove your Markdown. Changing languages translates only an untouched first-run sample, not a user-edited document.
+
+Run `node tests/audit-regressions.cjs` for focused source regressions (also included in `scripts/check-repository.ps1`). This does not replace real-browser keyboard, phone, or download tests.
+
+### Mobile presentation (v1.0.5)
+
+On phones, the site header scrolls normally. The explanatory text stays visible with a 16px gap before the workspace, while only the redundant hero title and local-processing badge are hidden. The Sync scroll toggle remains horizontally legible even when style selectors scroll sideways. Copy, Undo and Redo have centered SVG icons with larger touch targets.
+
+Compatibility scores remain visible while the detailed findings start collapsed. Use Show details to expand or hide the live scan results.
+
+### Automatic releases after merging
+
+After a PR is manually merged into main, `.github/workflows/release-on-main.yml` verifies the standalone build and tests, then creates the `v<version>` tag from `app.config.json` and publishes a GitHub Release with both HTML variants. Existing releases are not duplicated. Running the workflow manually on a PR branch cannot publish a release.
+
+### Spacing and card styling (v1.0.5)
+
+Application-shell padding, margins, and gaps use an 8px spacing scale. The editor and compatibility checker retain their outer section boundaries, while controls and score displays use fewer inner borders and shadows. Spacing within the GitHub-, Qiita-, and Zenn-inspired Markdown previews is unchanged so their visual character remains distinct.
+
+### Phone file and editing toolbar (v1.0.5)
+
+At widths from 375px through 720px, Open, filename, Save, Copy, Undo, and Redo fit together in one row with icon-only buttons. At 374px and below, the toolbar uses two intentional groups: Open / filename / Save and Copy / Undo / Redo. Buttons retain at least 40px tap targets and the filename field adapts to the available width without random wrapping.
+
+### Document outline and Find & Replace (v1.1.0)
+
+On desktop, use the Document tools icon in the editor header. On phones, use the matching icon beside the Edit / Preview / Compare tabs. Both open a compact panel with Outline and Find & Replace tabs. Closing the panel returns the space to the editor.
+
+- **Outline** lists up to 500 ATX headings (`#`–`######`) and jumps to the selected source line. Headings inside fenced code, opening Front Matter, math or Zenn message blocks are excluded. Setext headings are not included because the built-in renderer does not support them.
+- **Find & Replace** searches literal text, not regex, with optional case matching and wraparound Previous/Next navigation. You can replace one or all matches. Replace all is disabled if the document has more than 5,000 matches.
+- **Undo** restores replacements; the search and replacement strings themselves are not persisted. Only edited Markdown is autosaved and included in the downloaded .md file.
+
+Ctrl/Command+F opens the app's Find tab instead of the browser's page search. If the expanded editor is open, it closes while retaining the edited text before opening Find. Escape closes the panel.
+
+In Find & Replace, borderless arrow controls sit beside the match counter for Previous / Next. Replace and Replace all are low-contrast text actions without outlined button boxes. Their actions and Undo behavior are unchanged.

@@ -25,8 +25,8 @@
       --danger: #b3261e;
       --warning: #9a6500;
       --focus: #4d8bc7;
-      --shadow-sm: 0 1px 2px rgba(25,28,24,.08), 0 1px 6px rgba(25,28,24,.04);
-      --shadow-md: 0 12px 34px rgba(25,28,24,.10);
+      --shadow-sm: 0 1px 2px rgba(25,28,24,.04);
+      --shadow-md: 0 8px 24px rgba(25,28,24,.12);
       --radius: 12px;
       --header-height: 66px;
     }
@@ -38,85 +38,123 @@
     button { color: inherit; }
     button:focus-visible, textarea:focus-visible, select:focus-visible, summary:focus-visible, .seg-button:focus-visible { outline:3px solid color-mix(in srgb,var(--focus) 55%,transparent); outline-offset:2px; }
     .app-header { position:sticky; z-index:30; top:0; min-height:var(--header-height); border-bottom:1px solid color-mix(in srgb,var(--line) 82%,transparent); background:color-mix(in srgb,var(--bg) 92%,transparent); backdrop-filter:blur(16px) saturate(1.2); }
-    .header-inner { width:min(1500px,100%); min-height:var(--header-height); margin:0 auto; padding:10px clamp(14px,2.8vw,30px); display:flex; align-items:center; gap:14px; }
-    .brand { display:flex; align-items:center; gap:10px; min-width:0; }
+    .header-inner { width:min(1500px,100%); min-height:var(--header-height); margin:0 auto; padding:8px 24px; display:flex; align-items:center; gap:16px; }
+    .brand { display:flex; align-items:center; gap:8px; min-width:0; }
     .brand-mark { display:grid; place-items:center; width:38px; height:38px; flex:0 0 auto; overflow:hidden; border-radius:11px; box-shadow:var(--shadow-sm); }
     .brand-mark svg { width:100%; height:100%; display:block; }
     .brand-copy { min-width:0; }
     .brand-name { display:flex; align-items:center; margin:0; font-size:17px; line-height:1.2; letter-spacing:.01em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .brand-title { min-width:0; overflow:hidden; text-overflow:ellipsis; }
-    .brand-meta { margin:2px 0 0; color:var(--muted); font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .header-actions { margin-left:auto; display:flex; align-items:center; gap:12px; }
-    .language-button { padding:5px 1px; border:0; background:transparent; color:var(--muted); font-size:12px; font-weight:750; letter-spacing:.02em; cursor:pointer; transition:color .16s ease,opacity .16s ease; }
+    .brand-meta { margin:8px 0 0; color:var(--muted); font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .header-actions { margin-left:auto; display:flex; align-items:center; gap:16px; }
+    .language-button { padding:8px 0; border:0; background:transparent; color:var(--muted); font-size:12px; font-weight:750; letter-spacing:.02em; cursor:pointer; transition:color .16s ease,opacity .16s ease; }
     .language-button:hover { color:var(--text); }
-    .header-icon-button { width:auto; height:auto; padding:5px 1px; border:0; background:transparent; color:var(--muted); cursor:pointer; transition:color .16s ease,opacity .16s ease; }
+    .header-icon-button { width:auto; height:auto; padding:8px 0; border:0; background:transparent; color:var(--muted); cursor:pointer; transition:color .16s ease,opacity .16s ease; }
     .header-icon-button:hover { color:var(--text); }
     .header-icon-button svg { width:20px; height:20px; display:block; }
-    .main { width:min(1500px,100%); margin:0 auto; padding:18px clamp(12px,2.3vw,28px) 46px; }
-    .page-intro { display:flex; align-items:flex-start; justify-content:space-between; gap:20px; padding:0 2px 14px; }
+    .main { width:min(1500px,100%); margin:0 auto; padding:24px 24px 48px; }
+    .page-intro { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; padding:0 0 16px; }
     .page-intro h2 { margin:0; font-size:clamp(20px,3vw,25px); line-height:1.3; letter-spacing:-.025em; }
-    .page-intro p { margin:5px 0 0; max-width:900px; color:var(--muted); font-size:13px; }
-    .local-badge { display:inline-flex; align-items:center; gap:7px; flex:0 0 auto; margin-top:3px; padding:7px 0; border:0; border-radius:0; color:var(--accent); background:transparent; font-size:12px; font-weight:500; white-space:nowrap; }
+    .page-intro p { margin:8px 0 0; max-width:900px; color:var(--muted); font-size:13px; }
+    .local-badge { display:inline-flex; align-items:center; gap:8px; flex:0 0 auto; margin-top:0; padding:8px 0; border:0; border-radius:0; color:var(--accent); background:transparent; font-size:12px; font-weight:500; white-space:nowrap; }
     .local-badge svg { width:15px; height:15px; }
     .local-badge .short { display:none; }
     .workspace { border:1px solid var(--line); border-radius:16px; background:var(--surface); box-shadow:var(--shadow-sm); overflow:hidden; }
-    .workspace-toolbar { display:flex; align-items:center; gap:10px; min-height:56px; padding:8px 10px; border-bottom:1px solid var(--line); background:#fbfbf9; }
-    .button-row { display:flex; align-items:center; flex-wrap:wrap; gap:6px; }
-    .button { min-height:36px; padding:7px 11px; border:1px solid var(--line); border-radius:9px; background:var(--surface); font-weight:690; cursor:pointer; transition:border-color .16s ease,background .16s ease,transform .16s ease; }
+    .workspace-toolbar { display:flex; align-items:center; gap:8px; min-height:56px; padding:8px; border-bottom:1px solid var(--line); background:var(--surface); }
+    .button-row { display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
+    .button { min-height:40px; padding:8px; border:1px solid var(--line); border-radius:9px; background:var(--surface); font-weight:690; cursor:pointer; transition:border-color .16s ease,background .16s ease,transform .16s ease; }
     .button:hover { border-color:var(--line-strong); background:var(--surface-hover); }
     .button:active { transform:translateY(1px); }
     .button.primary { border-color:var(--accent); color:#fff; background:var(--accent); }
     .button.primary:hover { background:var(--accent-hover); border-color:var(--accent-hover); }
-    .icon-text { display:inline-flex; align-items:center; gap:7px; }
-    .icon-text svg { width:16px; height:16px; flex:0 0 auto; }
-    .toolbar-divider { width:1px; align-self:stretch; margin:2px 2px; background:var(--line); }
+    .workspace-toolbar .button { border-color:transparent; background:var(--surface-muted); }
+    .workspace-toolbar .button:hover { border-color:transparent; background:var(--surface-hover); }
+    .icon-text { display:inline-flex; align-items:center; gap:8px; }
+    .icon-text svg { width:16px; height:16px; flex:0 0 auto; display:block; }
+    #copyButton { display:inline-flex; align-items:center; justify-content:center; }
+    #undoButton, #redoButton { display:inline-grid; place-items:center; padding:0; width:38px; height:38px; min-height:38px; }
+    #undoButton svg, #redoButton svg { display:block; width:19px; height:19px; }
+    .sync-toggle { flex:0 0 auto; white-space:nowrap; min-width:max-content; }
+    .sync-toggle span { white-space:nowrap; }
+
+    .toolbar-divider { width:1px; align-self:stretch; margin:0; background:var(--line); }
     .toolbar-spacer { flex:1; }
-    .save-status { display:flex; align-items:center; gap:7px; color:var(--muted); font-size:11px; white-space:nowrap; }
+    .save-status { display:flex; align-items:center; gap:8px; color:var(--muted); font-size:11px; white-space:nowrap; }
     .save-dot { width:7px; height:7px; border-radius:50%; background:#4d8d5d; }
-    .filename-control { display:flex; align-items:center; gap:6px; min-width:0; color:var(--muted); font-size:11px; font-weight:700; white-space:nowrap; }
-    .filename-box { display:flex; align-items:center; min-width:0; height:36px; border:1px solid var(--line); border-radius:9px; background:var(--surface); overflow:hidden; transition:border-color .16s ease,box-shadow .16s ease; }
+    .filename-control { display:flex; align-items:center; gap:8px; min-width:0; color:var(--muted); font-size:11px; font-weight:700; white-space:nowrap; }
+    .filename-box { display:flex; align-items:center; min-width:0; height:40px; border:1px solid var(--line); border-radius:9px; background:var(--surface); overflow:hidden; transition:border-color .16s ease,box-shadow .16s ease; }
     .filename-box:focus-within { border-color:color-mix(in srgb,var(--focus) 68%,var(--line)); box-shadow:0 0 0 3px color-mix(in srgb,var(--focus) 18%,transparent); }
-    .filename-input { width:142px; min-width:70px; height:100%; padding:0 3px 0 10px; border:0; outline:0; background:transparent; color:var(--text); font:12px/1.2 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
-    .filename-suffix { padding:0 9px 0 2px; color:var(--muted); font:11px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; user-select:none; }
-    .workspace-controls { display:flex; align-items:center; gap:10px; padding:9px 10px; border-bottom:1px solid var(--line); overflow:auto; scrollbar-width:thin; }
-    .control-group { display:flex; align-items:center; gap:7px; min-width:max-content; }
+    .filename-input { width:142px; min-width:70px; height:100%; padding:0 8px; border:0; outline:0; background:transparent; color:var(--text); font:12px/1.2 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+    .filename-suffix { padding:0 8px; color:var(--muted); font:11px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; user-select:none; }
+    .workspace-controls { display:flex; align-items:center; gap:8px; padding:8px; border-bottom:1px solid var(--line); overflow:auto; scrollbar-width:thin; }
+    .control-group { display:flex; align-items:center; gap:8px; min-width:max-content; }
     .control-label { color:var(--muted); font-size:11px; font-weight:700; }
-    .segmented { display:inline-flex; align-items:center; padding:3px; border:1px solid var(--line); border-radius:10px; background:var(--surface-muted); }
-    .seg-button { min-height:30px; padding:5px 10px; border:0; border-radius:7px; background:transparent; color:var(--muted); font-size:12px; font-weight:740; cursor:pointer; }
-    .seg-button.active { color:var(--text); background:#fff; box-shadow:0 1px 2px rgba(20,22,18,.08); }
-    .style-chip { min-height:32px; padding:5px 10px; border:1px solid transparent; border-radius:999px; background:transparent; color:var(--muted); font-size:12px; font-weight:700; cursor:pointer; white-space:nowrap; }
+    .segmented { display:inline-flex; align-items:center; padding:0; border:0; border-radius:10px; background:var(--surface-muted); }
+    .seg-button { min-height:32px; padding:8px; border:0; border-radius:7px; background:transparent; color:var(--muted); font-size:12px; font-weight:740; cursor:pointer; }
+    .seg-button.active { color:var(--text); background:var(--surface); box-shadow:none; }
+    .style-chip { min-height:32px; padding:8px; border:1px solid transparent; border-radius:999px; background:transparent; color:var(--muted); font-size:12px; font-weight:700; cursor:pointer; white-space:nowrap; }
     .style-chip:hover { background:var(--surface-muted); color:var(--text); }
-    .style-chip.active { border-color:color-mix(in srgb,var(--accent) 28%,var(--line)); color:var(--accent); background:var(--accent-soft); }
-    select { min-height:34px; padding:5px 28px 5px 10px; border:1px solid var(--line); border-radius:9px; color:var(--text); background:#fff; cursor:pointer; }
-    .sync-toggle { display:inline-flex; align-items:center; gap:6px; color:var(--muted); font-size:11px; cursor:pointer; user-select:none; }
+    .style-chip.active { border-color:transparent; color:var(--accent); background:var(--accent-soft); }
+    select { min-height:34px; padding:8px 32px 8px 8px; border:1px solid var(--line); border-radius:9px; color:var(--text); background:#fff; cursor:pointer; }
+    .sync-toggle { display:inline-flex; align-items:center; gap:8px; color:var(--muted); font-size:11px; cursor:pointer; user-select:none; }
     .sync-toggle input { accent-color:var(--accent); }
     .editor-shell { display:grid; grid-template-columns:minmax(360px, .9fr) minmax(0, 1.1fr); height:clamp(520px, calc(100dvh - 250px), 820px); min-height:520px; }
     .editor-pane, .preview-pane { min-width:0; min-height:0; position:relative; background:#fff; }
-    .editor-pane { display:grid; grid-template-rows:auto minmax(0,1fr); border-right:1px solid var(--line); }
-    .pane-head { height:42px; display:flex; align-items:center; gap:8px; padding:0 11px; border-bottom:1px solid var(--line); background:#fafaf8; }
-    .editor-pane > .pane-head { height:auto; min-height:42px; flex-wrap:wrap; row-gap:4px; padding:6px 11px; }
+    .editor-pane { display:grid; grid-template-columns:minmax(0,1fr); grid-template-rows:auto auto minmax(0,1fr); border-right:1px solid var(--line); }
+    .pane-head { height:42px; display:flex; align-items:center; gap:8px; padding:0 16px; border-bottom:1px solid var(--line); background:#fafaf8; }
+    .editor-pane > .pane-head { height:auto; min-height:42px; flex-wrap:wrap; row-gap:8px; padding:8px 16px; }
     .editor-pane > .pane-head > * { flex-shrink:0; }
     .pane-title { font-size:12px; font-weight:800; letter-spacing:.015em; }
     .pane-meta { margin-left:auto; color:var(--muted); font-size:10px; white-space:nowrap; }
-    .sample-state { display:none; align-items:center; gap:7px; margin-left:auto; min-width:0; }
+    .sample-state { display:none; align-items:center; gap:8px; margin-left:auto; min-width:0; }
     .sample-state.visible { display:flex; }
     .sample-label { color:var(--muted); font-size:10px; white-space:nowrap; }
-    .sample-new-button { padding:4px 7px; border:0; border-radius:7px; background:transparent; color:var(--accent); font-size:10px; font-weight:800; cursor:pointer; white-space:nowrap; }
+    .sample-new-button { padding:8px; border:0; border-radius:7px; background:transparent; color:var(--accent); font-size:10px; font-weight:800; cursor:pointer; white-space:nowrap; }
     .sample-new-button:hover { background:var(--accent-soft); }
     .sample-state.visible + .pane-meta { margin-left:0; }
-    .format-bar { display:flex; max-width:100%; min-width:0; overflow-x:auto; align-items:center; gap:2px; padding-right:5px; border-right:1px solid var(--line); margin-right:3px; }
-    .format-button { width:29px; height:29px; display:grid; place-items:center; border:0; border-radius:7px; background:transparent; color:var(--muted); font-size:12px; font-weight:800; cursor:pointer; }
+    .format-bar { display:flex; max-width:100%; min-width:0; overflow-x:auto; align-items:center; gap:0; padding-right:8px; border-right:1px solid var(--line); margin-right:0; }
+    .format-button { min-width:36px; width:36px; height:36px; display:grid; place-items:center; border:0; border-radius:7px; background:transparent; color:var(--muted); font-size:12px; font-weight:800; cursor:pointer; }
     .format-button:hover { background:var(--surface-muted); color:var(--text); }
     .format-button svg { width:15px; height:15px; display:block; }
-    .pane-action-button { width:28px; height:28px; display:grid; place-items:center; flex:0 0 auto; border:0; border-radius:7px; background:transparent; color:var(--muted); cursor:pointer; }
+    .pane-action-button { width:36px; height:36px; display:grid; place-items:center; flex:0 0 auto; border:0; border-radius:7px; background:transparent; color:var(--muted); cursor:pointer; }
     .pane-action-button:hover { background:var(--surface-muted); color:var(--text); }
     .pane-action-button svg { width:15px; height:15px; display:block; }
-    #editor { grid-area:2 / 1; width:100%; height:100%; min-height:0; resize:none; border:0; outline:0; padding:18px 20px 36px; background:#fff; color:#252724; font:14px/1.72 ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace; tab-size:2; caret-color:var(--accent); }
+    #editor { grid-area:3 / 1; width:100%; height:100%; min-height:0; resize:none; border:0; outline:0; padding:16px 24px 40px; background:#fff; color:#252724; font:14px/1.72 ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace; tab-size:2; caret-color:var(--accent); }
     #editor::selection { background:#cfe7df; }
-    .drop-overlay { grid-area:2 / 1; position:relative; inset:auto; min-height:0; z-index:5; display:none; place-items:center; background:rgba(225,240,234,.92); color:var(--accent); font-weight:800; border:2px dashed var(--accent); }
+    .drop-overlay { grid-area:3 / 1; position:relative; inset:auto; min-height:0; z-index:5; display:none; place-items:center; background:rgba(225,240,234,.92); color:var(--accent); font-weight:800; border:2px dashed var(--accent); }
     .editor-pane.dragging .drop-overlay { display:grid; }
+    .document-panel[hidden], .document-tab-panel[hidden] { display:none; }
+    .document-panel { grid-area:2 / 1; width:100%; max-width:100%; min-width:0; padding:8px 16px; background:var(--surface); border-bottom:1px solid var(--line); }
+    .document-tabs { display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--line); }
+    .document-tab { min-height:40px; padding:8px; border:0; border-bottom:2px solid transparent; background:transparent; color:var(--muted); font-weight:700; font-size:12px; cursor:pointer; }
+    .document-tab[aria-selected="true"] { color:var(--accent); border-bottom-color:var(--accent); }
+    .document-close { display:grid; place-items:center; width:40px; height:40px; margin-left:auto; background:transparent; border:0; border-radius:8px; cursor:pointer; }
+    .document-close:hover, .document-tab:hover { background:var(--surface-muted); }
+    .document-close svg { width:18px; height:18px; }
+    .outline-list { max-height:200px; overflow-y:auto; padding-top:8px; }
+    .outline-item { display:flex; align-items:center; gap:8px; width:100%; min-height:40px; padding:8px; border:0; border-radius:8px; text-align:left; color:var(--text); background:transparent; cursor:pointer; }
+    .outline-item:hover, .outline-item:focus-visible { background:var(--surface-muted); }
+    .outline-item span:first-child { flex:0 0 24px; color:var(--muted); font-size:11px; }
+    .outline-item .outline-text { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .document-empty { margin:0; padding:16px 8px; color:var(--muted); font-size:12px; }
+    .document-find { display:grid; grid-template-columns:minmax(0,1fr); width:100%; min-width:0; gap:8px; padding-top:8px; }
+    .document-find-row { display:flex; align-items:center; width:100%; min-width:0; gap:8px; }
+    .document-search-row, .document-replace-row { display:grid; align-items:center; grid-template-columns:minmax(0,1fr) auto auto; gap:8px; }
+    .document-field { width:100%; min-width:0; min-height:40px; padding:8px; border:1px solid var(--line); border-radius:8px; background:var(--surface); }
+    .document-field:focus-visible { border-color:var(--accent); }
+    .document-find-count { min-width:32px; color:var(--muted); font-size:12px; text-align:center; font-variant-numeric:tabular-nums; white-space:nowrap; }
+    .document-find-nav { display:flex; align-items:center; gap:0; }
+    .document-step { display:grid; place-items:center; flex:0 0 40px; width:40px; height:40px; padding:0; border:0; border-radius:8px; background:transparent; color:var(--muted); cursor:pointer; }
+    .document-step svg { display:block; width:18px; height:18px; }
+    .document-action { min-height:40px; padding:0 8px; border:0; border-radius:8px; background:transparent; color:var(--muted); font-size:12px; font-weight:700; white-space:nowrap; cursor:pointer; }
+    .document-action-all { color:var(--accent); }
+    .document-step:not(:disabled):hover, .document-action:not(:disabled):hover { background:var(--surface-muted); color:var(--text); }
+    .document-action-all:not(:disabled):hover { color:var(--accent); background:var(--accent-soft); }
+    .document-step:disabled, .document-action:disabled { opacity:.38; cursor:default; }
+    .document-case { display:inline-flex; align-items:center; gap:8px; min-height:40px; color:var(--muted); font-size:12px; cursor:pointer; }
+    .document-case input { accent-color:var(--accent); }
     .preview-scroll { height:calc(100% - 42px); overflow:auto; overscroll-behavior:contain; background:#fff; }
-    .preview-wrap { min-height:100%; padding:28px clamp(22px,4vw,52px) 60px; }
+    .preview-wrap { min-height:100%; padding:32px 32px 64px; }
     .compare-pane { display:none; grid-template-columns:1fr 1fr; min-width:0; min-height:0; }
     .workspace.compare .editor-shell { grid-template-columns:minmax(330px,.72fr) minmax(0,1.28fr); }
     .workspace.compare .single-preview { display:none; }
@@ -124,8 +162,9 @@
     .compare-cell { min-width:0; min-height:0; border-right:1px solid var(--line); }
     .compare-cell:last-child { border-right:0; }
     .compare-cell .preview-scroll { height:calc(100% - 42px); }
-    .compare-cell .preview-wrap { padding:24px clamp(18px,2.2vw,34px) 52px; }
+    .compare-cell .preview-wrap { padding:24px 16px 48px; }
     .mobile-view-switch { display:none; }
+    .mobile-document-trigger { display:none; }
 
     /* Rendered Markdown: shared */
     .md { max-width:860px; margin:0 auto; color:#24292f; font-size:16px; line-height:1.7; overflow-wrap:anywhere; }
@@ -200,57 +239,72 @@
     .theme-print a { color:#111; text-decoration:underline; }
     .theme-print pre,.theme-print code { background:#f2f2f2; color:#111; }
 
-    .compat-section { margin-top:18px; padding:18px; border:1px solid var(--line); border-radius:16px; background:var(--surface); box-shadow:var(--shadow-sm); }
-    .section-head { display:flex; align-items:flex-start; gap:16px; margin-bottom:14px; }
+    .compat-section { margin-top:24px; padding:24px; border:1px solid var(--line); border-radius:16px; background:var(--surface); box-shadow:none; }
+    .section-head { display:flex; align-items:flex-start; gap:16px; margin-bottom:16px; }
     .section-head h2 { margin:0; font-size:17px; letter-spacing:-.015em; }
-    .section-head p { margin:3px 0 0; color:var(--muted); font-size:12px; }
-    .score-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:9px; margin-left:auto; min-width:min(520px,55%); }
-    .score-card { padding:10px 12px; border:1px solid var(--line); border-radius:11px; background:#fbfbf9; }
+    .section-head p { margin:8px 0 0; color:var(--muted); font-size:12px; }
+    .score-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0; margin-left:auto; min-width:min(520px,55%); border-radius:8px; background:var(--surface-muted); overflow:hidden; }
+    .score-card { min-width:0; padding:16px; border:0; border-radius:0; background:transparent; }
+    .score-card + .score-card { border-left:1px solid color-mix(in srgb,var(--line) 70%,transparent); }
     .score-top { display:flex; align-items:center; justify-content:space-between; gap:8px; }
     .score-name { font-size:11px; font-weight:800; }
     .score-number { font-size:16px; font-weight:820; }
-    .score-track { height:5px; margin-top:7px; border-radius:99px; background:#e6e7e2; overflow:hidden; }
+    .score-track { height:5px; margin-top:8px; border-radius:99px; background:#e6e7e2; overflow:hidden; }
     .score-fill { height:100%; border-radius:inherit; background:var(--accent); transition:width .22s ease; }
+    .compat-details { border-top:1px solid var(--line); }
+    .compat-summary { display:flex; align-items:center; justify-content:center; gap:8px; min-height:48px; padding:8px 16px; color:var(--accent); font-size:12px; font-weight:700; cursor:pointer; list-style:none; }
+    .compat-summary::-webkit-details-marker { display:none; }
+    .compat-summary::marker { content:''; }
+    .compat-summary:hover { background:var(--surface-muted); }
+    .compat-summary svg { display:block; width:16px; height:16px; transition:transform .18s ease; }
+    .compat-collapse-label, .compat-details[open] .compat-expand-label { display:none; }
+    .compat-details[open] .compat-collapse-label { display:inline; }
+    .compat-details[open] .compat-summary svg { transform:rotate(180deg); }
     .issues { border-top:1px solid var(--line); }
-    .issue-empty { padding:18px 4px 4px; color:var(--muted); font-size:12px; }
-    .issue-row { width:100%; display:grid; grid-template-columns:24px 84px minmax(0,1fr) auto; align-items:start; gap:8px; padding:11px 4px; border:0; border-bottom:1px solid #ecece8; background:transparent; text-align:left; cursor:pointer; }
+    .issue-empty { padding:16px 0 8px; color:var(--muted); font-size:12px; }
+    .issue-row { width:100%; display:grid; grid-template-columns:24px 84px minmax(0,1fr) auto; align-items:start; gap:8px; padding:16px 0; border:0; border-bottom:1px solid #ecece8; background:transparent; text-align:left; cursor:pointer; }
     .issue-row:hover { background:#fafaf8; }
-    .issue-icon { width:20px; height:20px; display:grid; place-items:center; margin-top:1px; border-radius:50%; font-size:11px; font-weight:900; }
+    .issue-icon { width:20px; height:20px; display:grid; place-items:center; margin-top:0; border-radius:50%; font-size:11px; font-weight:900; }
     .issue-icon.warn { color:#8a5b00; background:#fff2c7; }
     .issue-icon.info { color:#2d607a; background:#e5f4fb; }
     .issue-platform { color:var(--muted); font-size:11px; font-weight:750; }
     .issue-message { font-size:12px; line-height:1.55; }
     .issue-line { color:var(--muted); font-size:10px; white-space:nowrap; }
-    .heuristic-note { margin:10px 0 0; color:var(--muted); font-size:10px; }
-    footer { width:min(1500px,100%); margin:0 auto; padding:16px clamp(14px,2.8vw,30px) 32px; color:var(--muted); font-size:12px; }
+    .heuristic-note { margin:16px 0 0; color:var(--muted); font-size:10px; }
+    footer { width:min(1500px,100%); margin:0 auto; padding:16px 24px 32px; color:var(--muted); font-size:12px; }
 
-    .toast { position:fixed; right:18px; bottom:18px; z-index:60; max-width:min(360px,calc(100vw - 36px)); padding:11px 14px; border:1px solid var(--line); border-radius:11px; background:var(--surface); box-shadow:var(--shadow-md); opacity:0; transform:translateY(12px); pointer-events:none; transition:opacity .18s ease,transform .18s ease; }
+    .save-notice { display:flex; align-items:center; flex-wrap:wrap; gap:8px; padding:16px; background:#fff8e6; border-bottom:1px solid #e8c879; color:#61450b; font-size:12px; line-height:1.55; }
+    .save-notice[hidden] { display:none; }
+    .save-notice p { margin:0; flex:1 1 230px; }
+    .save-notice button { min-height:40px; padding:8px 16px; border:1px solid #a57e26; border-radius:8px; background:#fff; color:#563a05; font-weight:700; cursor:pointer; }
+    .save-notice button:focus-visible { outline:3px solid var(--focus); outline-offset:2px; }
+    .toast { position:fixed; right:16px; bottom:16px; z-index:60; max-width:min(360px,calc(100vw - 32px)); padding:16px; border:1px solid var(--line); border-radius:11px; background:var(--surface); box-shadow:var(--shadow-md); opacity:0; transform:translateY(12px); pointer-events:none; transition:opacity .18s ease,transform .18s ease; }
     .toast.show { opacity:1; transform:translateY(0); }
-    dialog { width:min(720px,calc(100% - 28px)); max-height:min(800px,calc(100dvh - 28px)); padding:0; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:var(--surface); color:var(--text); box-shadow:var(--shadow-md); }
+    dialog { width:min(720px,calc(100% - 32px)); max-height:min(800px,calc(100dvh - 32px)); padding:0; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:var(--surface); color:var(--text); box-shadow:var(--shadow-md); }
     dialog::backdrop { background:rgba(15,17,14,.52); backdrop-filter:blur(4px); }
-    .dialog-header { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 18px; border-bottom:1px solid var(--line); }
+    .dialog-header { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:16px 24px; border-bottom:1px solid var(--line); }
     .dialog-header h2 { margin:0; font-size:17px; }
     .dialog-close { width:34px; height:34px; display:grid; place-items:center; border:0; border-radius:9px; background:transparent; cursor:pointer; color:var(--muted); }
 .dialog-close svg { width:18px; height:18px; }
     .dialog-close:hover { background:var(--surface-muted); color:var(--text); }
-    .dialog-body { padding:20px 20px 26px; overflow:auto; max-height:calc(100dvh - 94px); }
-    .dialog-body h3 { margin:24px 0 8px; padding-top:18px; border-top:1px solid var(--line); font-size:14px; }
+    .dialog-body { padding:24px; overflow:auto; max-height:calc(100dvh - 94px); }
+    .dialog-body h3 { margin:24px 0 8px; padding-top:16px; border-top:1px solid var(--line); font-size:14px; }
     .dialog-body h3:first-child { margin-top:0; padding-top:0; border-top:0; }
     .dialog-body p,.dialog-body li { color:var(--muted); font-size:13px; line-height:1.7; }
-    .dialog-body ul { padding-left:20px; }
-    .custom-css-editor { width:100%; min-height:280px; resize:vertical; padding:14px; border:1px solid var(--line); border-radius:10px; background:#fbfbf9; color:var(--text); font:13px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
-    .dialog-actions { display:flex; justify-content:flex-end; flex-wrap:wrap; gap:8px; margin-top:12px; }
-    #expandedEditorDialog { width:min(1240px,calc(100% - 24px)); height:min(920px,calc(100dvh - 24px)); max-height:none; }
+    .dialog-body ul { padding-left:24px; }
+    .custom-css-editor { width:100%; min-height:280px; resize:vertical; padding:16px; border:1px solid var(--line); border-radius:10px; background:#fbfbf9; color:var(--text); font:13px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+    .dialog-actions { display:flex; justify-content:flex-end; flex-wrap:wrap; gap:8px; margin-top:16px; }
+    #expandedEditorDialog { width:min(1240px,calc(100% - 32px)); height:min(920px,calc(100dvh - 32px)); max-height:none; }
     #expandedEditorDialog[open] { display:flex; flex-direction:column; }
     .expanded-editor-header { flex:0 0 auto; }
     .expanded-editor-body { display:flex; flex:1 1 auto; min-height:0; padding:0; overflow:hidden; }
-    #expandedEditor { width:100%; height:100%; resize:none; border:0; outline:0; padding:24px 28px 48px; background:#fff; color:#252724; font:15px/1.75 ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace; tab-size:2; caret-color:var(--accent); }
+    #expandedEditor { width:100%; height:100%; resize:none; border:0; outline:0; padding:24px 32px 48px; background:#fff; color:#252724; font:15px/1.75 ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace; tab-size:2; caret-color:var(--accent); }
     #expandedEditor::selection { background:#cfe7df; }
 
     @media (max-width: 940px) {
       .brand-meta { display:none; }
-      .main { padding-top:12px; }
-      .page-intro { padding-bottom:10px; }
+      .main { padding-top:16px; }
+      .page-intro { padding-bottom:16px; }
       .page-intro p { max-width:620px; }
       .workspace-toolbar { overflow-x:auto; scrollbar-width:none; }
       .workspace-toolbar::-webkit-scrollbar,.workspace-controls::-webkit-scrollbar { display:none; }
@@ -260,69 +314,97 @@
       .editor-shell,.workspace.compare .editor-shell { grid-template-columns:42% 58%; }
       .compare-pane { grid-template-columns:1fr; }
       .compare-cell:first-child { border-right:0; border-bottom:1px solid var(--line); }
-      .compare-cell .preview-scroll { height:calc((100% - 84px)/2); }
+      .compare-cell .preview-scroll { height:calc(100% - 42px); }
       .score-grid { min-width:54%; }
     }
     @media (max-width: 720px) {
       :root { --header-height:58px; }
-      .header-inner { padding:8px 14px; }
+      .app-header { position:relative; top:auto; backdrop-filter:none; }
+      .page-intro { padding:0 8px 16px; align-items:flex-start; }
+      .page-intro h2, .page-intro .local-badge { display:none; }
+      .page-intro p { margin:0; max-width:none; font-size:12px; line-height:1.6; }
+      .workspace-controls { overflow-x:auto; overflow-y:hidden; }
+      .sync-toggle { flex:0 0 auto; white-space:nowrap; min-width:max-content; }
+      .sync-toggle span { white-space:nowrap; writing-mode:horizontal-tb; }
+      #copyButton, #undoButton, #redoButton { display:inline-grid; place-items:center; flex:0 0 38px; width:38px; height:38px; min-height:38px; padding:0; line-height:1; }
+      #copyButton .icon-text { display:grid; place-items:center; width:100%; height:100%; gap:0; }
+      #copyButton .icon-text svg, #undoButton svg, #redoButton svg { width:19px; height:19px; display:block; }
+
+      .header-inner { padding:8px 16px; }
       .brand-mark { width:35px; height:35px; border-radius:10px; }
       .brand-name { font-size:15px; }
-      .header-actions { gap:10px; }
-      .page-intro { align-items:center; }
-      .page-intro h2 { font-size:19px; }
-      .page-intro p { font-size:11px; line-height:1.55; }
-      .local-badge { padding:6px 8px; font-size:10px; }
+      .header-actions { gap:8px; }
       .workspace { border-radius:14px; }
-      .workspace-toolbar { min-height:50px; padding:6px 7px; }
+      .workspace-toolbar { min-height:56px; padding:8px; display:flex; flex-wrap:nowrap; overflow:visible; gap:8px; }
+      .workspace-toolbar .file-actions, .workspace-toolbar .edit-actions { display:flex; flex-wrap:nowrap; align-items:center; gap:8px; }
+      .workspace-toolbar .file-actions { flex:0 1 auto; min-width:0; }
+      .workspace-toolbar .edit-actions { flex:0 0 auto; }
+      .workspace-toolbar .filename-control { flex:1 1 160px; min-width:0; max-width:160px; }
+      .workspace-toolbar .filename-box { flex:1 1 auto; min-width:0; }
+      .workspace-toolbar .filename-input { flex:1 1 auto; width:100%; min-width:0; }
+      .workspace-toolbar .button { flex:0 0 40px; width:40px; height:40px; padding:0; display:inline-grid; place-items:center; }
+      .workspace-toolbar .label-mobile-hide { display:none; }
+      .workspace-toolbar .toolbar-spacer { display:none; }
+      .workspace-toolbar #copyButton, .workspace-toolbar #undoButton, .workspace-toolbar #redoButton { flex:0 0 40px; width:40px; height:40px; }
       .toolbar-divider { display:none; }
       .save-status { display:none; }
-      .button { min-height:34px; padding:6px 9px; font-size:12px; }
-      .filename-box { height:34px; }
+      .button { min-height:40px; padding:8px; font-size:12px; }
+      .filename-box { height:40px; }
       .filename-input { width:96px; padding-left:8px; font-size:11px; }
-      .filename-suffix { padding-right:7px; font-size:10px; }
-      #expandedEditorDialog { width:calc(100% - 12px); height:calc(100dvh - 12px); border-radius:12px; }
-      #expandedEditor { padding:18px 15px 36px; font-size:14px; }
-      .workspace-controls { padding:7px; gap:8px; }
+      .filename-suffix { padding-right:8px; font-size:10px; }
+      #expandedEditorDialog { width:calc(100% - 16px); height:calc(100dvh - 16px); border-radius:12px; }
+      #expandedEditor { padding:16px 16px 40px; font-size:14px; }
+      .workspace-controls { padding:8px; gap:8px; }
       .control-group.mode-group { display:none; }
-      .mobile-view-switch { display:flex; align-items:center; padding:7px; border-bottom:1px solid var(--line); background:#fafaf8; }
-      .mobile-view-switch .segmented { width:100%; }
+      .mobile-view-switch { display:flex; align-items:center; gap:8px; padding:8px; border-bottom:1px solid var(--line); background:var(--surface); }
+      .mobile-view-switch .mobile-document-trigger { display:grid; flex:0 0 40px; width:40px; height:40px; }
+      .mobile-view-switch .segmented { flex:1 1 auto; width:auto; min-width:0; }
       .mobile-view-switch .seg-button { flex:1; }
       .editor-shell,.workspace.compare .editor-shell { display:block; height:calc(100dvh - 258px); min-height:470px; }
       .editor-pane,.single-preview,.compare-pane { display:none !important; height:100%; border:0; }
       .workspace.mobile-editor .editor-pane { display:grid !important; }
       .workspace.mobile-preview .single-preview { display:block !important; }
-      .workspace.mobile-compare .compare-pane { display:grid !important; grid-template-columns:1fr; height:100%; }
+      .workspace.mobile-compare .compare-pane { display:grid !important; grid-template-columns:1fr; grid-template-rows:minmax(0,1fr) minmax(0,1fr); height:100%; }
       .workspace.mobile-compare .editor-pane { display:none !important; }
       .workspace.mobile-compare .compare-cell { min-height:0; }
-      .workspace.mobile-compare .compare-cell .preview-scroll { height:calc((100% - 84px)/2); }
-      #editor { padding:16px 14px 32px; font-size:13px; }
+      .workspace.mobile-compare .compare-cell .preview-scroll { height:calc(100% - 42px); }
+      #editor { padding:16px 16px 32px; font-size:13px; }
+      .editor-pane > .pane-head { flex-wrap:nowrap; gap:8px; padding:8px; }
+      .document-panel { padding:8px; }
+      .document-find-row { flex-wrap:nowrap; }
+      .document-search-row, .document-replace-row { grid-template-columns:minmax(0,1fr) auto auto; }
+      .outline-list { max-height:160px; }
+      .editor-pane > .pane-head > .format-bar { flex:1 1 auto; min-width:0; max-width:none; overflow-x:auto; scrollbar-width:none; }
+      .editor-pane > .pane-head > .format-bar::-webkit-scrollbar { display:none; }
+      .editor-pane > .pane-head > #editorStats { flex:0 0 auto; margin-left:0; }
+      .editor-pane > .pane-head > .pane-title, .editor-pane #documentToolsButton { display:none; }
       .sample-label { display:none; }
-      .sample-new-button { padding:4px 5px; }
-      .preview-wrap,.compare-cell .preview-wrap { padding:22px 17px 46px; }
+      .sample-new-button { padding:8px; }
+      .preview-wrap,.compare-cell .preview-wrap { padding:24px 16px 48px; }
       .md { font-size:15px; }
-      .section-head { display:block; margin-bottom:12px; }
-      .score-grid { min-width:0; width:100%; margin:12px 0 0; gap:6px; }
+      .section-head { display:block; margin-bottom:16px; }
+      .score-grid { min-width:0; width:100%; margin:16px 0 0; gap:0; }
       .score-card { padding:8px; }
       .score-name { font-size:10px; }
       .score-number { font-size:14px; }
-      .compat-section { padding:14px; }
+      .compat-section { padding:16px; }
       .issue-row { grid-template-columns:22px 68px minmax(0,1fr); }
       .issue-line { display:none; }
     }
     @media (max-width: 430px) {
       .brand-mark { width:33px; height:33px; }
-      .page-intro { gap:8px; flex-wrap:wrap; }
-      .page-intro p { display:none; }
-      .local-badge span.long { display:none; }
-      .local-badge .short { display:inline; }
       .main { padding-left:8px; padding-right:8px; }
       .button .label-mobile-hide { display:none; }
-      .format-bar { max-width:150px; overflow:auto; scrollbar-width:none; }
+      .format-bar { max-width:none; overflow-x:auto; scrollbar-width:none; }
       .format-bar::-webkit-scrollbar { display:none; }
       .control-label { display:none; }
-      .style-chip { padding:5px 8px; }
-      footer { padding-left:12px; padding-right:12px; }
+      .style-chip { padding:8px; }
+      footer { padding-left:16px; padding-right:16px; }
+    }
+    @media (max-width: 374px) {
+      .workspace-toolbar { display:grid; grid-template-columns:minmax(0,1fr); gap:8px; }
+      .workspace-toolbar .file-actions { width:100%; }
+      .workspace-toolbar .edit-actions { width:100%; justify-content:flex-end; }
     }
     @media print {
       .app-header,.page-intro,.workspace-toolbar,.workspace-controls,.mobile-view-switch,.editor-pane,.compat-section,footer,.pane-head { display:none !important; }
@@ -371,20 +453,21 @@
 
     <section class="workspace mobile-editor" id="workspace" aria-label="Markdown editor workspace">
       <div class="workspace-toolbar">
-        <div class="button-row">
-          <button class="button" id="openButton" type="button"><span class="icon-text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h6l2 2h10v10H3z"/><path d="M3 7v12"/></svg><span class="label-mobile-hide" data-i18n="open">開く</span></span></button>
+        <div class="button-row file-actions">
+          <button class="button" id="openButton" type="button" data-i18n-title="open" data-i18n-aria="open" title="open" aria-label="open"><span class="icon-text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h6l2 2h10v10H3z"/><path d="M3 7v12"/></svg><span class="label-mobile-hide" data-i18n="open">開く</span></span></button>
           <label class="filename-control"><span data-i18n="filename">ファイル名</span><span class="filename-box"><input class="filename-input" id="filenameInput" type="text" value="document" maxlength="120" autocomplete="off" spellcheck="false" aria-label="Output file name"><span class="filename-suffix">.md</span></span></label>
-          <button class="button" id="downloadButton" type="button"><span class="icon-text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg><span class="label-mobile-hide" data-i18n="download">保存</span></span></button>
-          <button class="button" id="copyButton" type="button"><span class="icon-text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span class="label-optional" data-i18n="copy">コピー</span></span></button>
+          <button class="button" id="downloadButton" type="button" data-i18n-title="download" data-i18n-aria="download" title="download" aria-label="download"><span class="icon-text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg><span class="label-mobile-hide" data-i18n="download">保存</span></span></button>
         </div>
         <div class="toolbar-divider"></div>
-        <div class="button-row">
-          <button class="button" id="undoButton" type="button" aria-label="Undo" title="Undo">↶</button>
-          <button class="button" id="redoButton" type="button" aria-label="Redo" title="Redo">↷</button>
+        <div class="button-row edit-actions">
+          <button class="button" id="copyButton" type="button" data-i18n-title="copy" data-i18n-aria="copy" title="copy" aria-label="copy"><span class="icon-text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span class="label-optional" data-i18n="copy">コピー</span></span></button>
+          <button class="button" id="undoButton" type="button" data-i18n-title="undoAction" data-i18n-aria="undoAction" aria-label="元に戻す" title="元に戻す"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-15.4-6.4L3 13"/></svg></button>
+          <button class="button" id="redoButton" type="button" data-i18n-title="redoAction" data-i18n-aria="redoAction" aria-label="やり直す" title="やり直す"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 15.4-6.4L21 13"/></svg></button>
         </div>
         <div class="toolbar-spacer"></div>
         <div class="save-status"><span class="save-dot"></span><span id="saveStatus" data-i18n="saved">自動保存済み</span></div>
       </div>
+      <div id="saveNotice" class="save-notice" role="alert" hidden><p id="saveNoticeMessage"></p><button id="retrySaveButton" type="button"></button></div>
 
       <div class="workspace-controls">
         <div class="control-group mode-group">
@@ -415,23 +498,54 @@
           <button class="seg-button" type="button" data-mobile-view="preview" data-i18n="preview">プレビュー</button>
           <button class="seg-button" type="button" data-mobile-view="compare" data-i18n="compare">比較</button>
         </div>
+        <button class="pane-action-button mobile-document-trigger" id="mobileDocumentToolsButton" type="button" data-i18n-aria="documentTools" data-i18n-title="documentTools" aria-controls="documentPanel" aria-expanded="false" aria-label="文書ツール" title="文書ツール"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6h10M4 12h10M4 18h7"/><circle cx="16" cy="16" r="4"/><path d="m19 19 3 3"/></svg></button>
       </div>
 
       <div class="editor-shell">
         <div class="editor-pane" id="editorPane">
           <div class="pane-head">
             <div class="format-bar" aria-label="Formatting toolbar">
-              <button class="format-button" type="button" data-format="bold" data-i18n-title="boldShortcut" title="太字 (Ctrl/⌘+B)" aria-keyshortcuts="Control+b Meta+b">B</button>
-              <button class="format-button" type="button" data-format="italic" data-i18n-title="italicShortcut" title="斜体 (Ctrl/⌘+I)" aria-keyshortcuts="Control+i Meta+i"><i>I</i></button>
-              <button class="format-button" type="button" data-format="heading" title="Heading">H</button>
-              <button class="format-button" type="button" data-format="link" title="Link" aria-label="Link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-              <button class="format-button" type="button" data-format="code" title="Code">&lt;/&gt;</button>
-              <button class="format-button" type="button" data-format="list" title="List">•</button>
+              <button class="format-button" type="button" data-format="bold" data-i18n-title="boldShortcut" title="太字 (Ctrl/⌘+B)" aria-keyshortcuts="Control+b Meta+b" data-i18n-aria="boldShortcut" aria-label="太字 (Ctrl/⌘+B)">B</button>
+              <button class="format-button" type="button" data-format="italic" data-i18n-title="italicShortcut" title="斜体 (Ctrl/⌘+I)" aria-keyshortcuts="Control+i Meta+i" data-i18n-aria="italicShortcut" aria-label="斜体 (Ctrl/⌘+I)"><i>I</i></button>
+              <button class="format-button" type="button" data-format="heading" data-i18n-title="formatHeading" data-i18n-aria="formatHeading" title="見出し" aria-label="見出し">H</button>
+              <button class="format-button" type="button" data-format="link" data-i18n-title="formatLink" data-i18n-aria="formatLink" title="リンク" aria-label="リンク"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
+              <button class="format-button" type="button" data-format="code" data-i18n-title="formatCode" data-i18n-aria="formatCode" title="コード" aria-label="コード">&lt;/&gt;</button>
+              <button class="format-button" type="button" data-format="list" data-i18n-title="formatList" data-i18n-aria="formatList" title="箇条書き" aria-label="箇条書き"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M10 6h11M10 12h11M10 18h11"/><circle cx="4" cy="6" r="1" fill="currentColor" stroke="none"/><circle cx="4" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="4" cy="18" r="1" fill="currentColor" stroke="none"/></svg></button>
             </div>
             <span class="pane-title">Markdown</span>
-            <button class="pane-action-button" id="expandEditorButton" type="button" data-i18n-title="expandEditor" title="入力欄を拡大" aria-label="Expand editor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H3v5"/><path d="M16 3h5v5"/><path d="M8 21H3v-5"/><path d="M16 21h5v-5"/></svg></button>
+            <button class="pane-action-button" id="documentToolsButton" type="button" data-i18n-aria="documentTools" data-i18n-title="documentTools" aria-controls="documentPanel" aria-expanded="false" aria-label="文書ツール" title="文書ツール"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6h10M4 12h10M4 18h7"/><circle cx="16" cy="16" r="4"/><path d="m19 19 3 3"/></svg></button>
+            <button class="pane-action-button" id="expandEditorButton" type="button" data-i18n-title="expandEditor" data-i18n-aria="expandEditor" title="入力欄を拡大" aria-label="入力欄を拡大"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H3v5"/><path d="M16 3h5v5"/><path d="M8 21H3v-5"/><path d="M16 21h5v-5"/></svg></button>
             <div class="sample-state" id="sampleState"><span class="sample-label" data-i18n="sampleViewing">サンプル表示中</span><button class="sample-new-button" id="newDocumentButton" type="button" data-i18n="newDocument">新規作成</button></div>
             <span class="pane-meta" id="editorStats">0 chars · 0 lines</span>
+          </div>
+          <div class="document-panel" id="documentPanel" hidden>
+            <div class="document-tabs" role="tablist" data-i18n-aria="documentTools" aria-label="文書ツール">
+              <button class="document-tab" id="outlineTab" type="button" role="tab" aria-selected="true" aria-controls="outlinePanel" data-i18n="outlineTab">見出し一覧</button>
+              <button class="document-tab" id="findTab" type="button" role="tab" aria-selected="false" tabindex="-1" aria-controls="findPanel" data-i18n="findTab">検索・置換</button>
+              <button class="document-close" id="documentClose" type="button" data-i18n-aria="closePanel" aria-label="閉じる"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+            </div>
+            <div id="outlinePanel" class="document-tab-panel" role="tabpanel" aria-labelledby="outlineTab">
+              <p class="document-empty" id="outlineEmpty" data-i18n="outlineEmpty">見出しはありません。</p>
+              <div class="outline-list" id="outlineList"></div>
+            </div>
+            <div id="findPanel" class="document-tab-panel document-find" role="tabpanel" aria-labelledby="findTab" hidden>
+              <div class="document-find-row document-search-row">
+                <input class="document-field" id="findInput" type="search" autocomplete="off" spellcheck="false" data-i18n-aria="findLabel" data-i18n-placeholder="findLabel" data-i18n-title="findLabel" aria-label="検索する文字" placeholder="検索する文字">
+                <span class="document-find-count" id="findCount" role="status" aria-live="polite">0 / 0</span>
+                <div class="document-find-nav">
+                  <button class="document-step" id="findPrevious" type="button" data-i18n-aria="findPrevious" data-i18n-title="findPrevious" aria-label="前へ" title="前へ" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 14 6-6 6 6"/></svg></button>
+                  <button class="document-step" id="findNext" type="button" data-i18n-aria="findNext" data-i18n-title="findNext" aria-label="次へ" title="次へ" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 10 6 6 6-6"/></svg></button>
+                </div>
+              </div>
+              <div class="document-find-row document-replace-row">
+                <input class="document-field" id="replaceInput" type="text" autocomplete="off" spellcheck="false" data-i18n-aria="replaceLabel" data-i18n-placeholder="replaceLabel" aria-label="置換する文字" placeholder="置換する文字">
+                <button class="document-action" id="replaceOneButton" type="button" data-i18n="replaceOne" disabled>置換</button>
+                <button class="document-action document-action-all" id="replaceAllButton" type="button" data-i18n="replaceAll" disabled>すべて置換</button>
+              </div>
+              <div class="document-find-row">
+                <label class="document-case"><input type="checkbox" id="findMatchCase"><span data-i18n="matchCase">大文字・小文字を区別</span></label>
+              </div>
+            </div>
           </div>
           <textarea id="editor" spellcheck="false" aria-label="Markdown input"></textarea>
           <div class="drop-overlay" data-i18n="drop">Markdownファイルをドロップ</div>
@@ -465,8 +579,11 @@
           <div class="score-card"><div class="score-top"><span class="score-name">Zenn</span><span class="score-number" id="scoreZenn">100%</span></div><div class="score-track"><div class="score-fill" id="fillZenn" style="width:100%"></div></div></div>
         </div>
       </div>
-      <div class="issues" id="issues"></div>
-      <p class="heuristic-note" data-i18n="heuristic">※ スコアは独自ルールによる目安です。各サービスの公式レンダラーと完全一致するものではありません。</p>
+      <details class="compat-details" id="compatDetails">
+        <summary class="compat-summary"><span class="compat-expand-label" data-i18n="compatExpand">詳細を見る</span><span class="compat-collapse-label" data-i18n="compatCollapse">詳細を閉じる</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></summary>
+        <div class="issues" id="issues"></div>
+        <p class="heuristic-note" data-i18n="heuristic">※ スコアは独自ルールによる目安です。各サービスの公式レンダラーと完全一致するものではありません。</p>
+      </details>
     </section>
   </main>
 
@@ -509,6 +626,12 @@
     </div>
   </dialog>
 
+  <dialog id="cssResetDialog">
+    <div class="dialog-header"><h2 data-i18n="cssResetTitle">CSSをリセットしますか？</h2><button class="dialog-close" type="button" data-close-dialog="cssResetDialog" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12"/><path d="M18 6 6 18"/></svg></button></div>
+    <div class="dialog-body"><p data-i18n="cssResetMessage">適用済みのCSSと入力途中のCSSが消えます。Markdown本文はそのまま残ります。</p>
+      <div class="dialog-actions"><button class="button" id="cancelResetCss" type="button" data-i18n="cancel">キャンセル</button><button class="button primary" id="confirmResetCss" type="button" data-i18n="reset">リセット</button></div>
+    </div>
+  </dialog>
   <style id="customCssStyle"></style>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -553,6 +676,45 @@ E = mc^2
 $$
 `;
 
+    const defaultMarkdownEn = [
+      '# Markdown Preview Lab',
+      '',
+      'Compare the same Markdown in **GitHub / Qiita / Zenn**-inspired styles.',
+      '',
+      '## What you can do',
+      '',
+      '- Live Markdown preview',
+      '- [x] Autosave in this browser',
+      '- [x] Side-by-side style comparison',
+      '- [x] Portability checks',
+      '',
+      '> This HTML works on its own and does not upload your draft.',
+      '',
+      '### Code',
+      '',
+      '```javascript',
+      'const message = "Hello, Markdown!";',
+      'console.log(message);',
+      '```',
+      '',
+      '### Table',
+      '',
+      '| Platform | Preview | Compatibility |',
+      '| --- | --- | --- |',
+      '| GitHub | ✓ | ✓ |',
+      '| Qiita | ✓ | ✓ |',
+      '| Zenn | ✓ | ✓ |',
+      '',
+      ':::message',
+      'Zenn-style message blocks may not work on other platforms.',
+      ':::',
+      '',
+      '$$',
+      'E = mc^2',
+      '$$',
+      ''
+    ].join('\n');
+
     const I18N = {
       ja: {
         compatMessageGithub:":::message はGitHub Markdownでは専用ブロックとして解釈されません。",
@@ -569,8 +731,8 @@ $$
         compatFenceOther:"コードブロックの言語指定は投稿先ごとに解釈差があります。",
         compatFrontMatterGithub:"先頭のFront MatterはREADME表示では本文扱いになる場合があります。",
         compatFrontMatterQiita:"Front Matterは投稿方法によって扱いが異なります。",
-        boldShortcut:'太字 (Ctrl/⌘+B)', italicShortcut:'斜体 (Ctrl/⌘+I)', helpShortcutsTitle:'編集ショートカット', helpShortcuts:'通常・拡大どちらの編集欄でも、Ctrl/⌘+Bで太字、Ctrl/⌘+Iで斜体の記法を挿入します。未選択時は編集用の文字を挿入して選択します。書式操作はUndoで直前の文章へ戻せます。',
-        brandMeta:'GitHub / Qiita / Zenn の見え方を比較', pageTitle:'Markdown エディタ', pageDesc:'同じMarkdownを GitHub / Qiita / Zenn 風に切り替え、投稿先ごとの互換性も確認できます。', localOnly:'完全ローカル処理', mobileLocal:'完全ローカル処理', open:'開く', filename:'ファイル名', download:'保存', copy:'コピー', saved:'自動保存済み', saving:'保存中…', view:'表示', single:'通常', compare:'比較', style:'スタイル', sync:'スクロール同期', edit:'編集', preview:'プレビュー', approx:'近似プレビュー', drop:'Markdownファイルをドロップ', compatTitle:'投稿先の互換性チェック', compatDesc:'記法を簡易解析して、移植時に確認したい箇所を表示します。', heuristic:'※ スコアは独自ルールによる目安です。各サービスの公式レンダラーと完全一致するものではありません。', footer:'Markdownの編集はブラウザー内で完結', helpTitle:'使い方と注意事項', helpBasicTitle:'基本操作', helpBasic:'左側にMarkdownを書くと右側へ即時反映します。スタイルを切り替えると、GitHub / Qiita / Zenn 風の見え方を比較できます。内容はLocalStorageへ自動保存されます。', helpCompareTitle:'比較モード', helpCompare:'「比較」を選ぶと、右側に2種類のプレビューを同時表示します。スマホでは下の「比較」タブから2プレビューを上下に確認できます。', helpCompatTitle:'互換性チェック', helpCompat:'GFM固有記法、Zennメッセージ、数式、HTMLなどを検出して注意点を表示します。判定は補助機能であり、各サービスの公式仕様を完全再現するものではありません。', helpPrivacyTitle:'プライバシー / オフライン', helpPrivacy:'外部ライブラリやCDNを使わず、このHTMLだけで動作します。CSPで外部通信を禁止しているため、Markdown内の外部画像は実画像を読み込まずプレースホルダーとして表示します。', helpSyntaxTitle:'主な対応記法', helpSyntaxItem1:'見出し、太字、斜体、取り消し線、リンク、引用', helpSyntaxItem2:'順序付き/なしリスト、タスクリスト、テーブル', helpSyntaxItem3:'インラインコード、コードフェンス', helpSyntaxItem4:'簡易数式ブロック、Zenn風 message ブロック', customCssHelp:'プレビュー用の .md を対象にCSSを書いてください。例: .md h2 { color: #16624f; }', reset:'リセット', apply:'適用', noIssues:'目立った互換性上の注意点はありません。', copied:'Markdownをコピーしました', copyFailed:'コピーできませんでした', downloaded:'Markdownファイルを保存しました', opened:'ファイルを読み込みました', invalidFile:'Markdown / テキストファイルを選んでください', cssApplied:'Custom CSSを適用しました', cssReset:'Custom CSSをリセットしました', line:'行', chars:'文字', lines:'行', warning:'注意', info:'情報', sampleViewing:'サンプル表示中', newDocument:'新規作成', newDocumentReady:'空のドキュメントを作成しました', expandEditor:'入力欄を拡大', expandedEditorTitle:'Markdownを大きく編集'
+        formatHeading:'見出し', formatLink:'リンク', formatCode:'コード', formatList:'箇条書き', boldShortcut:'太字 (Ctrl/⌘+B)', italicShortcut:'斜体 (Ctrl/⌘+I)', helpShortcutsTitle:'編集ショートカット', helpShortcuts:'通常・拡大どちらの編集欄でも、Ctrl/⌘+Bで太字、Ctrl/⌘+Iで斜体の記法を挿入します。未選択時は編集用の文字を挿入して選択します。書式操作はUndoで直前の文章へ戻せます。',
+        documentTools:'文書ツール', outlineTab:'見出し一覧', findTab:'検索・置換', closePanel:'閉じる', outlineEmpty:'見出しはありません。', findLabel:'検索する文字', replaceLabel:'置換する文字', replaceOne:'置換', replaceAll:'すべて置換', matchCase:'大文字・小文字を区別', findPrevious:'前へ', findNext:'次へ', findTooMany:'一致が多すぎます。検索条件を絞ってください。', replacedCount:'{count}件を置換しました', compatExpand:'詳細を見る', compatCollapse:'詳細を閉じる', undoAction:'元に戻す', redoAction:'やり直す', brandMeta:'GitHub / Qiita / Zenn の見え方を比較', pageTitle:'Markdown エディタ', pageDesc:'同じMarkdownを GitHub / Qiita / Zenn 風に切り替え、投稿先ごとの互換性も確認できます。', localOnly:'完全ローカル処理', mobileLocal:'完全ローカル処理', open:'開く', filename:'ファイル名', download:'保存', copy:'コピー', saved:'自動保存済み', saving:'保存中…', view:'表示', single:'通常', compare:'比較', style:'スタイル', sync:'スクロール同期', edit:'編集', preview:'プレビュー', approx:'近似プレビュー', drop:'Markdownファイルをドロップ', compatTitle:'投稿先の互換性チェック', compatDesc:'記法を簡易解析して、移植時に確認したい箇所を表示します。', heuristic:'※ スコアは独自ルールによる目安です。各サービスの公式レンダラーと完全一致するものではありません。', footer:'Markdownの編集はブラウザー内で完結', helpTitle:'使い方と注意事項', helpBasicTitle:'基本操作', helpBasic:'左側にMarkdownを書くと右側へ即時反映します。スタイルを切り替えると、GitHub / Qiita / Zenn 風の見え方を比較できます。内容はLocalStorageへ自動保存されます。', helpCompareTitle:'比較モード', helpCompare:'「比較」を選ぶと、右側に2種類のプレビューを同時表示します。スマホでは下の「比較」タブから2プレビューを上下に確認できます。', helpCompatTitle:'互換性チェック', helpCompat:'GFM固有記法、Zennメッセージ、数式、HTMLなどを検出して注意点を表示します。判定は補助機能であり、各サービスの公式仕様を完全再現するものではありません。', helpPrivacyTitle:'プライバシー / オフライン', helpPrivacy:'外部ライブラリやCDNを使わず、このHTMLだけで動作します。CSPで外部通信を禁止しているため、Markdown内の外部画像は実画像を読み込まずプレースホルダーとして表示します。', helpSyntaxTitle:'主な対応記法', helpSyntaxItem1:'見出し、太字、斜体、取り消し線、リンク、引用', helpSyntaxItem2:'順序付き/なしリスト、タスクリスト、テーブル', helpSyntaxItem3:'インラインコード、コードフェンス', helpSyntaxItem4:'簡易数式ブロック、Zenn風 message ブロック', customCssHelp:'プレビュー用の .md を対象にCSSを書いてください。例: .md h2 { color: #16624f; }', reset:'リセット', apply:'適用', noIssues:'目立った互換性上の注意点はありません。', copied:'Markdownをコピーしました', copyFailed:'コピーできませんでした', downloaded:'Markdownファイルを保存しました', opened:'ファイルを読み込みました', invalidFile:'Markdown / テキストファイルを選んでください', cssApplied:'Custom CSSを適用しました', cssReset:'Custom CSSをリセットしました', cssResetFailed:'保存できなかったためCSSは変更していません', cssResetTitle:'CSSをリセットしますか？', cssResetMessage:'適用済みのCSSと入力途中のCSSが消えます。Markdown本文はそのまま残ります。', cancel:'キャンセル', fileTooLarge:'ファイルは5 MB以下にしてください', fileReadFailed:'ファイルを読み込めませんでした', fileReadCancelled:'読み込み中に編集されたため、ファイルの反映を取りやめました', downloadStarted:'Markdownのダウンロードを開始しました', downloadFailed:'ダウンロードを開始できませんでした', line:'行', chars:'文字', lines:'行', warning:'注意', info:'情報', sampleViewing:'サンプル表示中', newDocument:'新規作成', newDocumentReady:'空のドキュメントを作成しました', notSaved:'未保存', storageReadError:'自動保存のデータを読み込めません。Markdownをファイルとして保存してください。', storageCorrupt:'以前の自動保存データを読み込めないため、上書きを防いでいます。現在のMarkdownをファイル保存してから再開してください。', storageWriteError:'自動保存に失敗しました。Markdownをファイルとして保存してください。', retrySave:'再試行', overwriteSavedData:'保存データを上書き', confirmOverwriteSavedData:'以前の保存データを上書きします。必要なMarkdownを先にファイルへ保存しましたか？', expandEditor:'入力欄を拡大', expandedEditorTitle:'Markdownを大きく編集'
       },
       en: {
         compatMessageGithub:"GitHub Markdown does not interpret :::message as a dedicated block.",
@@ -587,12 +749,13 @@ $$
         compatFenceOther:"Code block language metadata is interpreted differently by each platform.",
         compatFrontMatterGithub:"Leading Front Matter may appear as body text in a README.",
         compatFrontMatterQiita:"Front Matter handling depends on the publishing method.",
-        boldShortcut:'Bold (Ctrl/⌘+B)', italicShortcut:'Italic (Ctrl/⌘+I)', helpShortcutsTitle:'Editing shortcuts', helpShortcuts:'In either the main or expanded editor, Ctrl/⌘+B inserts bold markup and Ctrl/⌘+I inserts italic markup. With no selection, placeholder text is inserted and selected for editing. Undo restores the text immediately before formatting.',
-        brandMeta:'Compare GitHub / Qiita / Zenn appearances', pageTitle:'Markdown Editor', pageDesc:'Switch the same Markdown between GitHub, Qiita and Zenn-inspired previews and check portability.', localOnly:'Fully local processing', mobileLocal:'Fully local processing', open:'Open', filename:'File name', download:'Save', copy:'Copy', saved:'Autosaved', saving:'Saving…', view:'View', single:'Single', compare:'Compare', style:'Style', sync:'Sync scroll', edit:'Edit', preview:'Preview', approx:'Approx. preview', drop:'Drop a Markdown file', compatTitle:'Platform compatibility check', compatDesc:'A lightweight syntax scan highlights areas worth checking before publishing elsewhere.', heuristic:'Scores are heuristic estimates and do not guarantee identical output to each platform’s official renderer.', footer:'Markdown editing stays in the browser', helpTitle:'Help & notes', helpBasicTitle:'Basics', helpBasic:'Write Markdown on the left and the preview updates immediately. Switch styles to compare GitHub, Qiita and Zenn-inspired appearances. Your draft is autosaved to LocalStorage.', helpCompareTitle:'Compare mode', helpCompare:'Compare mode shows two preview styles at once. On phones, use the Compare tab to view both previews vertically.', helpCompatTitle:'Compatibility check', helpCompat:'The checker detects GFM-specific syntax, Zenn message blocks, math, HTML and more. It is an assistive heuristic, not an exact implementation of each official parser.', helpPrivacyTitle:'Privacy / offline', helpPrivacy:'No CDN or external library is required. CSP blocks external network requests, so remote images in Markdown are shown as placeholders rather than fetched.', helpSyntaxTitle:'Supported syntax', helpSyntaxItem1:'Headings, bold, italics, strikethrough, links, and blockquotes', helpSyntaxItem2:'Ordered and unordered lists, task lists, and tables', helpSyntaxItem3:'Inline code and fenced code blocks', helpSyntaxItem4:'Basic math blocks and Zenn-style message blocks', customCssHelp:'Target the .md preview in your CSS. Example: .md h2 { color: #16624f; }', reset:'Reset', apply:'Apply', noIssues:'No notable portability issues detected.', copied:'Markdown copied', copyFailed:'Could not copy', downloaded:'Markdown file saved', opened:'File loaded', invalidFile:'Choose a Markdown or text file', cssApplied:'Custom CSS applied', cssReset:'Custom CSS reset', line:'Line', chars:'chars', lines:'lines', warning:'Warning', info:'Info', sampleViewing:'Sample', newDocument:'New document', newDocumentReady:'Started a blank document', expandEditor:'Expand editor', expandedEditorTitle:'Edit Markdown in a larger window'
+        formatHeading:'Heading', formatLink:'Link', formatCode:'Code', formatList:'List', boldShortcut:'Bold (Ctrl/⌘+B)', italicShortcut:'Italic (Ctrl/⌘+I)', helpShortcutsTitle:'Editing shortcuts', helpShortcuts:'In either the main or expanded editor, Ctrl/⌘+B inserts bold markup and Ctrl/⌘+I inserts italic markup. With no selection, placeholder text is inserted and selected for editing. Undo restores the text immediately before formatting.',
+        documentTools:'Document tools', outlineTab:'Outline', findTab:'Find & replace', closePanel:'Close', outlineEmpty:'No headings found.', findLabel:'Find text', replaceLabel:'Replace with', replaceOne:'Replace', replaceAll:'Replace all', matchCase:'Match case', findPrevious:'Previous', findNext:'Next', findTooMany:'Too many matches. Narrow your search.', replacedCount:'Replaced {count} occurrences', compatExpand:'Show details', compatCollapse:'Hide details', undoAction:'Undo', redoAction:'Redo', brandMeta:'Compare GitHub / Qiita / Zenn appearances', pageTitle:'Markdown Editor', pageDesc:'Switch the same Markdown between GitHub, Qiita and Zenn-inspired previews and check portability.', localOnly:'Fully local processing', mobileLocal:'Fully local processing', open:'Open', filename:'File name', download:'Save', copy:'Copy', saved:'Autosaved', saving:'Saving…', view:'View', single:'Single', compare:'Compare', style:'Style', sync:'Sync scroll', edit:'Edit', preview:'Preview', approx:'Approx. preview', drop:'Drop a Markdown file', compatTitle:'Platform compatibility check', compatDesc:'A lightweight syntax scan highlights areas worth checking before publishing elsewhere.', heuristic:'Scores are heuristic estimates and do not guarantee identical output to each platform’s official renderer.', footer:'Markdown editing stays in the browser', helpTitle:'Help & notes', helpBasicTitle:'Basics', helpBasic:'Write Markdown on the left and the preview updates immediately. Switch styles to compare GitHub, Qiita and Zenn-inspired appearances. Your draft is autosaved to LocalStorage.', helpCompareTitle:'Compare mode', helpCompare:'Compare mode shows two preview styles at once. On phones, use the Compare tab to view both previews vertically.', helpCompatTitle:'Compatibility check', helpCompat:'The checker detects GFM-specific syntax, Zenn message blocks, math, HTML and more. It is an assistive heuristic, not an exact implementation of each official parser.', helpPrivacyTitle:'Privacy / offline', helpPrivacy:'No CDN or external library is required. CSP blocks external network requests, so remote images in Markdown are shown as placeholders rather than fetched.', helpSyntaxTitle:'Supported syntax', helpSyntaxItem1:'Headings, bold, italics, strikethrough, links, and blockquotes', helpSyntaxItem2:'Ordered and unordered lists, task lists, and tables', helpSyntaxItem3:'Inline code and fenced code blocks', helpSyntaxItem4:'Basic math blocks and Zenn-style message blocks', customCssHelp:'Target the .md preview in your CSS. Example: .md h2 { color: #16624f; }', reset:'Reset', apply:'Apply', noIssues:'No notable portability issues detected.', copied:'Markdown copied', copyFailed:'Could not copy', downloaded:'Markdown file saved', opened:'File loaded', invalidFile:'Choose a Markdown or text file', cssApplied:'Custom CSS applied', cssReset:'Custom CSS reset', cssResetFailed:'CSS was not changed because saving failed', cssResetTitle:'Reset custom CSS?', cssResetMessage:'This will remove the applied CSS and your un-applied CSS draft. Your Markdown is kept.', cancel:'Cancel', fileTooLarge:'Choose a file no larger than 5 MB', fileReadFailed:'Could not read the file', fileReadCancelled:'A new edit was made while opening the file; the import was cancelled', downloadStarted:'Markdown download started', downloadFailed:'Could not start the download', line:'Line', chars:'chars', lines:'lines', warning:'Warning', info:'Info', sampleViewing:'Sample', newDocument:'New document', newDocumentReady:'Started a blank document', notSaved:'Not saved', storageReadError:'Stored drafts could not be read. Download your Markdown to keep a copy.', storageCorrupt:'The previous stored draft cannot be read. Autosave is paused to protect it. Download your current Markdown before continuing.', storageWriteError:'Autosave failed. Download your Markdown to avoid losing it.', retrySave:'Retry', overwriteSavedData:'Overwrite stored draft', confirmOverwriteSavedData:'This will overwrite the previous stored draft. Have you downloaded any Markdown you need?', expandEditor:'Expand editor', expandedEditorTitle:'Edit Markdown in a larger window'
       }
     };
 
     const els = {
+      saveNotice: document.getElementById('saveNotice'), saveNoticeMessage: document.getElementById('saveNoticeMessage'), retrySaveButton: document.getElementById('retrySaveButton'),
       workspace: document.getElementById('workspace'), editor: document.getElementById('editor'), fileInput: document.getElementById('fileInput'), editorPane: document.getElementById('editorPane'),
       singlePreview: document.getElementById('singlePreview'), singlePreviewScroll: document.getElementById('singlePreviewScroll'), singlePreviewTitle: document.getElementById('singlePreviewTitle'),
       compareA: document.getElementById('comparePreviewA'), compareB: document.getElementById('comparePreviewB'), compareScrollA: document.getElementById('compareScrollA'), compareScrollB: document.getElementById('compareScrollB'),
@@ -600,11 +763,15 @@ $$
       issues: document.getElementById('issues'), editorStats: document.getElementById('editorStats'), saveStatus: document.getElementById('saveStatus'), toast: document.getElementById('toast'),
       sampleState: document.getElementById('sampleState'), newDocumentButton: document.getElementById('newDocumentButton'), filenameInput: document.getElementById('filenameInput'),
       expandEditorButton: document.getElementById('expandEditorButton'), expandedEditorDialog: document.getElementById('expandedEditorDialog'), expandedEditor: document.getElementById('expandedEditor'),
-      helpDialog: document.getElementById('helpDialog'), customCssDialog: document.getElementById('customCssDialog'), customCssEditor: document.getElementById('customCssEditor'), customCssStyle: document.getElementById('customCssStyle')
+      documentToolsButton:document.getElementById('documentToolsButton'), mobileDocumentToolsButton:document.getElementById('mobileDocumentToolsButton'), documentPanel:document.getElementById('documentPanel'), outlineTab:document.getElementById('outlineTab'), findTab:document.getElementById('findTab'), outlinePanel:document.getElementById('outlinePanel'), findPanel:document.getElementById('findPanel'), outlineList:document.getElementById('outlineList'), outlineEmpty:document.getElementById('outlineEmpty'), findInput:document.getElementById('findInput'), replaceInput:document.getElementById('replaceInput'), findMatchCase:document.getElementById('findMatchCase'), findCount:document.getElementById('findCount'), findPrevious:document.getElementById('findPrevious'), findNext:document.getElementById('findNext'), replaceOneButton:document.getElementById('replaceOneButton'), replaceAllButton:document.getElementById('replaceAllButton'),
+      helpDialog: document.getElementById('helpDialog'), customCssDialog: document.getElementById('customCssDialog'), customCssEditor: document.getElementById('customCssEditor'), customCssStyle: document.getElementById('customCssStyle'), cssResetDialog: document.getElementById('cssResetDialog'), cancelResetCss: document.getElementById('cancelResetCss')
     };
 
     let state = { lang:'ja', style:'github', mode:'single', mobileView:'editor', compareA:'github', compareB:'qiita', customCss:'', syncScroll:true, samplePristine:true, outputFilename:'document' };
     let history = [], historyIndex = -1, historyTimer = null, saveTimer = null, toastTimer = null, syncing = false;
+    let initializing = true, storageBlocked = '', saveError = false;
+    let editRevision = 0, fileRequestId = 0, filenameRevision = 0, customCssDraft = "";
+    let findMatches=[], findCursor=-1, findOverflow=false;
 
     function t(key) { return (I18N[state.lang] && I18N[state.lang][key]) || I18N.ja[key] || key; }
     function showToast(message) { clearTimeout(toastTimer); els.toast.textContent = message; els.toast.classList.add('show'); toastTimer = setTimeout(() => els.toast.classList.remove('show'), 1800); }
@@ -647,7 +814,7 @@ $$
     }
 
     function inlineMarkdown(text) {
-      const code = [], markup = [];
+      const code = [], markup = [], escaped = [];
       const restoreMarkup = value => value.replace(/\u0000MARKUP(\d+)\u0000/g, (_, i) => markup[Number(i)] || '');
       // Resolve earlier fragments (such as an image inside a link label) before storing an outer one.
       const protect = html => { markup.push(restoreMarkup(html)); return `\u0000MARKUP${markup.length-1}\u0000`; };
@@ -657,26 +824,78 @@ $$
         s = s.replace(/~~([^~]+)~~/g, '<del>$1</del>');
         return s.replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>').replace(/(^|[^_])_([^_\n]+)_/g, '$1<em>$2</em>');
       };
-      let s = String(text);
+      let s = String(text).replace(/\\([\\\x60*_{}\[\]()#+\-.!|>])/g, (_, ch) => {
+        escaped.push(escapeHtml(ch));
+        return '\u0000ESC'+(escaped.length-1)+'\u0000';
+      });
       s = replaceInlineCode(s, c => { code.push(`<code>${escapeHtml(c.replace(/\n/g,' '))}</code>`); return `\u0000CODE${code.length-1}\u0000`; });
       // Parse raw destinations, escape them once, and keep generated HTML out of text formatting.
-      s = s.replace(/!\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g, (_, alt, url) => protect(`<span class="image-placeholder" title="${escapeHtml(url)}">▧ <span>${formatText(alt || 'image')} · ${escapeHtml(url)}</span></span>`));
-      s = s.replace(/\[([^\]]+)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g, (_, label, url) => protect(`<a href="${escapeHtml(safeUrl(url))}" target="_blank" rel="noopener noreferrer">${formatText(label)}</a>`));
+      s = s.replace(/!\[([^\]]*)\]\(((?:[^()\s]|\([^()]*\))+)(?:\s+"[^"]*")?\)/g, (_, alt, url) => protect(`<span class="image-placeholder" title="${escapeHtml(url)}">▧ <span>${formatText(alt || 'image')} · ${escapeHtml(url)}</span></span>`));
+      s = s.replace(/\[([^\]]+)\]\(((?:[^()\s]|\([^()]*\))+)(?:\s+"[^"]*")?\)/g, (_, label, url) => protect(`<a href="${escapeHtml(safeUrl(url))}" target="_blank" rel="noopener noreferrer">${formatText(label)}</a>`));
       s = s.replace(/<(https?:\/\/[^&<>\s]+)>/g, (_, url) => protect(`<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(url)}</a>`));
       s = formatText(s);
       s = restoreMarkup(s);
       s = s.replace(/\u0000CODE(\d+)\u0000/g, (_, i) => code[Number(i)] || '');
-      return s;
+      return s.replace(/\u0000ESC(\d+)\u0000/g, (_, i) => escaped[Number(i)] || '');
     }
 
     function splitTableRow(line) {
-      let s=line.trim(); if (s.startsWith('|')) s=s.slice(1); if (s.endsWith('|')) s=s.slice(0,-1);
-      return s.split(/(?<!\\)\|/).map(x => x.trim().replace(/\\\|/g,'|'));
+      let value=line.trim();
+      if(value.startsWith('|'))value=value.slice(1);
+      if(value.endsWith('|'))value=value.slice(0,-1);
+      const cells=[]; let cell='', ticks=0;
+      for(let i=0;i<value.length;i++) {
+        const ch=value[i];
+        if(ch==='\\'&&value[i+1]==='|'){cell+='\\|';i++;continue;}
+        if(ch===String.fromCharCode(96)) {
+          let end=i+1;
+          while(end<value.length&&value[end]===String.fromCharCode(96))end++;
+          const size=end-i;
+          if(!ticks)ticks=size;else if(ticks===size)ticks=0;
+          cell+=value.slice(i,end);i=end-1;continue;
+        }
+        if(ch==='|'&&!ticks){cells.push(cell.trim());cell='';}
+        else cell+=ch;
+      }
+      cells.push(cell.trim());
+      return cells;
     }
-
     function frontMatterEnd(lines) {
       return /^---\s*$/.test(lines[0]||'') ? lines.findIndex((line,i)=>i>0 && /^---\s*$/.test(line)) : -1;
     }
+    function extractHeadings(markdown) {
+      const lines=String(markdown).split('\n');
+      const normalized=lines.map(line=>line.replace(/\r$/,''));
+      const frontEnd=frontMatterEnd(normalized);
+      const headings=[];
+      let fence=null, inMath=false, inMessage=false, offset=0;
+      for(let i=0;i<lines.length;i++) {
+        const line=normalized[i];
+        const nextOffset=offset+lines[i].length+1;
+        if(i<=frontEnd) { offset=nextOffset; continue; }
+        if(fence) {
+          if(codeFenceEnd(line,fence))fence=null;
+          offset=nextOffset; continue;
+        }
+        const opening=codeFenceStart(line);
+        if(opening) { fence=opening; offset=nextOffset; continue; }
+        if(/^\s*\$\$\s*$/.test(line)) { inMath=!inMath; offset=nextOffset; continue; }
+        if(inMath) { offset=nextOffset; continue; }
+        if(/^\s*:::message(?:\s+alert)?\s*$/.test(line)) { inMessage=true; offset=nextOffset; continue; }
+        if(inMessage) {
+          if(/^\s*:::\s*$/.test(line))inMessage=false;
+          offset=nextOffset; continue;
+        }
+        const match=line.match(/^(#{1,6})[ \t]+(.+?)\s*$/);
+        if(match && headings.length<500) {
+          const label=match[2].replace(/[ \t]+#+[ \t]*$/,'').trim();
+          if(label)headings.push({level:match[1].length,text:label,line:i+1,start:offset});
+        }
+        offset=nextOffset;
+      }
+      return headings;
+    }
+
     function continuesParagraph(lines, i) {
       const line=lines[i];
       return !/^\s*$/.test(line) && !/^(#{1,6})\s+/.test(line) && !codeFenceStart(line) && !/^\s*>/.test(line) && !/^\s*([-+*]|\d+[.)])\s+/.test(line) && !/^\s*\$\$\s*$/.test(line) && !/^\s*:::message/.test(line) && !(i+1<lines.length && /\|/.test(line) && /^\s*\|?\s*:?-{3,}:?/.test(lines[i+1]));
@@ -726,17 +945,36 @@ $$
           const rows=[]; while(i<lines.length && /\|/.test(lines[i]) && !isBlank(lines[i])) { inspectTable(lines[i],i); rows.push(splitTableRow(lines[i])); i++; }
           out.push('<table><thead><tr>'+head.map((c,k)=>`<th${aligns[k]?` style="text-align:${aligns[k]}"`:''}>${inlineMarkdown(c)}</th>`).join('')+'</tr></thead><tbody>'+rows.map(r=>'<tr>'+head.map((_,k)=>`<td${aligns[k]?` style="text-align:${aligns[k]}"`:''}>${inlineMarkdown(r[k]||'')}</td>`).join('')+'</tr>').join('')+'</tbody></table>'); continue;
         }
-        let listMatch=line.match(/^\s*([-+*]|\d+[.)])\s+(.+)$/);
+        let listMatch=line.match(/^(\s*)([-+*]|\d+[.)])\s+(.+)$/);
         if (listMatch) {
-          const ordered=/^\d/.test(listMatch[1]), items=[];
+          const tokens=[];
           while(i<lines.length) {
-            const m=lines[i].match(/^\s*([-+*]|\d+[.)])\s+(.+)$/); if(!m || /^\d/.test(m[1])!==ordered) break;
+            const m=lines[i].match(/^(\s*)([-+*]|\d+[.)])\s+(.+)$/);
+            if(!m)break;
             inspect(lines[i],i);
-            let body=m[2], task=body.match(/^\[([ xX])\]\s+(.*)$/);
-            if(task) items.push(`<li class="task"><input type="checkbox" disabled ${task[1].toLowerCase()==='x'?'checked':''}>${inlineMarkdown(task[2])}</li>`); else items.push(`<li>${inlineMarkdown(body)}</li>`);
+            tokens.push({indent:m[1].length,ordered:/^\d/.test(m[2]),body:m[3]});
             i++;
           }
-          out.push(`<${ordered?'ol':'ul'}>${items.join('')}</${ordered?'ol':'ul'}>`); continue;
+          let index=0;
+          const listAt=(indent,ordered)=>{
+            const tag=ordered?'ol':'ul', children=[];
+            while(index<tokens.length) {
+              const tok=tokens[index];
+              if(tok.indent<indent||(tok.indent===indent&&tok.ordered!==ordered))break;
+              if(tok.indent>indent) {
+                const nested=listAt(tok.indent,tok.ordered);
+                if(children.length)children[children.length-1]=children[children.length-1].replace(/<\/li>$/,nested+'</li>');
+                else children.push('<li>'+nested+'</li>');
+                continue;
+              }
+              const task=tok.body.match(/^\[([ xX])\]\s+(.*)$/);
+              children.push(task?'<li class="task"><input type="checkbox" disabled '+(task[1].toLowerCase()==='x'?'checked':'')+'>'+inlineMarkdown(task[2])+'</li>':'<li>'+inlineMarkdown(tok.body)+'</li>');
+              index++;
+            }
+            return '<'+tag+'>'+children.join('')+'</'+tag+'>';
+          };
+          while(index<tokens.length)out.push(listAt(tokens[index].indent,tokens[index].ordered));
+          continue;
         }
         if (/^\s*</.test(line)) { inspect(line,i,false); out.push(`<p class="raw-html">${escapeHtml(line)}</p>`); i++; continue; }
         const paragraphStart=i, para=[line]; i++;
@@ -756,7 +994,7 @@ $$
       els.compareA.innerHTML=htmlA; els.compareB.innerHTML=htmlB; applyTheme(els.compareA,state.compareA); applyTheme(els.compareB,state.compareB);
       const lines=md ? md.split(/\r?\n/).length : 0; els.editorStats.textContent=`${md.length} ${t('chars')} · ${lines} ${t('lines')}`;
       updateSampleStateUI();
-      runCompatibility(md); scheduleSave();
+      runCompatibility(md); updateOutline(md); updateFindMatches(); scheduleSave();
     }
     function capitalize(s) { return s.charAt(0).toUpperCase()+s.slice(1); }
 
@@ -794,43 +1032,259 @@ $$
       els.issues.innerHTML=issues.slice(0,24).map((x,i)=>`<button class="issue-row" type="button" data-issue-index="${i}" data-line="${x.line}"><span class="issue-icon ${x.severity}">${x.severity==='warn'?'!':'i'}</span><span class="issue-platform">${x.platform==='local'?'Local':capitalize(x.platform)}</span><span class="issue-message">${escapeHtml(x.message)}</span><span class="issue-line">${t('line')} ${x.line}</span></button>`).join('');
     }
 
-    function scheduleSave() { els.saveStatus.textContent=t('saving'); clearTimeout(saveTimer); saveTimer=setTimeout(saveState,350); }
-    function saveState() { try { localStorage.setItem(STORAGE_KEY,JSON.stringify({...state,markdown:els.editor.value})); els.saveStatus.textContent=t('saved'); } catch { els.saveStatus.textContent='LocalStorage error'; } }
-    function loadState() {
-      try {
-        const raw=localStorage.getItem(STORAGE_KEY);
-        if(!raw) return false;
-        const saved=JSON.parse(raw);
-        if(typeof saved.samplePristine!=='boolean') saved.samplePristine=saved.markdown===defaultMarkdown;
-        state={...state,...saved};
-        return true;
-      } catch { return false; }
+    function updateStorageNotice() {
+      const blocked=!!storageBlocked;
+      const visible=blocked||saveError;
+      els.saveNotice.hidden=!visible;
+      els.saveNoticeMessage.textContent=blocked ? t(storageBlocked==='read'?'storageReadError':'storageCorrupt') : t('storageWriteError');
+      els.retrySaveButton.textContent=blocked&&storageBlocked!=='read' ? t('overwriteSavedData') : t('retrySave');
+      els.saveStatus.textContent=visible?t('notSaved'):t('saved');
     }
-    function updateSampleStateUI() { els.sampleState.classList.toggle('visible',state.samplePristine && els.editor.value===defaultMarkdown); }
+    function scheduleSave() {
+      if(initializing||storageBlocked)return;
+      clearTimeout(saveTimer);
+      els.saveStatus.textContent=t('saving');
+      saveTimer=setTimeout(saveState,350);
+    }
+    function saveState() {
+      if(initializing||storageBlocked)return false;
+      try {
+        localStorage.setItem(STORAGE_KEY,JSON.stringify({...state,markdown:els.editor.value}));
+        saveError=false;
+        updateStorageNotice();
+        return true;
+      } catch {
+        saveError=true;
+        updateStorageNotice();
+        return false;
+      }
+    }
+    function loadState() {
+      let raw;
+      try { raw=localStorage.getItem(STORAGE_KEY); }
+      catch { storageBlocked='read'; return false; }
+      if(raw===null)return false;
+      try {
+        const saved=JSON.parse(raw);
+        if(!saved||typeof saved!=='object'||Array.isArray(saved)||typeof saved.markdown!=='string') throw Error('Invalid saved draft');
+        if(typeof saved.samplePristine!=='boolean') saved.samplePristine=saved.markdown===defaultMarkdown||saved.markdown===defaultMarkdownEn;
+        const styles=['github','qiita','zenn','standard','minimal','print','custom'];
+        const safe={markdown:saved.markdown};
+        if(saved.lang==='ja'||saved.lang==='en')safe.lang=saved.lang;
+        if(styles.includes(saved.style))safe.style=saved.style;
+        if(styles.includes(saved.compareA))safe.compareA=saved.compareA;
+        if(styles.includes(saved.compareB))safe.compareB=saved.compareB;
+        if(saved.mode==='single'||saved.mode==='compare')safe.mode=saved.mode;
+        if(['editor','preview','compare'].includes(saved.mobileView))safe.mobileView=saved.mobileView;
+        if(typeof saved.customCss==='string')safe.customCss=saved.customCss;
+        if(typeof saved.outputFilename==='string')safe.outputFilename=saved.outputFilename;
+        if(typeof saved.syncScroll==='boolean')safe.syncScroll=saved.syncScroll;
+        safe.samplePristine=saved.samplePristine;
+        state={...state,...safe};
+        return true;
+      } catch { storageBlocked='corrupt'; return false; }
+    }
+    function retryStorage() {
+      if(storageBlocked==='read') {
+        try {
+          const raw=localStorage.getItem(STORAGE_KEY);
+          storageBlocked=raw===null?'':'corrupt';
+        } catch { updateStorageNotice(); return; }
+        if(storageBlocked) { updateStorageNotice(); return; }
+      } else if(storageBlocked) {
+        if(!window.confirm(t('confirmOverwriteSavedData')))return;
+        storageBlocked='';
+      }
+      saveState();
+    }
+    function updateSampleStateUI() { els.sampleState.classList.toggle('visible',state.samplePristine && (els.editor.value===defaultMarkdown||els.editor.value===defaultMarkdownEn)); }
     function leaveSampleMode() { if(state.samplePristine){ state.samplePristine=false; updateSampleStateUI(); } }
     function newDocument() {
       state.samplePristine=false;
       state.outputFilename='document'; els.filenameInput.value=state.outputFilename;
-      els.editor.value='';
+      pushHistory(true);
+      els.editor.value=''; editRevision++; fileRequestId++;
       pushHistory(true);
       render();
       els.editor.focus();
       showToast(t('newDocumentReady'));
     }
     function pushHistory(immediate=false) { clearTimeout(historyTimer); const run=()=>{ const value=els.editor.value; if(history[historyIndex]===value)return; history=history.slice(0,historyIndex+1); history.push(value); if(history.length>100) history.shift(); historyIndex=history.length-1; }; if(immediate)run(); else historyTimer=setTimeout(run,350); }
-    function undo() { if(historyIndex>0){ historyIndex--; els.editor.value=history[historyIndex]; render(); } }
-    function redo() { if(historyIndex<history.length-1){ historyIndex++; els.editor.value=history[historyIndex]; render(); } }
+    function undo() {
+      pushHistory(true);
+      if(historyIndex>0){ historyIndex--; els.editor.value=history[historyIndex]; editRevision++; render(); }
+    }
+    function redo() {
+      clearTimeout(historyTimer);
+      if(els.editor.value!==history[historyIndex]) { pushHistory(true); return; }
+      if(historyIndex<history.length-1){ historyIndex++; els.editor.value=history[historyIndex]; editRevision++; render(); }
+    }
 
     function setStyle(style, editCustom=false) {
       state.style=style; document.querySelectorAll('[data-style]').forEach(b=>b.classList.toggle('active',b.dataset.style===style));
-      if(style==='custom') { els.customCssEditor.value=state.customCss; if((editCustom||!state.customCss)&&!els.customCssDialog.open) els.customCssDialog.showModal(); }
+      if(style==='custom') { els.customCssEditor.value=customCssDraft; if(editCustom&&!els.customCssDialog.open) els.customCssDialog.showModal(); }
       render();
     }
-    function setMode(mode) { state.mode=mode; els.workspace.classList.toggle('compare',mode==='compare'); document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode)); requestAnimationFrame(()=>syncScrollGroup(els.editor)); saveState(); }
-    function setMobileView(view) { state.mobileView=view; els.workspace.classList.remove('mobile-editor','mobile-preview','mobile-compare'); els.workspace.classList.add('mobile-'+view); document.querySelectorAll('[data-mobile-view]').forEach(b=>b.classList.toggle('active',b.dataset.mobileView===view)); if(view==='compare') setMode('compare'); saveState(); }
-    function setLanguage(lang) { state.lang=lang; document.documentElement.lang=lang; document.querySelectorAll('[data-i18n]').forEach(el=>{ const key=el.dataset.i18n; if(t(key)) el.textContent=t(key); }); document.querySelectorAll('[data-i18n-title]').forEach(el=>{ const key=el.dataset.i18nTitle; if(t(key)) el.title=t(key); }); document.querySelectorAll('[data-i18n-aria]').forEach(el=>el.setAttribute('aria-label',t(el.dataset.i18nAria))); document.getElementById('languageButton').textContent=lang==='ja'?'EN':'JA'; document.getElementById('languageButton').setAttribute('aria-label',lang==='ja'?'英語に切り替え':'Switch to Japanese'); render(); saveState(); }
+    function setMode(mode) { state.mode=mode; els.workspace.classList.toggle('compare',mode==='compare'); document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode)); requestAnimationFrame(()=>syncScrollGroup(els.editor)); if(!initializing)saveState(); }
+    function setMobileView(view) { state.mobileView=view; els.workspace.classList.remove('mobile-editor','mobile-preview','mobile-compare'); els.workspace.classList.add('mobile-'+view); document.querySelectorAll('[data-mobile-view]').forEach(b=>b.classList.toggle('active',b.dataset.mobileView===view)); if(view==='compare') setMode('compare'); if(!initializing)saveState(); }
+    function setLanguage(lang) {
+      if(!initializing&&state.samplePristine&&(els.editor.value===defaultMarkdown||els.editor.value===defaultMarkdownEn)) {
+        const translated=lang==='en'?defaultMarkdownEn:defaultMarkdown;
+        if(els.editor.value!==translated) {
+          els.editor.value=translated; editRevision++; fileRequestId++;
+          clearTimeout(historyTimer); history=[translated]; historyIndex=0;
+        }
+      }
+      state.lang=lang; document.documentElement.lang=lang;
+      document.querySelectorAll('[data-i18n]').forEach(el=>{ const key=el.dataset.i18n; if(t(key)) el.textContent=t(key); });
+      document.querySelectorAll('[data-i18n-title]').forEach(el=>{ const key=el.dataset.i18nTitle; if(t(key)) el.title=t(key); });
+      document.querySelectorAll('[data-i18n-aria]').forEach(el=>el.setAttribute('aria-label',t(el.dataset.i18nAria)));
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>el.placeholder=t(el.dataset.i18nPlaceholder));
+      document.getElementById('languageButton').textContent=lang==='ja'?'EN':'JA';
+      document.getElementById('languageButton').setAttribute('aria-label',lang==='ja'?'英語に切り替え':'Switch to Japanese');
+      render(); updateStorageNotice(); if(!initializing)saveState();
+    }
 
     function selectLine(line) { const lines=els.editor.value.split('\n'); let start=0; for(let i=0;i<line-1;i++)start+=lines[i].length+1; const end=start+(lines[line-1]||'').length; els.editor.focus(); els.editor.setSelectionRange(start,end); if(window.innerWidth<=720)setMobileView('editor'); const ratio=start/Math.max(1,els.editor.value.length); els.editor.scrollTop=(els.editor.scrollHeight-els.editor.clientHeight)*ratio; }
+    function updateOutline(markdown) {
+      const headings=extractHeadings(markdown);
+      els.outlineEmpty.hidden=headings.length>0;
+      els.outlineList.innerHTML=headings.map(h=>
+        '<button class="outline-item" type="button" data-outline-line="'+h.line+'" style="padding-left:'+(8+(h.level-1)*16)+'px" title="'+escapeHtml(h.text)+'"><span>H'+h.level+'</span><span class="outline-text">'+escapeHtml(h.text)+'</span></button>'
+      ).join('');
+    }
+
+    function literalMatches(markdown,query,caseSensitive,limit=5000) {
+      if(!query)return {matches:[],overflow:false};
+      const escaped=query.replace(/[.*+?^$()|[\]{}\\]/g,'\\$&');
+      const re=new RegExp(escaped,'g'+(caseSensitive?'':'i'));
+      const matches=[]; let match;
+      while((match=re.exec(markdown))!==null) {
+        if(matches.length>=limit)return {matches,overflow:true};
+        matches.push({start:match.index,end:match.index+match[0].length});
+      }
+      return {matches,overflow:false};
+    }
+
+    function updateFindMatches(reset=false) {
+      const previous=!reset&&findCursor>=0 ? findMatches[findCursor]?.start : -1;
+      const result=literalMatches(els.editor.value,els.findInput.value,els.findMatchCase.checked);
+      findMatches=result.matches;
+      findOverflow=result.overflow;
+      findCursor=findMatches.findIndex(m=>m.start===previous);
+      els.findCount.textContent=(findCursor+1)+' / '+findMatches.length+(findOverflow?'+':'');
+      els.findCount.title=findOverflow?t('findTooMany'):'';
+      const hasMatches=findMatches.length>0;
+      els.findNext.disabled=!hasMatches;
+      els.findPrevious.disabled=!hasMatches;
+      els.replaceOneButton.disabled=!hasMatches;
+      els.replaceAllButton.disabled=!hasMatches||findOverflow;
+    }
+
+    function setDocumentTab(name,focus=false) {
+      const outline=name==='outline';
+      els.outlineTab.setAttribute('aria-selected',String(outline));
+      els.findTab.setAttribute('aria-selected',String(!outline));
+      els.outlineTab.tabIndex=outline?0:-1;
+      els.findTab.tabIndex=outline?-1:0;
+      els.outlinePanel.hidden=!outline;
+      els.findPanel.hidden=outline;
+      if(focus) {
+        if(outline)els.outlineTab.focus();
+        else els.findInput.focus();
+      }
+    }
+
+    function closeDocumentPanel(focus=true) {
+      els.documentPanel.hidden=true;
+      els.documentToolsButton.setAttribute('aria-expanded','false');
+      els.mobileDocumentToolsButton.setAttribute('aria-expanded','false');
+      if(focus)(window.innerWidth<=720?els.mobileDocumentToolsButton:els.documentToolsButton).focus();
+    }
+
+    function openDocumentPanel(name='outline') {
+      if(window.innerWidth<=720 && state.mobileView!=='editor')setMobileView('editor');
+      els.documentPanel.hidden=false;
+      els.documentToolsButton.setAttribute('aria-expanded','true');
+      els.mobileDocumentToolsButton.setAttribute('aria-expanded','true');
+      setDocumentTab(name,true);
+      updateOutline(els.editor.value);
+      updateFindMatches();
+    }
+
+    function selectSourceRange(start,end) {
+      if(window.innerWidth<=720 && state.mobileView!=='editor')setMobileView('editor');
+      els.editor.focus();
+      els.editor.setSelectionRange(start,end);
+      const available=Math.max(0,els.editor.scrollHeight-els.editor.clientHeight);
+      if(available>0)els.editor.scrollTop=available*start/Math.max(1,els.editor.value.length);
+    }
+
+    function navigateFind(direction) {
+      if(!findMatches.length)return;
+      if(findCursor<0) {
+        const caret=els.editor.selectionStart;
+        if(direction>0) {
+          findCursor=findMatches.findIndex(m=>m.start>=caret);
+          if(findCursor<0)findCursor=0;
+        } else {
+          findCursor=0;
+          for(let i=0;i<findMatches.length;i++)if(findMatches[i].end<=caret)findCursor=i;
+        }
+      } else findCursor=(findCursor+direction+findMatches.length)%findMatches.length;
+      const match=findMatches[findCursor];
+      selectSourceRange(match.start,match.end);
+      els.findCount.textContent=(findCursor+1)+' / '+findMatches.length+(findOverflow?'+':'');
+    }
+
+    function replaceCurrentMatch() {
+      if(!findMatches.length)return;
+      if(findCursor<0) {
+        navigateFind(1);
+        if(findCursor<0)return;
+      }
+      const match=findMatches[findCursor], value=els.editor.value, replacement=els.replaceInput.value;
+      pushHistory(true);
+      leaveSampleMode();
+      els.editor.value=value.slice(0,match.start)+replacement+value.slice(match.end);
+      editRevision++;
+      els.editor.setSelectionRange(match.start+replacement.length,match.start+replacement.length);
+      pushHistory(true);
+      render();
+      findCursor=-1;
+      navigateFind(1);
+    }
+
+    function replaceEveryMatch() {
+      if(!findMatches.length||findOverflow)return;
+      const value=els.editor.value,replacement=els.replaceInput.value,count=findMatches.length;
+      let output='',cursor=0;
+      for(const match of findMatches) {
+        output+=value.slice(cursor,match.start)+replacement;
+        cursor=match.end;
+      }
+      output+=value.slice(cursor);
+      if(output===value)return;
+      pushHistory(true);
+      leaveSampleMode();
+      els.editor.value=output;
+      editRevision++;
+      pushHistory(true);
+      render();
+      selectSourceRange(0,0);
+      showToast(t('replacedCount').replace('{count}',String(count)));
+    }
+
+    function handleDocumentShortcut(event) {
+      if(!(event.ctrlKey||event.metaKey)||event.altKey||event.shiftKey||event.isComposing||String(event.key).toLowerCase()!=='f')return;
+      if(document.querySelector('dialog[open]:not(#expandedEditorDialog)'))return;
+      event.preventDefault();
+      if(els.expandedEditorDialog.open) {
+        els.expandedEditorDialog.close();
+        requestAnimationFrame(()=>openDocumentPanel('find'));
+      } else openDocumentPanel('find');
+    }
+
     function formatSelection(type,e=els.editor) {
       const start=e.selectionStart, end=e.selectionEnd, selected=e.value.slice(start,end), before=e.value.slice(0,start), after=e.value.slice(end); let replacement=selected, selectOffset=0;
       if(type==='bold'){ replacement=`**${selected||'bold'}**`; selectOffset=2; }
@@ -842,7 +1296,7 @@ $$
       // Commit pending typing before the formatting change becomes its own undo step.
       if(e===els.expandedEditor)els.editor.value=e.value;
       pushHistory(true);
-      leaveSampleMode(); e.value=before+replacement+after; e.focus(); const targetText=selected||({bold:'bold',italic:'italic',heading:'Heading',link:'link text',code:'code',list:'item'}[type]); const pos=start+Math.max(0,selectOffset); e.setSelectionRange(pos,pos+targetText.length);
+      leaveSampleMode(); e.value=before+replacement+after; editRevision++; e.focus(); const targetText=selected||({bold:'bold',italic:'italic',heading:'Heading',link:'link text',code:'code',list:'item'}[type]); const pos=start+Math.max(0,selectOffset); e.setSelectionRange(pos,pos+targetText.length);
       if(e===els.expandedEditor) { els.editor.value=e.value; els.editor.setSelectionRange(e.selectionStart,e.selectionEnd); }
       pushHistory(true); render();
     }
@@ -869,7 +1323,7 @@ $$
       });
     }
     function syncExpandedEditor() {
-      leaveSampleMode();
+      leaveSampleMode(); editRevision++;
       els.editor.value=els.expandedEditor.value;
       els.editor.setSelectionRange(els.expandedEditor.selectionStart,els.expandedEditor.selectionEnd);
       pushHistory();
@@ -899,20 +1353,119 @@ $$
       event.preventDefault();
       pushHistory(true);
       const editor=event.currentTarget;
-      editor.setRangeText('  ',editor.selectionStart,editor.selectionEnd,'end');
+      editor.setRangeText('  ',editor.selectionStart,editor.selectionEnd,'end'); editRevision++;
       if(editor===els.expandedEditor)syncExpandedEditor();
       else { leaveSampleMode(); render(); }
       pushHistory(true);
     }
 
-    async function copyMarkdown() { try { await navigator.clipboard.writeText(els.editor.value); showToast(t('copied')); } catch { try { els.editor.select(); document.execCommand('copy'); showToast(t('copied')); } catch { showToast(t('copyFailed')); } } }
+    async function copyMarkdown() {
+      const text=els.editor.value;
+      try { if(!navigator.clipboard?.writeText)throw Error('Clipboard API unavailable'); await navigator.clipboard.writeText(text); showToast(t('copied')); return; }
+      catch { /* Try the native legacy copy operation. */ }
+      const previousFocus=document.activeElement;
+      const selection=previousFocus===els.editor?[els.editor.selectionStart,els.editor.selectionEnd]:null;
+      const temporary=document.createElement('textarea');
+      temporary.value=text; temporary.setAttribute('readonly',''); temporary.style.cssText='position:fixed;left:-9999px;top:0;opacity:0';
+      let success=false;
+      try { document.body.appendChild(temporary); temporary.select(); success=document.execCommand('copy')===true; }
+      catch { success=false; }
+      finally {
+        temporary.remove();
+        try { previousFocus?.focus({preventScroll:true}); if(selection)els.editor.setSelectionRange(...selection); } catch {}
+      }
+      showToast(t(success?'copied':'copyFailed'));
+    }
     function normalizedFilename() { let name=(els.filenameInput.value||state.outputFilename||'document').trim().replace(/\.(?:md|markdown|mdown|mkd)$/i,'').replace(/[<>:"/\\|?*\u0000-\u001F]/g,'-').replace(/[. ]+$/g,'').trim(); if(!name) name='document'; state.outputFilename=name; els.filenameInput.value=name; return name+'.md'; }
-    function downloadMarkdown() { const blob=new Blob([els.editor.value],{type:'text/markdown;charset=utf-8'}), a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=normalizedFilename(); document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); saveState(); showToast(t('downloaded')); }
-    function readFile(file) { if(!file)return; if(file.size>5*1024*1024){ showToast('File is too large (max 5 MB)'); return; } const name=file.name.toLowerCase(); if(!(name.endsWith('.md')||name.endsWith('.markdown')||name.endsWith('.mdown')||name.endsWith('.mkd')||file.type.startsWith('text/'))){ showToast(t('invalidFile')); return; } const reader=new FileReader(); reader.onload=()=>{ state.samplePristine=false; state.outputFilename=file.name.replace(/\.(?:md|markdown|mdown|mkd)$/i,'')||'document'; els.filenameInput.value=state.outputFilename; els.editor.value=String(reader.result||''); pushHistory(true); render(); showToast(t('opened')); }; reader.readAsText(file); }
+    function downloadMarkdown() {
+      const markdown=els.editor.value, filename=normalizedFilename();
+      let href='', anchor=null;
+      try {
+        href=URL.createObjectURL(new Blob([markdown],{type:'text/markdown;charset=utf-8'}));
+        anchor=document.createElement('a'); anchor.href=href; anchor.download=filename;
+        document.body.appendChild(anchor); anchor.click();
+        saveState();
+        showToast(t('downloadStarted'));
+      } catch { showToast(t('downloadFailed')); }
+      finally {
+        anchor?.remove();
+        if(href)setTimeout(()=>URL.revokeObjectURL(href),1000);
+      }
+    }
+    function readFile(file) {
+      if(!file)return;
+      const id=++fileRequestId;
+      if(file.size>5*1024*1024) { showToast(t('fileTooLarge')); return; }
+      const name=file.name.toLowerCase();
+      if(!(name.endsWith('.md')||name.endsWith('.markdown')||name.endsWith('.mdown')||name.endsWith('.mkd')||file.type.startsWith('text/'))) { showToast(t('invalidFile')); return; }
+      const currentEditRevision=editRevision, currentFilenameRevision=filenameRevision;
+      const reader=new FileReader();
+      reader.onload=()=>{
+        if(id!==fileRequestId)return;
+        if(currentEditRevision!==editRevision){ showToast(t('fileReadCancelled')); return; }
+        pushHistory(true); // Preserve typing still waiting for its history timer.
+        state.samplePristine=false;
+        if(currentFilenameRevision===filenameRevision) {
+          state.outputFilename=file.name.replace(/\.(?:md|markdown|mdown|mkd)$/i,'')||'document';
+          els.filenameInput.value=state.outputFilename;
+        }
+        els.editor.value=String(reader.result??''); editRevision++;
+        pushHistory(true); render(); showToast(t('opened'));
+      };
+      reader.onerror=()=>{ if(id===fileRequestId)showToast(t('fileReadFailed')); };
+      reader.onabort=()=>{ if(id===fileRequestId)showToast(t('fileReadFailed')); };
+      try { reader.readAsText(file); } catch { if(id===fileRequestId)showToast(t('fileReadFailed')); }
+    }
 
+    els.mobileDocumentToolsButton.addEventListener('click',()=>{
+      if(!els.documentPanel.hidden)closeDocumentPanel();
+      else openDocumentPanel('outline');
+    });
+    els.documentToolsButton.addEventListener('click',()=>{
+      if(!els.documentPanel.hidden)closeDocumentPanel();
+      else openDocumentPanel('outline');
+    });
+    els.outlineTab.addEventListener('click',()=>setDocumentTab('outline',true));
+    els.findTab.addEventListener('click',()=>setDocumentTab('find',true));
+    const tabKeys=event=>{
+      if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
+      event.preventDefault();
+      setDocumentTab(event.key==='Home'?'outline':event.key==='End'?'find':
+        event.currentTarget===els.outlineTab?'find':'outline',true);
+    };
+    els.outlineTab.addEventListener('keydown',tabKeys);
+    els.findTab.addEventListener('keydown',tabKeys);
+    document.getElementById('documentClose').addEventListener('click',()=>closeDocumentPanel());
+    els.outlineList.addEventListener('click',event=>{
+      const button=event.target.closest('[data-outline-line]');
+      if(!button)return;
+      const line=Number(button.dataset.outlineLine);
+      closeDocumentPanel(false);
+      selectLine(line);
+    });
+    els.findInput.addEventListener('input',()=>updateFindMatches(true));
+    els.findMatchCase.addEventListener('change',()=>updateFindMatches(true));
+    els.findInput.addEventListener('keydown',event=>{
+      if(event.key==='Enter') {
+        event.preventDefault();
+        navigateFind(event.shiftKey?-1:1);
+      }
+    });
+    els.findNext.addEventListener('click',()=>navigateFind(1));
+    els.findPrevious.addEventListener('click',()=>navigateFind(-1));
+    els.replaceOneButton.addEventListener('click',replaceCurrentMatch);
+    els.replaceAllButton.addEventListener('click',replaceEveryMatch);
+    document.addEventListener('keydown',event=>{
+      handleDocumentShortcut(event);
+      if(event.key==='Escape' && !els.documentPanel.hidden && !document.querySelector('dialog[open]')) {
+        event.preventDefault();
+        closeDocumentPanel();
+      }
+    });
+    els.retrySaveButton.addEventListener('click',retryStorage);
     document.getElementById('openButton').addEventListener('click',()=>els.fileInput.click());
     document.getElementById('downloadButton').addEventListener('click',downloadMarkdown);
-    els.filenameInput.addEventListener('input',()=>{ state.outputFilename=els.filenameInput.value; scheduleSave(); });
+    els.filenameInput.addEventListener('input',()=>{ filenameRevision++; state.outputFilename=els.filenameInput.value; scheduleSave(); });
     els.filenameInput.addEventListener('blur',()=>{ normalizedFilename(); saveState(); });
     els.expandEditorButton.addEventListener('click',openExpandedEditor);
     els.expandedEditor.addEventListener('input',syncExpandedEditor);
@@ -930,7 +1483,7 @@ $$
     document.querySelectorAll('[data-format]').forEach(b=>b.addEventListener('click',()=>formatSelection(b.dataset.format)));
     els.fileInput.addEventListener('change',()=>{ readFile(els.fileInput.files[0]); els.fileInput.value=''; });
     els.newDocumentButton.addEventListener('click',newDocument);
-    els.editor.addEventListener('input',()=>{ leaveSampleMode(); pushHistory(); render(); });
+    els.editor.addEventListener('input',()=>{ editRevision++; leaveSampleMode(); pushHistory(); render(); });
     els.editor.addEventListener('scroll',()=>syncScrollGroup(els.editor));
     els.singlePreviewScroll.addEventListener('scroll',()=>syncScrollGroup(els.singlePreviewScroll));
     els.compareScrollA.addEventListener('scroll',()=>syncScrollGroup(els.compareScrollA));
@@ -941,12 +1494,43 @@ $$
     els.syncScroll.addEventListener('change',()=>{ state.syncScroll=els.syncScroll.checked; saveState(); });
     els.compareStyleA.addEventListener('change',()=>{ state.compareA=els.compareStyleA.value; render(); }); els.compareStyleB.addEventListener('change',()=>{ state.compareB=els.compareStyleB.value; render(); });
     els.issues.addEventListener('click',e=>{ const row=e.target.closest('[data-line]'); if(row)selectLine(Number(row.dataset.line)); });
-    document.getElementById('applyCssButton').addEventListener('click',()=>{ state.customCss=els.customCssEditor.value; els.customCssStyle.textContent=state.customCss; els.customCssDialog.close(); setStyle('custom'); showToast(t('cssApplied')); });
-    document.getElementById('resetCssButton').addEventListener('click',()=>{ state.customCss=''; els.customCssEditor.value=''; els.customCssStyle.textContent=''; saveState(); showToast(t('cssReset')); });
+    els.customCssEditor.addEventListener('input',()=>{ customCssDraft=els.customCssEditor.value; });
+    document.getElementById('applyCssButton').addEventListener('click',()=>{
+      customCssDraft=els.customCssEditor.value;
+      state.customCss=customCssDraft; els.customCssStyle.textContent=state.customCss;
+      els.customCssDialog.close(); setStyle('custom'); showToast(t('cssApplied'));
+    });
+    document.getElementById('resetCssButton').addEventListener('click',()=>{
+      customCssDraft=els.customCssEditor.value;
+      if(!customCssDraft&&!state.customCss) { showToast(t('cssReset')); return; }
+      els.cssResetDialog.showModal(); els.cancelResetCss.focus();
+    });
+    els.cancelResetCss.addEventListener('click',()=>els.cssResetDialog.close());
+    document.getElementById('confirmResetCss').addEventListener('click',()=>{
+      const previous=state.customCss;
+      state.customCss='';
+      if(!saveState()) {
+        state.customCss=previous; els.customCssStyle.textContent=previous;
+        els.cssResetDialog.close(); showToast(t('cssResetFailed')); return;
+      }
+      customCssDraft=''; els.customCssEditor.value=''; els.customCssStyle.textContent='';
+      els.cssResetDialog.close(); render(); showToast(t('cssReset'));
+    });
     document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='hidden')saveState(); }); window.addEventListener('beforeunload',saveState);
 
-    const hadSavedState=loadState(); els.editor.value=hadSavedState && typeof state.markdown==='string' ? state.markdown : defaultMarkdown; if(!hadSavedState) state.samplePristine=true; state.outputFilename=String(state.outputFilename||'document').replace(/\.(?:md|markdown|mdown|mkd)$/i,'')||'document'; els.filenameInput.value=state.outputFilename; els.compareStyleA.value=state.compareA; els.compareStyleB.value=state.compareB; els.syncScroll.checked=state.syncScroll!==false; els.customCssStyle.textContent=state.customCss||''; els.customCssEditor.value=state.customCss||'';
-    setMode(state.mode); setMobileView(state.mobileView); setLanguage(state.lang); setStyle(state.style); history=[els.editor.value]; historyIndex=0; render();
+    const hadSavedState=loadState();
+    els.editor.value=hadSavedState ? state.markdown : defaultMarkdown;
+    if(!hadSavedState)state.samplePristine=true;
+    if(state.samplePristine&&state.lang==='en'&&els.editor.value===defaultMarkdown)els.editor.value=defaultMarkdownEn;
+    state.outputFilename=String(state.outputFilename||'document').replace(/\.(?:md|markdown|mdown|mkd)$/i,'')||'document';
+    els.filenameInput.value=state.outputFilename;
+    els.compareStyleA.value=state.compareA; els.compareStyleB.value=state.compareB;
+    els.syncScroll.checked=state.syncScroll!==false;
+    els.customCssStyle.textContent=state.customCss||''; customCssDraft=state.customCss||''; els.customCssEditor.value=customCssDraft;
+    setMode(state.mode); setMobileView(state.mobileView); setLanguage(state.lang); setStyle(state.style);
+    history=[els.editor.value]; historyIndex=0; render();
+    initializing=false; updateStorageNotice();
+    if(!hadSavedState&&!storageBlocked)els.saveStatus.textContent=t('notSaved');
   })();
   </script>
 </body>

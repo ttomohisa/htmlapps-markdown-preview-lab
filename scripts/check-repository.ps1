@@ -21,6 +21,12 @@ if ($LASTEXITCODE -ne 0) { throw "Compatibility and header regression tests fail
 if ($LASTEXITCODE -ne 0) { throw "Dialog layout and focus regression tests failed." }
 & node (Join-Path $Root "tests/editor-header-layout.cjs")
 if ($LASTEXITCODE -ne 0) { throw "Editor header layout regression tests failed." }
+& node (Join-Path $Root "tests/audit-regressions.cjs")
+if ($LASTEXITCODE -ne 0) { throw "Audit regression tests failed." }
+& node (Join-Path $Root "tests/mobile-ui-release.cjs")
+if ($LASTEXITCODE -ne 0) { throw "Mobile UI and release workflow regressions failed." }
+& node (Join-Path $Root "tests/document-tools.cjs")
+if ($LASTEXITCODE -ne 0) { throw "Document outline and search regressions failed." }
 Write-Host "[OK] Repository check passed." -ForegroundColor Green
 
 # Header icons and version visibility across source and generated releases.

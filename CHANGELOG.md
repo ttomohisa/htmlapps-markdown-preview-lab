@@ -1,5 +1,34 @@
 # Changelog
 
+## 1.1.0 - Unreleased
+
+- Correct the Japanese and English README download links to the actual `dist/index.html` release file, and keep supported Markdown headings independent of old release numbers.
+
+- Refine Find & Replace UI: flat text actions for Replace / Replace all and borderless chevrons beside the match count for Previous / Next, with unchanged keyboard and Undo behavior.
+
+- Add a compact heading outline and literal Find & Replace panel with keyboard support, case matching, source navigation, wraparound, safe all-replace, and undoable edits.
+- Preserve browser-only handling; search terms are not persisted. Update Japanese and English labels, README, tests and standalone HTML.
+
+- Reorganize the smartphone toolbar into one balanced row from 375px, and deliberate file/edit action rows on narrower screens; prevent isolated Copy / Redo buttons from wrapping apart.
+
+- Retain the useful introductory description on phones while removing the redundant heading and badge; align its horizontal inset and 16px spacing before the workspace.
+
+- Align the app shell's spacing to 8px increments and reduce nested cards, outlines and shadows while preserving preview-theme typography.
+
+- On phones, let the header scroll with the page, hide the redundant privacy badge and hero heading, keep Sync scroll horizontal, and center Copy / Undo / Redo controls with improved curved-arrow icons.
+- Keep compatibility scores visible while collapsing the detailed findings by default; allow expanding and closing without losing the scan results.
+- Publish a versioned tag and GitHub Release automatically on validated main updates after a manual PR merge, with duplicate-release protection.
+
+- Protect unreadable and corrupt local drafts from silent startup overwrites, and show recoverable autosave errors on mobile and desktop.
+- Prevent asynchronous imports from replacing newly edited text; preserve immediate typing for Undo and keep filename edits made during import.
+- Confirm Custom CSS reset, retain unapplied draft text, and restore applied CSS if persistence fails.
+- Report clipboard and download handoff failures accurately; translate import errors.
+- Fix narrow-screen compare preview geometry, enlarge formatting controls and name icon-only buttons for assistive technology.
+- Improve nested lists, escaped Markdown characters, parenthesized links and table code spans while keeping service preview styles approximate.
+- Localize the untouched first-run sample in English without translating user documents.
+- Add source-level recovery and renderer regressions to the canonical repository check.
+
+
 ## 1.0.4 - 2026-10-27
 
 - Restore the round bottom dot in the Help question-mark icon without changing layout or controls.

@@ -53,12 +53,23 @@ jobs:
         New-Item -ItemType Directory -Force -Path test-results/mobile-footer | Out-Null
         node scripts/mobile-footer.browser.cjs 2>&1 | Tee-Object -FilePath test-results/mobile-footer/results.log
         if ($LASTEXITCODE -ne 0) { throw "Footer browser regression failed." }
+        New-Item -ItemType Directory -Force -Path test-results/audit | Out-Null
+        node scripts/audit-browser.cjs 2>&1 | Tee-Object -FilePath test-results/audit/results.log
+        if ($LASTEXITCODE -ne 0) { throw "Audit browser regression failed." }
     - name: Upload footer browser evidence
       if: always()
       uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
       with:
         name: mobile-footer-browser-evidence
         path: test-results/mobile-footer/
+        if-no-files-found: ignore
+        retention-days: 7
+    - name: Upload audit browser evidence
+      if: always()
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+      with:
+        name: markdown-audit-browser-evidence
+        path: test-results/audit/
         if-no-files-found: ignore
         retention-days: 7
     - name: Upload static preview site
