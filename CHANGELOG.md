@@ -2,6 +2,8 @@
 
 ## 1.0.5 - Unreleased
 
+- Reorganize the smartphone toolbar into one balanced row from 375px, and deliberate file/edit action rows on narrower screens; prevent isolated Copy / Redo buttons from wrapping apart.
+
 - Retain the useful introductory description on phones while removing the redundant heading and badge; align its horizontal inset and 16px spacing before the workspace.
 
 - Align the app shell's spacing to 8px increments and reduce nested cards, outlines and shadows while preserving preview-theme typography.

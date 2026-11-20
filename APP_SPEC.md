@@ -69,3 +69,7 @@ Merging a PR into main triggers the repository release workflow. The job runs th
 ## Layout spacing and restrained surfaces (v1.0.5)
 
 Use 8px increments for the application chrome's fixed padding, margin, and gaps, including desktop and mobile controls, dialogs, and compatibility area. Preserve the theme-specific rendered Markdown spacing, which deliberately approximates distinct publishing platforms. Keep only a restrained outer boundary for the main workspace and compatibility section. Score summaries share a muted strip with lightweight dividers instead of three outlined cards; segmented navigation and toolbar controls avoid redundant nested outlines. The percentages, actions, focus states, keyboard access, and editing behavior must stay available.
+
+## Responsive file / editing toolbar (v1.0.5)
+
+At smartphone widths of 375–720px, arrange Open, filename, Save, Copy, Undo and Redo in a single nonwrapping row. File-name input flexes within a constrained maximum width, action buttons are 40px squares, and labels are visually hidden where icon-only buttons are necessary (accessible button names are retained). At 374px and below, deliberately split into two compact groups: Open / filename / Save, then Copy / Undo / Redo aligned together at the end. Do not allow an individual button to wrap away from its group, overlap the filename, or cause page-wide horizontal scrolling. Desktop behavior remains unchanged apart from grouping Copy with editing actions.

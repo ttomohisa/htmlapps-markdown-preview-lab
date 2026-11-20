@@ -20,7 +20,7 @@ async function main() {
         assert.equal(await page.locator('#editor').count(),1,'editor exists');
         // The phone header is not sticky; the description remains while its heading and badge are hidden.
         // Scores remain visible while compatibility findings start collapsed.
-        for (const width of [320,390,720]) {
+        for (const width of [320,360,374,375,390,430,720]) {
           await page.setViewportSize({width,height:844});
           const layout=await page.evaluate(()=>{
             const $=selector=>document.querySelector(selector);

@@ -256,3 +256,7 @@ After a PR is manually merged into main, `.github/workflows/release-on-main.yml`
 ### Spacing and card styling (v1.0.5)
 
 Application-shell padding, margins, and gaps use an 8px spacing scale. The editor and compatibility checker retain their outer section boundaries, while controls and score displays use fewer inner borders and shadows. Spacing within the GitHub-, Qiita-, and Zenn-inspired Markdown previews is unchanged so their visual character remains distinct.
+
+### Phone file and editing toolbar (v1.0.5)
+
+At widths from 375px through 720px, Open, filename, Save, Copy, Undo, and Redo fit together in one row with icon-only buttons. At 374px and below, the toolbar uses two intentional groups: Open / filename / Save and Copy / Undo / Redo. Buttons retain at least 40px tap targets and the filename field adapts to the available width without random wrapping.
