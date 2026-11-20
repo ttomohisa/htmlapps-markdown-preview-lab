@@ -92,7 +92,7 @@ for(const variant of versions) {
     assert.match(h.els.findCount.textContent,/5000\+/);
   });
   test(variant+': UI is localized, initially hidden and editor data stays local',()=>{
-    assert.match(source,/class="document-search-row"/);
+    assert.match(source,/class="document-find-row document-search-row"/);
     assert.match(source,/class="document-find-row document-search-row"/);
     assert.match(source,/class="document-find-row document-replace-row"/);
     for(const id of ['findPrevious','findNext']) {
