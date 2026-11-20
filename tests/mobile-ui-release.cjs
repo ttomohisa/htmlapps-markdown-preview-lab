@@ -18,6 +18,13 @@ for(const file of versions) {
     assert.match(mobile,/\.sync-toggle\s*\{\s*flex:0 0 auto;\s*white-space:nowrap;/);
     assert.match(mobile,/\.sync-toggle span\s*\{\s*white-space:nowrap;\s*writing-mode:horizontal-tb;/);
     assert.match(mobile,/#copyButton, #undoButton, #redoButton\s*\{\s*display:inline-grid;/);
+    assert.match(mobile,/\.workspace-toolbar\s*\{[^}]*display:flex;\s*flex-wrap:nowrap;\s*overflow:visible;/);
+    assert.match(mobile,/\.workspace-toolbar \.file-actions, \.workspace-toolbar \.edit-actions\s*\{[^}]*flex-wrap:nowrap;/);
+    assert.match(mobile,/\.workspace-toolbar \.filename-control\s*\{[^}]*flex:1 1 160px;\s*min-width:0;/);
+    assert.match(mobile,/\.workspace-toolbar \.toolbar-spacer\s*\{\s*display:none;/);
+    assert.match(html,/@media \(max-width: 374px\)\s*\{\s*\.workspace-toolbar\s*\{[^}]*display:grid;/);
+    assert.match(html,/<div class="button-row file-actions">/);
+    assert.match(html,/<div class="button-row edit-actions">\s*<button[^>]*id="copyButton"/);
     assert.match(mobile,/\.editor-pane > \.pane-head > \.pane-title\s*\{\s*display:none;/);
     assert.match(mobile,/\.editor-pane > \.pane-head\s*\{\s*flex-wrap:nowrap;/);
     assert.match(mobile,/\.editor-pane > \.pane-head > \.format-bar\s*\{\s*flex:1 1 auto;\s*min-width:0;\s*max-width:none;/);

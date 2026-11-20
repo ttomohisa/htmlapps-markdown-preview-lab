@@ -304,7 +304,17 @@
       .brand-name { font-size:15px; }
       .header-actions { gap:8px; }
       .workspace { border-radius:14px; }
-      .workspace-toolbar { min-height:56px; padding:8px; }
+      .workspace-toolbar { min-height:56px; padding:8px; display:flex; flex-wrap:nowrap; overflow:visible; gap:8px; }
+      .workspace-toolbar .file-actions, .workspace-toolbar .edit-actions { display:flex; flex-wrap:nowrap; align-items:center; gap:8px; }
+      .workspace-toolbar .file-actions { flex:0 1 auto; min-width:0; }
+      .workspace-toolbar .edit-actions { flex:0 0 auto; }
+      .workspace-toolbar .filename-control { flex:1 1 160px; min-width:0; max-width:160px; }
+      .workspace-toolbar .filename-box { flex:1 1 auto; min-width:0; }
+      .workspace-toolbar .filename-input { flex:1 1 auto; width:100%; min-width:0; }
+      .workspace-toolbar .button { flex:0 0 40px; width:40px; height:40px; padding:0; display:inline-grid; place-items:center; }
+      .workspace-toolbar .label-mobile-hide { display:none; }
+      .workspace-toolbar .toolbar-spacer { display:none; }
+      .workspace-toolbar #copyButton, .workspace-toolbar #undoButton, .workspace-toolbar #redoButton { flex:0 0 40px; width:40px; height:40px; }
       .toolbar-divider { display:none; }
       .save-status { display:none; }
       .button { min-height:40px; padding:8px; font-size:12px; }
@@ -355,6 +365,11 @@
       .style-chip { padding:8px; }
       footer { padding-left:16px; padding-right:16px; }
     }
+    @media (max-width: 374px) {
+      .workspace-toolbar { display:grid; grid-template-columns:minmax(0,1fr); gap:8px; }
+      .workspace-toolbar .file-actions { width:100%; }
+      .workspace-toolbar .edit-actions { width:100%; justify-content:flex-end; }
+    }
     @media print {
       .app-header,.page-intro,.workspace-toolbar,.workspace-controls,.mobile-view-switch,.editor-pane,.compat-section,footer,.pane-head { display:none !important; }
       body,.main,.workspace,.editor-shell,.preview-pane,.preview-scroll { display:block !important; width:100% !important; height:auto !important; min-height:0 !important; margin:0 !important; padding:0 !important; border:0 !important; box-shadow:none !important; background:#fff !important; overflow:visible !important; }
@@ -402,14 +417,14 @@
 
     <section class="workspace mobile-editor" id="workspace" aria-label="Markdown editor workspace">
       <div class="workspace-toolbar">
-        <div class="button-row">
+        <div class="button-row file-actions">
           <button class="button" id="openButton" type="button" data-i18n-title="open" data-i18n-aria="open" title="open" aria-label="open"><span class="icon-text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h6l2 2h10v10H3z"/><path d="M3 7v12"/></svg><span class="label-mobile-hide" data-i18n="open">開く</span></span></button>
           <label class="filename-control"><span data-i18n="filename">ファイル名</span><span class="filename-box"><input class="filename-input" id="filenameInput" type="text" value="document" maxlength="120" autocomplete="off" spellcheck="false" aria-label="Output file name"><span class="filename-suffix">.md</span></span></label>
           <button class="button" id="downloadButton" type="button" data-i18n-title="download" data-i18n-aria="download" title="download" aria-label="download"><span class="icon-text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg><span class="label-mobile-hide" data-i18n="download">保存</span></span></button>
-          <button class="button" id="copyButton" type="button" data-i18n-title="copy" data-i18n-aria="copy" title="copy" aria-label="copy"><span class="icon-text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span class="label-optional" data-i18n="copy">コピー</span></span></button>
         </div>
         <div class="toolbar-divider"></div>
-        <div class="button-row">
+        <div class="button-row edit-actions">
+          <button class="button" id="copyButton" type="button" data-i18n-title="copy" data-i18n-aria="copy" title="copy" aria-label="copy"><span class="icon-text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span class="label-optional" data-i18n="copy">コピー</span></span></button>
           <button class="button" id="undoButton" type="button" data-i18n-title="undoAction" data-i18n-aria="undoAction" aria-label="元に戻す" title="元に戻す"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-15.4-6.4L3 13"/></svg></button>
           <button class="button" id="redoButton" type="button" data-i18n-title="redoAction" data-i18n-aria="redoAction" aria-label="やり直す" title="やり直す"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 15.4-6.4L21 13"/></svg></button>
         </div>

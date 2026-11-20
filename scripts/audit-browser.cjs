@@ -52,6 +52,23 @@ async function main() {
               overflow:document.documentElement.scrollWidth>innerWidth
             };
           });
+
+          const toolbar=await page.evaluate(()=>{
+            const toolbar=document.querySelector('.workspace-toolbar').getBoundingClientRect();
+            const box=id=>{const r=document.querySelector('#'+id).getBoundingClientRect();return {top:r.top,left:r.left,right:r.right,width:r.width,height:r.height};};
+            const first=['openButton','downloadButton'].map(box);
+            const filename=document.querySelector('.filename-control').getBoundingClientRect();
+            const second=['copyButton','undoButton','redoButton'].map(box);
+            return {left:toolbar.left,right:toolbar.right,first,filename:{left:filename.left,right:filename.right,width:filename.width,top:filename.top},second};
+          });
+          const allActions=[...toolbar.first,...toolbar.second];
+          assert.ok(allActions.every(btn=>btn.width>=40&&btn.height>=40),width+': action buttons remain >= 40px');
+          assert.ok(allActions.every(btn=>btn.left>=toolbar.left-1&&btn.right<=toolbar.right+1),width+': no toolbar buttons are clipped');
+          assert.ok(toolbar.filename.width>=80,width+': filename remains editable');
+          assert.ok(toolbar.first.every(btn=>Math.abs(btn.top-toolbar.filename.top)<2),width+': open/file/save share a row');
+          assert.ok(toolbar.second.every(btn=>Math.abs(btn.top-toolbar.second[0].top)<2),width+': copy/undo/redo stay grouped');
+          if(width<375) assert.ok(toolbar.second[0].top-toolbar.first[0].top>=40,width+': compact phone uses two orderly action rows');
+          else assert.ok(Math.abs(toolbar.second[0].top-toolbar.first[0].top)<2,width+': buttons fit on one row');
           assert.equal(layout.headerPosition,'relative',width+': header scrolls with page');
           assert.equal(layout.introVisible,true,width+': description section remains visible');
           assert.equal(layout.headingVisible,false,width+': redundant heading is hidden');
