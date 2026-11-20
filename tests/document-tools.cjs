@@ -92,6 +92,20 @@ for(const variant of versions) {
     assert.match(h.els.findCount.textContent,/5000\+/);
   });
   test(variant+': UI is localized, initially hidden and editor data stays local',()=>{
+    assert.match(source,/class="document-search-row"/);
+    assert.match(source,/class="document-find-row document-search-row"/);
+    assert.match(source,/class="document-find-row document-replace-row"/);
+    for(const id of ['findPrevious','findNext']) {
+      assert.match(source,new RegExp('class="document-step" id="'+id+'"[^>]*data-i18n-aria="find(?:Previous|Next)"'));
+    }
+    for(const id of ['replaceOneButton','replaceAllButton']) {
+      assert.match(source,new RegExp('class="document-action[^"]*" id="'+id+'"'));
+    }
+    const css=source.match(/<style>([\s\S]*?)<\/style>/)?.[1]||'';
+    assert.match(css,/\.document-step\s*\{[^}]*border:0;[^}]*background:transparent;/);
+    assert.match(css,/\.document-action\s*\{[^}]*border:0;[^}]*background:transparent;/);
+    assert.match(css,/\.document-action-all\s*\{\s*color:var\(--accent\);/);
+    assert.doesNotMatch(css,/\.document-find-row \.button/);
     assert.match(source,/id="documentPanel" hidden/);
     assert.match(source,/id="mobileDocumentToolsButton"[^>]*aria-expanded="false"/);
     assert.match(source,/class="document-tabs"[^>]*data-i18n-aria="documentTools"/);

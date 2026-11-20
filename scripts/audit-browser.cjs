@@ -89,6 +89,30 @@ async function main() {
           assert.equal(layout.collapsed,true,width+': findings initially closed');
           assert.equal(layout.overflow,false,width+': no page horizontal overflow');
         }
+        // Search navigation is visually lightweight: no borders/shadows on four actions.
+        for(const width of [320,390,720]) {
+          await page.setViewportSize({width,height:844});
+          await page.locator('#mobileDocumentToolsButton').click();
+          await page.locator('#findTab').click();
+          const controls=await page.evaluate(()=>{
+            const rect=el=>{const r=el.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height};};
+            const buttons=['findPrevious','findNext','replaceOneButton','replaceAllButton'].map(id=>{
+              const el=document.getElementById(id),css=getComputedStyle(el);
+              return {id,...rect(el),border:css.borderTopWidth,shadow:css.boxShadow};
+            });
+            const search=rect(document.querySelector('.document-search-row'));
+            const replace=rect(document.querySelector('.document-replace-row'));
+            const first=rect(document.getElementById('findInput'));
+            return {buttons,search,replace,first,overflow:document.documentElement.scrollWidth>innerWidth};
+          });
+          assert.equal(controls.overflow,false,width+': open search panel never causes horizontal scrolling');
+          assert.ok(controls.first.width>=100,width+': search input stays usable');
+          assert.ok(controls.buttons.every(x=>x.height>=40 && x.border==='0px' && x.shadow==='none'),width+': four flat 40px actions');
+          assert.ok(controls.buttons.every(x=>x.left>=0&&x.right<=width+1),width+': no actions spill offscreen');
+          assert.ok(controls.buttons.slice(0,2).every(x=>x.top===controls.search.top),width+': navigation sits by the search count');
+          assert.ok(controls.buttons.slice(2).every(x=>x.top===controls.replace.top),width+': replace actions sit beside the replace field');
+          await page.locator('#documentClose').click();
+        }
         await page.setViewportSize({width:390,height:844});
         await page.locator('#compatDetails summary').click();
         assert.equal(await page.locator('#compatDetails').evaluate(el=>el.open),true,'compatibility findings expand');

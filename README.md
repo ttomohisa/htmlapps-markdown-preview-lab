@@ -270,3 +270,5 @@ On desktop, use the Document tools icon in the editor header. On phones, use the
 - **Undo** restores replacements; the search and replacement strings themselves are not persisted. Only edited Markdown is autosaved and included in the downloaded .md file.
 
 Ctrl/Command+F opens the app's Find tab instead of the browser's page search. If the expanded editor is open, it closes while retaining the edited text before opening Find. Escape closes the panel.
+
+In Find & Replace, borderless arrow controls sit beside the match counter for Previous / Next. Replace and Replace all are low-contrast text actions without outlined button boxes. Their actions and Undo behavior are unchanged.

@@ -2,6 +2,8 @@
 
 ## 1.1.0 - Unreleased
 
+- Refine Find & Replace UI: flat text actions for Replace / Replace all and borderless chevrons beside the match count for Previous / Next, with unchanged keyboard and Undo behavior.
+
 - Add a compact heading outline and literal Find & Replace panel with keyboard support, case matching, source navigation, wraparound, safe all-replace, and undoable edits.
 - Preserve browser-only handling; search terms are not persisted. Update Japanese and English labels, README, tests and standalone HTML.
 
