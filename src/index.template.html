@@ -157,6 +157,7 @@
     .compare-cell .preview-scroll { height:calc(100% - 42px); }
     .compare-cell .preview-wrap { padding:24px 16px 48px; }
     .mobile-view-switch { display:none; }
+    .mobile-document-trigger { display:none; }
 
     /* Rendered Markdown: shared */
     .md { max-width:860px; margin:0 auto; color:#24292f; font-size:16px; line-height:1.7; overflow-wrap:anywhere; }
@@ -348,8 +349,9 @@
       #expandedEditor { padding:16px 16px 40px; font-size:14px; }
       .workspace-controls { padding:8px; gap:8px; }
       .control-group.mode-group { display:none; }
-      .mobile-view-switch { display:flex; align-items:center; padding:8px; border-bottom:1px solid var(--line); background:var(--surface); }
-      .mobile-view-switch .segmented { width:100%; }
+      .mobile-view-switch { display:flex; align-items:center; gap:8px; padding:8px; border-bottom:1px solid var(--line); background:var(--surface); }
+      .mobile-view-switch .mobile-document-trigger { display:grid; flex:0 0 40px; width:40px; height:40px; }
+      .mobile-view-switch .segmented { flex:1 1 auto; width:auto; min-width:0; }
       .mobile-view-switch .seg-button { flex:1; }
       .editor-shell,.workspace.compare .editor-shell { display:block; height:calc(100dvh - 258px); min-height:470px; }
       .editor-pane,.single-preview,.compare-pane { display:none !important; height:100%; border:0; }
@@ -369,7 +371,7 @@
       .editor-pane > .pane-head > .format-bar { flex:1 1 auto; min-width:0; max-width:none; overflow-x:auto; scrollbar-width:none; }
       .editor-pane > .pane-head > .format-bar::-webkit-scrollbar { display:none; }
       .editor-pane > .pane-head > #editorStats { flex:0 0 auto; margin-left:0; }
-      .editor-pane > .pane-head > .pane-title { display:none; }
+      .editor-pane > .pane-head > .pane-title, .editor-pane #documentToolsButton { display:none; }
       .sample-label { display:none; }
       .sample-new-button { padding:8px; }
       .preview-wrap,.compare-cell .preview-wrap { padding:24px 16px 48px; }
@@ -490,6 +492,7 @@
           <button class="seg-button" type="button" data-mobile-view="preview" data-i18n="preview">プレビュー</button>
           <button class="seg-button" type="button" data-mobile-view="compare" data-i18n="compare">比較</button>
         </div>
+        <button class="pane-action-button mobile-document-trigger" id="mobileDocumentToolsButton" type="button" data-i18n-aria="documentTools" data-i18n-title="documentTools" aria-controls="documentPanel" aria-expanded="false" aria-label="文書ツール" title="文書ツール"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6h10M4 12h10M4 18h7"/><circle cx="16" cy="16" r="4"/><path d="m19 19 3 3"/></svg></button>
       </div>
 
       <div class="editor-shell">
@@ -754,7 +757,7 @@ $$
       issues: document.getElementById('issues'), editorStats: document.getElementById('editorStats'), saveStatus: document.getElementById('saveStatus'), toast: document.getElementById('toast'),
       sampleState: document.getElementById('sampleState'), newDocumentButton: document.getElementById('newDocumentButton'), filenameInput: document.getElementById('filenameInput'),
       expandEditorButton: document.getElementById('expandEditorButton'), expandedEditorDialog: document.getElementById('expandedEditorDialog'), expandedEditor: document.getElementById('expandedEditor'),
-      documentToolsButton:document.getElementById('documentToolsButton'), documentPanel:document.getElementById('documentPanel'), outlineTab:document.getElementById('outlineTab'), findTab:document.getElementById('findTab'), outlinePanel:document.getElementById('outlinePanel'), findPanel:document.getElementById('findPanel'), outlineList:document.getElementById('outlineList'), outlineEmpty:document.getElementById('outlineEmpty'), findInput:document.getElementById('findInput'), replaceInput:document.getElementById('replaceInput'), findMatchCase:document.getElementById('findMatchCase'), findCount:document.getElementById('findCount'), findPrevious:document.getElementById('findPrevious'), findNext:document.getElementById('findNext'), replaceOneButton:document.getElementById('replaceOneButton'), replaceAllButton:document.getElementById('replaceAllButton'),
+      documentToolsButton:document.getElementById('documentToolsButton'), mobileDocumentToolsButton:document.getElementById('mobileDocumentToolsButton'), documentPanel:document.getElementById('documentPanel'), outlineTab:document.getElementById('outlineTab'), findTab:document.getElementById('findTab'), outlinePanel:document.getElementById('outlinePanel'), findPanel:document.getElementById('findPanel'), outlineList:document.getElementById('outlineList'), outlineEmpty:document.getElementById('outlineEmpty'), findInput:document.getElementById('findInput'), replaceInput:document.getElementById('replaceInput'), findMatchCase:document.getElementById('findMatchCase'), findCount:document.getElementById('findCount'), findPrevious:document.getElementById('findPrevious'), findNext:document.getElementById('findNext'), replaceOneButton:document.getElementById('replaceOneButton'), replaceAllButton:document.getElementById('replaceAllButton'),
       helpDialog: document.getElementById('helpDialog'), customCssDialog: document.getElementById('customCssDialog'), customCssEditor: document.getElementById('customCssEditor'), customCssStyle: document.getElementById('customCssStyle'), cssResetDialog: document.getElementById('cssResetDialog'), cancelResetCss: document.getElementById('cancelResetCss')
     };
 
@@ -1187,13 +1190,15 @@ $$
     function closeDocumentPanel(focus=true) {
       els.documentPanel.hidden=true;
       els.documentToolsButton.setAttribute('aria-expanded','false');
-      if(focus)els.documentToolsButton.focus();
+      els.mobileDocumentToolsButton.setAttribute('aria-expanded','false');
+      if(focus)(window.innerWidth<=720?els.mobileDocumentToolsButton:els.documentToolsButton).focus();
     }
 
     function openDocumentPanel(name='outline') {
       if(window.innerWidth<=720 && state.mobileView!=='editor')setMobileView('editor');
       els.documentPanel.hidden=false;
       els.documentToolsButton.setAttribute('aria-expanded','true');
+      els.mobileDocumentToolsButton.setAttribute('aria-expanded','true');
       setDocumentTab(name,true);
       updateOutline(els.editor.value);
       updateFindMatches();
@@ -1404,6 +1409,10 @@ $$
       try { reader.readAsText(file); } catch { if(id===fileRequestId)showToast(t('fileReadFailed')); }
     }
 
+    els.mobileDocumentToolsButton.addEventListener('click',()=>{
+      if(!els.documentPanel.hidden)closeDocumentPanel();
+      else openDocumentPanel('outline');
+    });
     els.documentToolsButton.addEventListener('click',()=>{
       if(!els.documentPanel.hidden)closeDocumentPanel();
       else openDocumentPanel('outline');
