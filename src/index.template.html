@@ -1136,6 +1136,141 @@ $$
     }
 
     function selectLine(line) { const lines=els.editor.value.split('\n'); let start=0; for(let i=0;i<line-1;i++)start+=lines[i].length+1; const end=start+(lines[line-1]||'').length; els.editor.focus(); els.editor.setSelectionRange(start,end); if(window.innerWidth<=720)setMobileView('editor'); const ratio=start/Math.max(1,els.editor.value.length); els.editor.scrollTop=(els.editor.scrollHeight-els.editor.clientHeight)*ratio; }
+    function updateOutline(markdown) {
+      const headings=extractHeadings(markdown);
+      els.outlineEmpty.hidden=headings.length>0;
+      els.outlineList.innerHTML=headings.map(h=>
+        '<button class="outline-item" type="button" data-outline-line="'+h.line+'" style="padding-left:'+(8+(h.level-1)*16)+'px" title="'+escapeHtml(h.text)+'"><span>H'+h.level+'</span><span class="outline-text">'+escapeHtml(h.text)+'</span></button>'
+      ).join('');
+    }
+
+    function literalMatches(markdown,query,caseSensitive,limit=5000) {
+      if(!query)return {matches:[],overflow:false};
+      const escaped=query.replace(/[.*+?^$()|[\]{}\\]/g,'\\    function formatSelection(type,e=els.editor) {');
+      const re=new RegExp(escaped,'g'+(caseSensitive?'':'i'));
+      const matches=[]; let match;
+      while((match=re.exec(markdown))!==null) {
+        if(matches.length>=limit)return {matches,overflow:true};
+        matches.push({start:match.index,end:match.index+match[0].length});
+      }
+      return {matches,overflow:false};
+    }
+
+    function updateFindMatches(reset=false) {
+      const previous=!reset&&findCursor>=0 ? findMatches[findCursor]?.start : -1;
+      const result=literalMatches(els.editor.value,els.findInput.value,els.findMatchCase.checked);
+      findMatches=result.matches;
+      findOverflow=result.overflow;
+      findCursor=findMatches.findIndex(m=>m.start===previous);
+      els.findCount.textContent=(findCursor+1)+' / '+findMatches.length+(findOverflow?'+':'');
+      els.findCount.title=findOverflow?t('findTooMany'):'';
+      const hasMatches=findMatches.length>0;
+      els.findNext.disabled=!hasMatches;
+      els.findPrevious.disabled=!hasMatches;
+      els.replaceOneButton.disabled=!hasMatches;
+      els.replaceAllButton.disabled=!hasMatches||findOverflow;
+    }
+
+    function setDocumentTab(name,focus=false) {
+      const outline=name==='outline';
+      els.outlineTab.setAttribute('aria-selected',String(outline));
+      els.findTab.setAttribute('aria-selected',String(!outline));
+      els.outlinePanel.hidden=!outline;
+      els.findPanel.hidden=outline;
+      if(focus) {
+        if(outline)els.outlineTab.focus();
+        else els.findInput.focus();
+      }
+    }
+
+    function closeDocumentPanel(focus=true) {
+      els.documentPanel.hidden=true;
+      els.documentToolsButton.setAttribute('aria-expanded','false');
+      if(focus)els.documentToolsButton.focus();
+    }
+
+    function openDocumentPanel(name='outline') {
+      if(window.innerWidth<=720 && state.mobileView!=='editor')setMobileView('editor');
+      els.documentPanel.hidden=false;
+      els.documentToolsButton.setAttribute('aria-expanded','true');
+      setDocumentTab(name,true);
+      updateOutline(els.editor.value);
+      updateFindMatches();
+    }
+
+    function selectSourceRange(start,end) {
+      if(window.innerWidth<=720 && state.mobileView!=='editor')setMobileView('editor');
+      els.editor.focus();
+      els.editor.setSelectionRange(start,end);
+      const available=Math.max(0,els.editor.scrollHeight-els.editor.clientHeight);
+      if(available>0)els.editor.scrollTop=available*start/Math.max(1,els.editor.value.length);
+    }
+
+    function navigateFind(direction) {
+      if(!findMatches.length)return;
+      if(findCursor<0) {
+        const caret=els.editor.selectionStart;
+        if(direction>0) {
+          findCursor=findMatches.findIndex(m=>m.start>=caret);
+          if(findCursor<0)findCursor=0;
+        } else {
+          findCursor=0;
+          for(let i=0;i<findMatches.length;i++)if(findMatches[i].end<=caret)findCursor=i;
+        }
+      } else findCursor=(findCursor+direction+findMatches.length)%findMatches.length;
+      const match=findMatches[findCursor];
+      selectSourceRange(match.start,match.end);
+      els.findCount.textContent=(findCursor+1)+' / '+findMatches.length+(findOverflow?'+':'');
+    }
+
+    function replaceCurrentMatch() {
+      if(!findMatches.length)return;
+      if(findCursor<0) {
+        navigateFind(1);
+        if(findCursor<0)return;
+      }
+      const match=findMatches[findCursor], value=els.editor.value, replacement=els.replaceInput.value;
+      pushHistory(true);
+      leaveSampleMode();
+      els.editor.value=value.slice(0,match.start)+replacement+value.slice(match.end);
+      editRevision++;
+      els.editor.setSelectionRange(match.start+replacement.length,match.start+replacement.length);
+      pushHistory(true);
+      render();
+      findCursor=-1;
+      navigateFind(1);
+    }
+
+    function replaceEveryMatch() {
+      if(!findMatches.length||findOverflow)return;
+      const value=els.editor.value,replacement=els.replaceInput.value,count=findMatches.length;
+      let output='',cursor=0;
+      for(const match of findMatches) {
+        output+=value.slice(cursor,match.start)+replacement;
+        cursor=match.end;
+      }
+      output+=value.slice(cursor);
+      if(output===value)return;
+      pushHistory(true);
+      leaveSampleMode();
+      els.editor.value=output;
+      editRevision++;
+      pushHistory(true);
+      render();
+      selectSourceRange(0,0);
+      showToast(t('replacedCount').replace('{count}',String(count)));
+    }
+
+    function handleDocumentShortcut(event) {
+      if(!(event.ctrlKey||event.metaKey)||event.altKey||event.shiftKey||event.isComposing||String(event.key).toLowerCase()!=='f')return;
+      if(document.querySelector('dialog[open]:not(#expandedEditorDialog)'))return;
+      event.preventDefault();
+      if(els.expandedEditorDialog.open) {
+        els.expandedEditorDialog.close();
+        requestAnimationFrame(()=>openDocumentPanel('find'));
+      } else openDocumentPanel('find');
+    }
+
     function formatSelection(type,e=els.editor) {
       const start=e.selectionStart, end=e.selectionEnd, selected=e.value.slice(start,end), before=e.value.slice(0,start), after=e.value.slice(end); let replacement=selected, selectOffset=0;
       if(type==='bold'){ replacement=`**${selected||'bold'}**`; selectOffset=2; }
