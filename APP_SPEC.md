@@ -1,7 +1,7 @@
 # Application Specification
 
 ## Product
-**Markdown Preview Lab v1.0.5**
+**Markdown Preview Lab v1.1.0**
 
 A browser-only Markdown editor that compares GitHub, Qiita, and Zenn-inspired rendering and highlights portability concerns.
 
@@ -73,3 +73,12 @@ Use 8px increments for the application chrome's fixed padding, margin, and gaps,
 ## Responsive file / editing toolbar (v1.0.5)
 
 At smartphone widths of 375–720px, arrange Open, filename, Save, Copy, Undo and Redo in a single nonwrapping row. File-name input flexes within a constrained maximum width, action buttons are 40px squares, and labels are visually hidden where icon-only buttons are necessary (accessible button names are retained). At 374px and below, deliberately split into two compact groups: Open / filename / Save, then Copy / Undo / Redo aligned together at the end. Do not allow an individual button to wrap away from its group, overlap the filename, or cause page-wide horizontal scrolling. Desktop behavior remains unchanged apart from grouping Copy with editing actions.
+
+## Document outline and find / replace (v1.1.0)
+
+- A single icon in the editor formatting header toggles an optional, inline document panel. It has Outline and Find & Replace tabs; the editor panel uses a separate flexible grid row. The document and its panel do not become separate nested cards.
+- Outline lists up to 500 non-empty ATX Markdown headings (`#` through `######`) with levels and clickable source-line navigation. Ignore fenced code blocks, leading front matter, math blocks, Zenn message blocks, and escaped hash markers. Do not claim Setext headings are supported when the preview renderer does not parse them.
+- Find uses literal text (no regular expressions), supports case-sensitive matching, next/previous wraparound, an accessible result count, and a 5,000-match cap. If the result count exceeds the cap, disable Replace all rather than silently changing only part of the document.
+- Replace current and Replace all are undoable, capture pending edits before modifying source, and update preview and compatibility checks. Empty replacement deletes matches. Literal replacement text including `$&` is inserted unchanged.
+- Keyboard Ctrl/Command+F opens the app's Find tab. A modal expanded editor closes first, retaining the same source text before searching. Escape closes the panel, while native shortcuts for Bold, Italic, Save and Undo remain.
+- The tool panel is initially hidden. Search terms and replacement terms are not stored or uploaded; only the actual Markdown source changes participate in LocalStorage autosave and .md downloads. Labels and placeholders are localized in Japanese and English.

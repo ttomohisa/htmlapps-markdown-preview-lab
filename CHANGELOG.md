@@ -1,6 +1,9 @@
 # Changelog
 
-## 1.0.5 - Unreleased
+## 1.1.0 - Unreleased
+
+- Add a compact heading outline and literal Find & Replace panel with keyboard support, case matching, source navigation, wraparound, safe all-replace, and undoable edits.
+- Preserve browser-only handling; search terms are not persisted. Update Japanese and English labels, README, tests and standalone HTML.
 
 - Reorganize the smartphone toolbar into one balanced row from 375px, and deliberate file/edit action rows on narrower screens; prevent isolated Copy / Redo buttons from wrapping apart.
 

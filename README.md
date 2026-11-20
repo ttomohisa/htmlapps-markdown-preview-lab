@@ -260,3 +260,13 @@ Application-shell padding, margins, and gaps use an 8px spacing scale. The edito
 ### Phone file and editing toolbar (v1.0.5)
 
 At widths from 375px through 720px, Open, filename, Save, Copy, Undo, and Redo fit together in one row with icon-only buttons. At 374px and below, the toolbar uses two intentional groups: Open / filename / Save and Copy / Undo / Redo. Buttons retain at least 40px tap targets and the filename field adapts to the available width without random wrapping.
+
+### Document outline and Find & Replace (v1.1.0)
+
+Use the Document tools icon in the editor header to open a compact panel with Outline and Find & Replace tabs, including on phones. Closing the panel returns the space to the editor.
+
+- **Outline** lists up to 500 ATX headings (`#`–`######`) and jumps to the selected source line. Headings inside fenced code, opening Front Matter, math or Zenn message blocks are excluded. Setext headings are not included because the built-in renderer does not support them.
+- **Find & Replace** searches literal text, not regex, with optional case matching and wraparound Previous/Next navigation. You can replace one or all matches. Replace all is disabled if the document has more than 5,000 matches.
+- **Undo** restores replacements; the search and replacement strings themselves are not persisted. Only edited Markdown is autosaved and included in the downloaded .md file.
+
+Ctrl/Command+F opens the app's Find tab instead of the browser's page search. If the expanded editor is open, it closes while retaining the edited text before opening Find. Escape closes the panel.
