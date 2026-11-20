@@ -58,7 +58,7 @@ function fileHarness(source) {
   });
   vm.runInContext("let state={samplePristine:false,outputFilename:'old'};let history=['old draft'],historyIndex=0,historyTimer=null;let editRevision=0,fileRequestId=0,filenameRevision=0;\n"
     + section(source, '    function pushHistory(', '    function setStyle(')
-    + section(source, '    function readFile(', "    els.retrySaveButton.addEventListener("), context);
+    + section(source, '    function readFile(', "    els.mobileDocumentToolsButton.addEventListener("), context);
   return {
     context, editor, filenameInput, readers, messages,
     history: () => JSON.parse(vm.runInContext('JSON.stringify(history)', context)),
