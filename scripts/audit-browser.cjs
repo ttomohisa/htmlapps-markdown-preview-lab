@@ -18,7 +18,7 @@ async function main() {
       try {
         await page.goto(pathToFileURL(path.resolve(__dirname,'../dist',file)).href);
         assert.equal(await page.locator('#editor').count(),1,'editor exists');
-        // The phone header is not sticky; the hero heading and local badge are hidden.
+        // The phone header is not sticky; the description remains while its heading and badge are hidden.
         // Scores remain visible while compatibility findings start collapsed.
         for (const width of [320,390,720]) {
           await page.setViewportSize({width,height:844});
@@ -33,7 +33,12 @@ async function main() {
             };
             return {
               headerPosition:getComputedStyle($('.app-header')).position,
-              introVisible:getComputedStyle($('.page-intro')).display!=='none',
+              introVisible:rect($('.page-intro')).height>0,
+              headingVisible:rect($('.page-intro h2')).height>0,
+              descriptionVisible:rect($('.page-intro p')).height>0,
+              descriptionMarginTop:getComputedStyle($('.page-intro p')).marginTop,
+              introBottomGap:rect($('.workspace')).top-rect($('.page-intro p')).bottom,
+              introLeftInset:rect($('.page-intro p')).left-rect($('.workspace')).left,
               badgeVisible:rect($('.local-badge')).height>0,
               syncDirection:getComputedStyle($('.sync-toggle span')).writingMode,
               syncWhiteSpace:getComputedStyle($('.sync-toggle span')).whiteSpace,
@@ -48,7 +53,12 @@ async function main() {
             };
           });
           assert.equal(layout.headerPosition,'relative',width+': header scrolls with page');
-          assert.equal(layout.introVisible,false,width+': empty mobile intro strip is hidden');
+          assert.equal(layout.introVisible,true,width+': description section remains visible');
+          assert.equal(layout.headingVisible,false,width+': redundant heading is hidden');
+          assert.equal(layout.descriptionVisible,true,width+': description text is visible');
+          assert.equal(layout.descriptionMarginTop,'0px',width+': description has no redundant top margin');
+          assert.ok(Math.abs(layout.introBottomGap-16)<1,width+': description has a 16px gap before workspace: '+layout.introBottomGap);
+          assert.ok(Math.abs(layout.introLeftInset-8)<1,width+': description aligns to an 8px inset: '+layout.introLeftInset);
           assert.equal(await page.locator('.editor-pane > .pane-head > .pane-title').isVisible(),false,width+': editor Markdown label is hidden');
           assert.equal(layout.badgeVisible,false,width+': local badge is hidden');
           assert.equal(layout.syncDirection,'horizontal-tb',width+': sync label stays horizontal');

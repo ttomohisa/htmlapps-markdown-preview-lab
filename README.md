@@ -245,7 +245,7 @@ Run `node tests/audit-regressions.cjs` for focused source regressions (also incl
 
 ### Mobile presentation (v1.0.5)
 
-On phones, the site header scrolls normally; the entire redundant hero section (title, description, and local-processing badge) is hidden. The Sync scroll toggle remains horizontally legible even when style selectors scroll sideways. Copy, Undo and Redo have centered SVG icons with larger touch targets.
+On phones, the site header scrolls normally. The explanatory text stays visible with a 16px gap before the workspace, while only the redundant hero title and local-processing badge are hidden. The Sync scroll toggle remains horizontally legible even when style selectors scroll sideways. Copy, Undo and Redo have centered SVG icons with larger touch targets.
 
 Compatibility scores remain visible while the detailed findings start collapsed. Use Show details to expand or hide the live scan results.
 

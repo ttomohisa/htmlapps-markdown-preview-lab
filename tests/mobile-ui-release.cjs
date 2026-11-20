@@ -12,7 +12,9 @@ for(const file of versions) {
   test(file+': mobile header is not sticky and hero/local badge are hidden',()=>{
     const mobile=html.slice(html.indexOf('@media (max-width: 720px) {'),html.indexOf('@media (max-width: 430px) {'));
     assert.match(mobile,/\.app-header\s*\{\s*position:relative;/);
-    assert.match(mobile,/\.page-intro\s*\{\s*display:none;/);
+    assert.match(mobile,/\.page-intro\s*\{\s*padding:0 8px 16px;\s*align-items:flex-start;/);
+    assert.match(mobile,/\.page-intro h2, \.page-intro \.local-badge\s*\{\s*display:none;/);
+    assert.match(mobile,/\.page-intro p\s*\{\s*margin:0;\s*max-width:none;/);
     assert.match(mobile,/\.sync-toggle\s*\{\s*flex:0 0 auto;\s*white-space:nowrap;/);
     assert.match(mobile,/\.sync-toggle span\s*\{\s*white-space:nowrap;\s*writing-mode:horizontal-tb;/);
     assert.match(mobile,/#copyButton, #undoButton, #redoButton\s*\{\s*display:inline-grid;/);
