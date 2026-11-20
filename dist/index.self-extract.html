@@ -100,7 +100,7 @@
     .sync-toggle input { accent-color:var(--accent); }
     .editor-shell { display:grid; grid-template-columns:minmax(360px, .9fr) minmax(0, 1.1fr); height:clamp(520px, calc(100dvh - 250px), 820px); min-height:520px; }
     .editor-pane, .preview-pane { min-width:0; min-height:0; position:relative; background:#fff; }
-    .editor-pane { display:grid; grid-template-rows:auto auto minmax(0,1fr); border-right:1px solid var(--line); }
+    .editor-pane { display:grid; grid-template-columns:minmax(0,1fr); grid-template-rows:auto auto minmax(0,1fr); border-right:1px solid var(--line); }
     .pane-head { height:42px; display:flex; align-items:center; gap:8px; padding:0 16px; border-bottom:1px solid var(--line); background:#fafaf8; }
     .editor-pane > .pane-head { height:auto; min-height:42px; flex-wrap:wrap; row-gap:8px; padding:8px 16px; }
     .editor-pane > .pane-head > * { flex-shrink:0; }
@@ -124,7 +124,7 @@
     .drop-overlay { grid-area:3 / 1; position:relative; inset:auto; min-height:0; z-index:5; display:none; place-items:center; background:rgba(225,240,234,.92); color:var(--accent); font-weight:800; border:2px dashed var(--accent); }
     .editor-pane.dragging .drop-overlay { display:grid; }
     .document-panel[hidden], .document-tab-panel[hidden] { display:none; }
-    .document-panel { grid-area:2 / 1; min-width:0; padding:8px 16px; background:var(--surface); border-bottom:1px solid var(--line); }
+    .document-panel { grid-area:2 / 1; width:100%; max-width:100%; min-width:0; padding:8px 16px; background:var(--surface); border-bottom:1px solid var(--line); }
     .document-tabs { display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--line); }
     .document-tab { min-height:40px; padding:8px; border:0; border-bottom:2px solid transparent; background:transparent; color:var(--muted); font-weight:700; font-size:12px; cursor:pointer; }
     .document-tab[aria-selected="true"] { color:var(--accent); border-bottom-color:var(--accent); }
@@ -137,8 +137,8 @@
     .outline-item span:first-child { flex:0 0 24px; color:var(--muted); font-size:11px; }
     .outline-item .outline-text { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     .document-empty { margin:0; padding:16px 8px; color:var(--muted); font-size:12px; }
-    .document-find { display:grid; gap:8px; padding-top:8px; }
-    .document-find-row { display:flex; align-items:center; gap:8px; min-width:0; }
+    .document-find { display:grid; grid-template-columns:minmax(0,1fr); width:100%; min-width:0; gap:8px; padding-top:8px; }
+    .document-find-row { display:flex; align-items:center; width:100%; min-width:0; gap:8px; }
     .document-search-row, .document-replace-row { display:grid; align-items:center; grid-template-columns:minmax(0,1fr) auto auto; gap:8px; }
     .document-field { width:100%; min-width:0; min-height:40px; padding:8px; border:1px solid var(--line); border-radius:8px; background:var(--surface); }
     .document-field:focus-visible { border-color:var(--accent); }
