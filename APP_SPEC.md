@@ -58,7 +58,7 @@ In compare mode, two preview cells fill the available vertical space without dou
 
 ## Mobile presentation and compatibility panel (v1.0.5)
 
-At viewport widths up to 720px, the top site header scrolls normally instead of sticking. The hero heading and informational local-processing badge are hidden; at the existing narrow-phone breakpoint, the unused intro space is removed. The Sync scroll label must stay on one horizontal line even when the style selector overflows horizontally. Copy, Undo and Redo controls have centered SVG icons and usable tap targets. Desktop layout and actual scroll synchronization remain unchanged.
+At viewport widths up to 720px, the top site header scrolls normally instead of sticking. The entire introductory hero area is hidden (heading, description, and local-processing badge); at the existing narrow-phone breakpoint, the unused intro space is removed. The Sync scroll label must stay on one horizontal line even when the style selector overflows horizontally. Copy, Undo and Redo controls have centered SVG icons and usable tap targets. Desktop layout and actual scroll synchronization remain unchanged.
 
 The compatibility section's title and the three percentage scores remain visible at all times. The diagnostic list and explanatory note are inside an initially collapsed, keyboard-operable details section. Expanding it shows the current live check results; closing and reopening does not reset the Markdown or scores.
 
